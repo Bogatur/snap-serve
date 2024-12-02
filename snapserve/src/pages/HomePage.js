@@ -19,6 +19,7 @@ const HomePage = () => {
         <h1>Home Page</h1>
         <h2>User: {user ? user.email : 'Guest'}!</h2>
         <h2>{user ? user.displayName : ""}</h2>
+        <h2>{user ? user.uid : ""}</h2>
         <button onClick={logout}>Logout</button>
         <button onClick={handleLoginRedirect}>Go to Login</button>
         <button onClick={handleSignupRedirect}>Go to Signup</button>

@@ -21,7 +21,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      await signInWithEmailAndPassword(auth, email, password);
 
     } catch (error) {
       console.error("Login Error:", error.message);
@@ -35,7 +35,7 @@ export const AuthProvider = ({ children }) => {
       throw new Error("Tüm alanlar doldurulmalıdır.");
     }
     // şifrelerin uyuşup uyuşmadığını kontrol et
-    if(password != rePassword){
+    if(password !== rePassword){
       throw new Error("Şifreler uyuşmuyor!");
     }
 
@@ -65,8 +65,6 @@ export const AuthProvider = ({ children }) => {
         errorMessage = "Şifreniz çok zayıf. Lütfen daha güçlü bir şifre seçin (en az 6 karakter).";
       } else if (error.code === 'auth/operation-not-allowed') {
         errorMessage = "Email ve şifre ile kayıt işlemi şu anda yapılamıyor. Sistem yöneticisine başvurun.";
-      } else if (error.code === 'auth/missing-password') {
-        errorMessage = "Şifre alanı boş bırakılamaz. Lütfen bir şifre girin.";
       }
 
       // Hatayı fırlat
