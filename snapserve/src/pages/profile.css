@@ -1,0 +1,60 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+}
+
+.profile-page{
+    display: flex;
+    background-color: rgb(177, 177, 177);
+}
+
+.profile-menu{
+    display: flex;
+    flex-direction: column;
+    background-color:rgb(230, 230, 230);
+    margin: 2rem;
+    padding: 5rem 2rem;
+}
+
+.profile-navigation{
+    display: flex;
+    flex-direction: column;
+}
+
+.current-profile-page{
+    background-color: rgb(220, 239, 255);
+}
+
+
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 300px;
+  }
+  
+  label {
+    display: block;
+    margin: 10px 0;
+  }
+  
+  input {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+  }

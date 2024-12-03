@@ -1,0 +1,30 @@
+
+*{
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+}
+
+.nav-bar{
+    display: flex;
+    background-color: rgb(255, 255, 255);
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 1rem;
+}
+
+.nav-bar h1{
+    margin-left: 1rem;
+    color: #212B36;
+    font-size: 22px;
+
+}
+.pages{
+    margin-right: 1rem;
+}
+.pages a{
+    padding: 0 1rem;
+    color: #212B36;
+    font-size: 15px;
+    font-weight: 600;
+}
