@@ -12,7 +12,7 @@ const LoginPage = () => {
     e.preventDefault();
     try {
       await login(email, password);
-      navigate('/profile'); // Giriş başarılıysa ana sayfaya yönlendir
+      navigate('/createmenü'); // Giriş başarılıysa ana sayfaya yönlendir
     } catch (error) {
       alert("Hata: " + error.message);
     }

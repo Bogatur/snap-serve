@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { useAuth } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
-import './profile.css';
+import { useAuth } from '../../context/AuthContext'
+import { useNavigate, Link } from 'react-router-dom';
+import './CreateMenu.css';
 
-function Profile() {
+function CreateMenu() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const handleLoginRedirect = () => {
@@ -114,7 +114,7 @@ function Profile() {
         <div className="user-info-container">
           <h3>PROFILE INFORMATION</h3>
           <div className="userinfo">
-            <h4>XYZ Company</h4>
+            <h4></h4>
             <h5 className="username">{user ? user.displayName: "empty"}</h5>
             <img src="" alt="" />
           </div>
@@ -122,7 +122,7 @@ function Profile() {
         <div className="profile-navigation">
           <h5>GENERAL</h5>
           <button>Create Menu</button>
-          <button>Generate QR</button>
+          <button><Link to="/generateqr">Generate QR</Link></button>
           <button>Order Tracking</button>
           <button>Statistics</button>
           <button onClick={handleLogoutRedirect}>Logout</button>
@@ -345,6 +345,6 @@ function Profile() {
   );
 }
 
-export default Profile;
+export default CreateMenu;
 
 

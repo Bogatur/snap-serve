@@ -5,18 +5,20 @@ import Header from './components/header/Header'
 
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
-import Profile from './pages/Profile';  // Örnek bir ana sayfa
 import Home from './pages/Home';
+import CreateMenu from './pages/createMenuPage/CreateMenu';
+import GenerateQr from './pages/generateQrPage/GenerateQr';
 
 function App() {
   return (
     <AuthProvider>
       <Header /> 
         <Routes>
+          <Route path="/" element={<Home />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/" element={<Home />} />
+          <Route path="/createmenü" element={<CreateMenu />} />
+          <Route path="/generateqr" element={<GenerateQr />} />
         </Routes>
     </AuthProvider>
   );
