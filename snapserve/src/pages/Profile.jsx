@@ -7,10 +7,12 @@ function Profile() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const handleLoginRedirect = () => {
+    logout();
     navigate('/login'); // Login sayfasına yönlendir
   };
 
   const handleSignupRedirect = () => {
+    logout();
     navigate('/signup'); // Login sayfasına yönlendir
   };
 
@@ -18,6 +20,7 @@ function Profile() {
     logout();
     navigate('/login'); // Login sayfasına yönlendir
   };
+
   
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPageModalOpen, setIsPageModalOpen] = useState(false);
@@ -103,6 +106,7 @@ function Profile() {
     setIsDeleteItemModalOpen(false);
     setIsEditItemModalOpen(false); // Edit modal'ı kapanacak
   };
+  console.log(user ? user.displayName : "empty")
 
   return (
     <div className="profile-page">
@@ -111,7 +115,7 @@ function Profile() {
           <h3>PROFILE INFORMATION</h3>
           <div className="userinfo">
             <h4>XYZ Company</h4>
-            <h5>{user ? user.displayName : ""}</h5>
+            <h5 className="username">{user ? user.displayName: "empty"}</h5>
             <img src="" alt="" />
           </div>
         </div>

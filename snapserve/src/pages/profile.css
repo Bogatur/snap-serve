@@ -27,7 +27,10 @@
     background-color: rgb(220, 239, 255);
 }
 
-
+.user-name{
+  font-size: 50px;
+  color:black;
+}
 
 .modal-overlay {
     position: fixed;
