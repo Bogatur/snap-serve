@@ -2,6 +2,8 @@
 import { initializeApp } from "firebase/app";
 //import { getAnalytics } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
+import 'firebase/database';
+import { getDatabase, ref, push, set, get, update } from "firebase/database";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -10,6 +12,7 @@ import { getAuth } from "firebase/auth";
 const firebaseConfig = {
   apiKey: "AIzaSyBdNKxRizhY3YhueEfCPbjXA5Z-14shv7I",
   authDomain: "snap-serve-d09ad.firebaseapp.com",
+  databaseURL: "https://snap-serve-d09ad-default-rtdb.firebaseio.com",
   projectId: "snap-serve-d09ad",
   storageBucket: "snap-serve-d09ad.firebasestorage.app",
   messagingSenderId: "51577749899",
@@ -17,9 +20,12 @@ const firebaseConfig = {
   measurementId: "G-GRRLTNG9RV"
 };
 
+
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 //const analytics = getAnalytics(app);
 const auth = getAuth(app);
+const database = getDatabase(app);
 
-export { auth };
+export { auth, database, ref, push, set, get, update };
