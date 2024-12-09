@@ -3,17 +3,27 @@ import React, { createContext, useState, useEffect, useContext } from 'react';
 import { auth } from '../firebase';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from 'firebase/auth';
 import { updateProfile } from 'firebase/auth'; 
+import { addCompany } from '../services/companyService';
 
 const AuthContext = createContext();
 
 // AuthProvider, oturum açan kullanıcı bilgilerini sağlayacak
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [username, setUsername] = useState(null);
+  const [companyKey, setCompanyKey] = useState(null);
 
   useEffect(() => {
     // Kullanıcı oturum durumu değiştiğinde, kullanıcıyı güncelle
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
+      // separateCompanyKeyAndUserName
+      if(currentUser != null){
+        const [userName, companyKey] = currentUser.displayName.split(":");
+        setUsername(userName);
+        setCompanyKey(companyKey);
+      }
+   
     });
 
     return unsubscribe;
@@ -29,7 +39,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   
- const signup = async (email, password, rePassword, firstName, lastName) => {
+ const signup = async (email, password, rePassword, firstName, lastName, companyName) => {
     // Alanların boş olup olmadığını kontrol et
     if (!email || !password || !firstName || !lastName) {
       throw new Error("Tüm alanlar doldurulmalıdır.");
@@ -42,11 +52,15 @@ export const AuthProvider = ({ children }) => {
     try {
       // Firebase ile kullanıcı kaydı oluştur
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+
+      const companyKey = await addCompany(companyName,"default menu name", " default menu slogan");
       
       // Kullanıcıyı oluşturduktan sonra profil bilgilerini güncelle
       await updateProfile(userCredential.user, {
-        displayName: `${firstName} ${lastName}`, // İsim ve soyisim profil ismi olarak ayarlanır
+        displayName: `${firstName} ${lastName} :${companyKey}`, // İsim ve soyisim profil ismi olarak ayarlanır
       });
+
+
 
       console.log('Kullanıcı kaydedildi ve profil güncellendi:', userCredential.user);
 
@@ -82,7 +96,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, signup, logout }}>
+    <AuthContext.Provider value={{ user, username, companyKey, login, signup, logout }}>
       {children}
     </AuthContext.Provider>
   );

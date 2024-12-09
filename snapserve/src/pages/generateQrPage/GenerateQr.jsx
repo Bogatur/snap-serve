@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAuth } from '../../context/AuthContext'
 import { useNavigate, Link } from 'react-router-dom';
 import '../createMenuPage/CreateMenu.css';
+import { addTable, deleteTable, getCompanyData } from "../../services/companyService";
+import { QRCodeCanvas } from 'qrcode.react';
+
 
 function GenerateQr (){
-    const { user, logout } = useAuth();
+    const { user, companyKey, logout } = useAuth();
     console.log(user ? user.displayName : "empty")
 
     const navigate = useNavigate();
@@ -24,18 +27,64 @@ function GenerateQr (){
     };
 
     const [tables, setTables] = useState([]);
-    const [tableCounter, setTableCounter] = useState(1);
-  
-    const addTable = () => {
-      setTables([...tables, { id: tableCounter }]);
-      setTableCounter(tableCounter + 1);
+
+    const addNewTable = async() => {
+      addTable(companyKey); // firebase add
+    //  setTables([...tables, { id: tableCounter }]);
+    //  setTableCounter(tableCounter + 1);
     };
   
-    const deleteTable = (id) => {
-      setTables(tables.filter(table => table.id !== id));
+    const deleteATable = (key) => {
+        deleteTable(key, companyKey);
+   //   setTables(tables.filter(table => table.id !== id));
     };
 
 
+    const[companyData, setCompanyData] = useState();
+
+    useEffect(() => {
+        const fetchCompany = async () => {
+          try {
+            const companyData = await getCompanyData(companyKey);
+            setCompanyData(companyData);
+
+            const tables = Object.entries(companyData.tables).map(([key, value]) => ({
+                tableKey : key,
+                tableID: value.tableID,
+                tableName: value.tableName,
+                tableQRBase64Data: value.tableQRBase64Data
+              }));
+      
+
+
+          setTables(tables);
+          } catch (error) {
+            console.error('Şirket verisi alınırken hata oluştu:', error);
+          }
+        };
+    
+        if( companyKey) {
+          fetchCompany();
+        }
+    
+      }, [companyKey]);
+
+
+      const [showModal, setShowModal] = useState(false); // Modal'ın görünür olup olmadığını kontrol eden state
+      const [qrData, setQrData] = useState(''); // QR kodu verisi
+
+
+        // Modal'ı açmak için butona tıklanıldığında çağrılan fonksiyon
+  const handleOpenModal = (item) => {
+ 
+    setQrData("blablablbalbal.bla?id="+item); // QR kodu için URL verisini ayarlıyoruz
+    setShowModal(true); // Modal'ı açıyoruz
+  };
+
+  // Modal'ı kapatmak için fonksiyon
+  const handleCloseModal = () => {
+    setShowModal(false); // Modal'ı kapatıyoruz
+  };
 
 
     return (
@@ -66,13 +115,13 @@ function GenerateQr (){
             <div className="menu-container">
                 <div className="menu-item-container">
                     <div className="menu-item add-item">
-                    <button onClick={addTable}>Add Table</button>
+                    <button onClick={addNewTable}>Add Table</button>
                     <div>
                         {tables.map(table => (
-                        <div key={table.id} style={{ border: '1px solid black', padding: '10px', margin: '10px', width: '200px' }}>
-                            <p>Masa No: {table.id}</p>
-                            <button disabled>Get QR Code</button>
-                            <button onClick={() => deleteTable(table.id)}>Delete</button>
+                        <div key={table.tableID} style={{ border: '1px solid black', padding: '10px', margin: '10px', width: '200px' }}>
+                            <p>Masa No: {table.tableID}</p>
+                            <button onClick={() => handleOpenModal(table.tableID)}>Get QR Code</button>
+                            <button onClick={() => deleteATable(table.tableKey)}>Delete</button>
                         </div>
                         ))}
                     </div>
@@ -82,8 +131,38 @@ function GenerateQr (){
 
             </div>
         </div>
+             {/* Modal Gösterimi */}
+      {showModal && tables && (
+        <div style={modalStyles}>
+          <div style={modalContentStyles}>
+            
+            <QRCodeCanvas value={qrData} size={256} /> {/* QR kodunu render ediyoruz */}
+            <button onClick={handleCloseModal}>Kapat</button>
+          </div>
+        </div>
+      )}
       </div>
     )
 }
+
+// Basit modal stilleri
+const modalStyles = {
+    position: 'fixed',
+    top: '0',
+    left: '0',
+    right: '0',
+    bottom: '0',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  };
+  
+  const modalContentStyles = {
+    backgroundColor: 'white',
+    padding: '20px',
+    borderRadius: '8px',
+    textAlign: 'center',
+  };
 
 export default GenerateQr

@@ -9,6 +9,7 @@ import Home from './pages/Home';
 import CreateMenu from './pages/createMenuPage/CreateMenu';
 import GenerateQr from './pages/generateQrPage/GenerateQr';
 
+
 function App() {
   return (
     <AuthProvider>

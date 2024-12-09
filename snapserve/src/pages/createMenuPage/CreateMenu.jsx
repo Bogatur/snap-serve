@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useAuth } from '../../context/AuthContext'
 import { useNavigate, Link } from 'react-router-dom';
 import './CreateMenu.css';
+import { addMenuPage, addMenuPageProduct, deleteMenuPage, getCompanyData, updateCompanyMenuNameMenuSlogan, updateMenuPageProduct } from "../../services/companyService";
 
 function CreateMenu() {
-  const { user, logout } = useAuth();
+  const { user, username, companyKey, logout } = useAuth();
   const navigate = useNavigate();
   const handleLoginRedirect = () => {
     logout();
@@ -33,7 +34,7 @@ function CreateMenu() {
   const [newPageName, setNewPageName] = useState("");
   const [newItem, setNewItem] = useState({ title: "", description: "", price: "", image: null });
   const [editItem, setEditItem] = useState(null);
-  const [pages, setPages] = useState(["Main Dishes", "Desserts", "Drinks"]);
+  const [pages, setPages] = useState([]);
   const [items, setItems] = useState([]);
   const [pageToDelete, setPageToDelete] = useState(null);
   const [itemToDelete, setItemToDelete] = useState(null);
@@ -42,8 +43,9 @@ function CreateMenu() {
   const handleCloseModal = () => setIsModalOpen(false);
   const handleOpenPageModal = () => setIsPageModalOpen(true);
   const handleClosePageModal = () => setIsPageModalOpen(false);
-  const handleOpenDeleteModal = (page) => {
-    setPageToDelete(page);
+  const handleOpenDeleteModal = (pageKey) => {
+   // deleteMenuPage(pageKey, companyKey); // firebase silme
+    setPageToDelete(pageKey);
     setIsDeleteModalOpen(true);
   };
   const handleCloseDeleteModal = () => setIsDeleteModalOpen(false);
@@ -67,35 +69,41 @@ function CreateMenu() {
 
 
 
-  const handleSaveMenuInfo = (e) => {
+
+  const handleSaveMenuInfo = async (e) => {
     e.preventDefault();
+    await updateCompanyMenuNameMenuSlogan(companyKey, newMenuName, newSlogan);
     handleCloseModal();
   };
 
   const handleAddPage = (e) => {
     e.preventDefault();
-    setPages([...pages, newPageName]);
+  //  setPages([...pages, newPageName]);
+    addMenuPage(newPageName, companyKey);
     setNewPageName("");
     handleClosePageModal();
   };
 
-  const handleDeletePage = () => {
-    setPages(pages.filter((page) => page !== pageToDelete));
-    setPageToDelete(null);
+  const handleDeletePage = (pageKey) => {
+    deleteMenuPage(pageToDelete, companyKey); 
+   // setPages(pages.filter((page) => page !== pageToDelete));
+   // setPageToDelete(null);
     handleCloseDeleteModal();
   };
 
   const handleAddItem = (e) => {
     e.preventDefault();
+    addMenuPageProduct(pages[0].pageKey, companyKey, newItem.title, newItem.description, newItem.price, newItem.image);
     setItems([...items, newItem]);
     setNewItem({ title: "", description: "", price: "", image: null }); // Formu sıfırlıyoruz
     handleCloseItemModal();
   };
   
-  const handleEditItem = () => {
-    setItems(items.map(item => item === editItem ? newItem : item)); // Düzenlenmiş öğeyi listeye kaydediyoruz
-    setEditItem(null);
-    setNewItem({ title: "", description: "", price: "", image: null }); // Düzenleme sonrası sıfırlıyoruz
+  const handleEditItem = (productKey) => {
+    updateMenuPageProduct(productKey, pages[0].pageKey, companyKey, "düzenlenmiş name", "edit description", "10", " edit image");
+   // setItems(items.map(item => item === editItem ? newItem : item)); // Düzenlenmiş öğeyi listeye kaydediyoruz
+  //  setEditItem(null);
+   // setNewItem({ title: "", description: "", price: "", image: null }); // Düzenleme sonrası sıfırlıyoruz
     handleCloseEditItemModal();
   };
   
@@ -108,14 +116,47 @@ function CreateMenu() {
   };
   console.log(user ? user.displayName : "empty")
 
+
+
+  /*---------------*/
+  const[companyData, setCompanyData] = useState();
+
+  
+  useEffect(() => {
+    const fetchCompany = async () => {
+      try {
+        const companyData = await getCompanyData(companyKey);
+        setCompanyData(companyData);
+        
+        const pages = Object.entries(companyData.menu).map(([key, value]) => ({
+          pageKey : key,
+          name: value.menuPageName,
+          products: value.products,
+        }));
+
+
+        setPages(pages);
+      } catch (error) {
+        console.error('Şirket verisi alınırken hata oluştu:', error);
+      }
+    };
+
+    if( companyKey) {
+      fetchCompany();
+    }
+
+  }, [companyKey]);
+  /*----------------*/
+
   return (
+     companyData != null ? (
     <div className="profile-page">
       <div className="profile-menu">
         <div className="user-info-container">
           <h3>PROFILE INFORMATION</h3>
           <div className="userinfo">
             <h4></h4>
-            <h5 className="username">{user ? user.displayName: "empty"}</h5>
+            <h5 className="username">{username ? username: "empty"}</h5>
             <img src="" alt="" />
           </div>
         </div>
@@ -137,19 +178,27 @@ function CreateMenu() {
         <div className="menu-container">
           <div className="menu-info-container">
             <div className="menu-title">
-              <h2>{newMenuName}</h2>
+              <h2>{"company name :" + companyData.companyName}</h2>
+              <h2>{newMenuName + " -- " + companyData.menuName}</h2>
             </div>
             <div className="menu-subtitle">
-              <h3>{newSlogan}</h3>
+              <h3>{newSlogan + " -- " + companyData.menuSlogan}</h3>
             </div>
             <button onClick={handleOpenModal}>Edit Info</button>
           </div>
 
           <div className="menu-pages">
             {pages.map((page) => (
-              <button key={page}>{page}</button>
+              <button key={page.pageKey} >{page.name}</button>
             ))}
             <button onClick={handleOpenPageModal}>Add Page</button>
+          </div>
+
+          <div>
+            <h2>-ilk sayfa seçili!! ürünler: </h2>
+
+            {Object.entries(pages[0].products).map(([key,val]) =><div> <p>-----</p> {Object.entries(val).toString()} <button onClick={() => handleEditItem(key)}>edit</button> </div> )}
+    
           </div>
 
           <div className="menu-item-container">
@@ -222,12 +271,14 @@ function CreateMenu() {
             </form>
             <h3>Current Pages:</h3>
             <ul>
-              {pages.map((page) => (
-                <li key={page}>
-                  {page}{" "}
-                  <button onClick={() => handleOpenDeleteModal(page)}>Delete</button>
+       
+
+            {pages.map((page) => (
+                <li key={page.pageKey}>
+                  {page.name}{" "}
+                  <button onClick={() => handleOpenDeleteModal(page.pageKey)}>Delete</button>
                 </li>
-              ))}
+              ))} 
             </ul>
           </div>
         </div>
@@ -293,7 +344,7 @@ function CreateMenu() {
           <div className="modal-content">
             <h2>Edit Item</h2>
             <button onClick={() => handleOpenDeleteItemModal(editItem)}>Delete</button>
-            <form onSubmit={handleEditItem}>
+            <form>
               <label>
                 Photo:
                 <input
@@ -342,7 +393,7 @@ function CreateMenu() {
         </div>
       )}
     </div>
-  );
+  ) : (<h2>Yükleniyor..</h2>));
 }
 
 export default CreateMenu;
