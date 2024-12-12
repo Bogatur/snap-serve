@@ -7,15 +7,6 @@ import { addMenuPage, addMenuPageProduct, deleteMenuPage, getCompanyData, update
 function CreateMenu() {
   const { user, username, companyKey, logout } = useAuth();
   const navigate = useNavigate();
-  const handleLoginRedirect = () => {
-    logout();
-    navigate('/login'); // Login sayfasına yönlendir
-  };
-
-  const handleSignupRedirect = () => {
-    logout();
-    navigate('/signup'); // Login sayfasına yönlendir
-  };
 
   const handleLogoutRedirect = () => {
     logout();
@@ -128,22 +119,22 @@ function CreateMenu() {
         const companyData = await getCompanyData(companyKey);
      
         
-        const pages = Object.entries(companyData.menu).map(([key, value]) => ({
-          pageKey : key,
-          name: value.menuPageName,
-          products: value.products,
+        const pages = Object.entries(companyData.menu || {}).map(([key, value]) => ({
+          pageKey: key,
+          name: value?.menuPageName || 'Default Page Name',  // Eğer menuPageName yoksa bir varsayılan isim
+          products: value?.products || {},  // Eğer products yoksa boş bir nesne
         }));
-
-
+        
         setPages(pages);
         setCompanyData(companyData);
-        console.log("pages 0 : " + Object.entries(pages[0]).toString());
+        // console.log("pages 0 : " + Object.entries(pages[0]).toString());
       } catch (error) {
         console.error('Şirket verisi alınırken hata oluştu:', error);
       }
     };
 
     if( companyKey) {
+      console.log("aaa" + companyKey);
       fetchCompany();
     }
 
@@ -169,8 +160,6 @@ function CreateMenu() {
           <button>Order Tracking</button>
           <button>Statistics</button>
           <button onClick={handleLogoutRedirect}>Logout</button>
-          <button onClick={handleLoginRedirect}>Go to Login</button>
-          <button onClick={handleSignupRedirect}>Go to Signup</button>
         </div>
       </div>
 
@@ -199,7 +188,40 @@ function CreateMenu() {
           <div>
             <h2>-ilk sayfa seçili!! ürünler: </h2>
 
-            { Object.entries(pages[0].products).map(([key,val]) =><div> <p>-----</p> {Object.entries(val).toString()} <button onClick={() => handleEditItem(key)}>edit</button> </div> ) }
+            { 
+  // pages ve products'ın boş olup olmadığını kontrol et
+  pages && pages.length > 0 ? (
+    pages.map((page, index) => (
+      // Eğer page.products boş değilse
+      page.products && Object.keys(page.products).length > 0 ? (
+        // Ürünler mevcutsa, her birini göster
+        Object.entries(page.products).map(([key, val]) => (
+          // Eğer val boş değilse
+          val && Object.keys(val).length > 0 ? (
+            <div key={key}> 
+              <p>-----</p> 
+              {Object.entries(val).toString()} 
+              <button onClick={() => handleEditItem(key)}>edit</button> 
+            </div>
+          ) : (
+            // Eğer val boşsa, başka bir mesaj gösterebiliriz
+            <div key={key}> 
+              <p>No data available for this product.</p>
+            </div>
+          )
+        ))
+      ) : (
+        // Eğer products boşsa, bu sayfa için başka bir mesaj gösterebiliriz
+        <div key={index}> 
+          <p>No products available for {page.name}.</p>
+        </div>
+      )
+    ))
+  ) : (
+    // Eğer pages boşsa, burada başka bir şey gösterebiliriz
+    <p>No pages available.</p>
+  )
+}
           
           </div>
 

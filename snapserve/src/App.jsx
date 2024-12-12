@@ -8,6 +8,7 @@ import SignupPage from './pages/SignupPage';
 import Home from './pages/Home';
 import CreateMenu from './pages/createMenuPage/CreateMenu';
 import GenerateQr from './pages/generateQrPage/GenerateQr';
+import MobileMenu from './pages/mobileMenuPage/MobileMenu';
 
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/createmenü" element={<CreateMenu />} />
           <Route path="/generateqr" element={<GenerateQr />} />
+          <Route path="/mobilemenu" element={<MobileMenu />} />
         </Routes>
     </AuthProvider>
   );

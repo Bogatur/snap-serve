@@ -11,15 +11,6 @@ function GenerateQr (){
     console.log(user ? user.displayName : "empty")
 
     const navigate = useNavigate();
-    const handleLoginRedirect = () => {
-        logout();
-        navigate('/login'); // Login sayfasına yönlendir
-    };
-
-    const handleSignupRedirect = () => {
-        logout();
-        navigate('/signup'); // Login sayfasına yönlendir
-    };
 
     const handleLogoutRedirect = () => {
         logout();
@@ -106,8 +97,6 @@ function GenerateQr (){
             <button>Order Tracking</button>
             <button>Statistics</button>
             <button onClick={handleLogoutRedirect}>Logout</button>
-            <button onClick={handleLoginRedirect}>Go to Login</button>
-            <button onClick={handleSignupRedirect}>Go to Signup</button>
             </div>
         </div>
         <div className="current-profile-page">
@@ -137,11 +126,12 @@ function GenerateQr (){
         <div style={modalStyles}>
           <div style={modalContentStyles}>
             
-            <QRCodeCanvas value={qrData} size={256} /> {/* QR kodunu render ediyoruz */}
+            <QRCodeCanvas value={qrData} size={256} />  {/*qr code ürettiğimiz kısım */}
             <button onClick={handleCloseModal}>Kapat</button>
           </div>
         </div>
       )}
+
       </div>
     ) : (<h2>Yükleniyor..</h2>));
 }

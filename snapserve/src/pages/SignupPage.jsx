@@ -15,7 +15,7 @@ const SignupPage = () => {
 
   const handleSignup = async () => {
     try {
-      await signup(email, password, rePassword, firstName, lastName); 
+      await signup(email, password, rePassword, firstName, lastName, companyName); 
       navigate('/login'); 
     } catch (err) {
         alert(err);
