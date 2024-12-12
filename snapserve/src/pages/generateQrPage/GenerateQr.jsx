@@ -6,6 +6,8 @@ import { addTable, deleteTable, getCompanyData } from "../../services/companySer
 import { QRCodeCanvas } from 'qrcode.react';
 
 
+const baseURL = "http://localhost:3000/mobilemenu";
+
 function GenerateQr (){
     const { user, companyKey, logout } = useAuth();
     console.log(user ? user.displayName : "empty")
@@ -66,9 +68,9 @@ function GenerateQr (){
 
 
         // Modal'ı açmak için butona tıklanıldığında çağrılan fonksiyon
-  const handleOpenModal = (item) => {
+  const handleOpenModal = (tableKey) => {
  
-    setQrData("blablablbalbal.bla?id="+item); // QR kodu için URL verisini ayarlıyoruz
+    setQrData(baseURL+"?cid="+companyKey+"&tid="+tableKey); // QR kodu için URL verisini ayarlıyoruz
     setShowModal(true); // Modal'ı açıyoruz
   };
 
@@ -110,7 +112,7 @@ function GenerateQr (){
                         {tables.map(table => (
                         <div key={table.tableID} style={{ border: '1px solid black', padding: '10px', margin: '10px', width: '200px' }}>
                             <p>Masa No: {table.tableID}</p>
-                            <button onClick={() => handleOpenModal(table.tableID)}>Get QR Code</button>
+                            <button onClick={() => handleOpenModal(table.tableKey, companyKey)}>Get QR Code</button>
                             <button onClick={() => deleteATable(table.tableKey)}>Delete</button>
                         </div>
                         ))}
@@ -125,7 +127,7 @@ function GenerateQr (){
       {showModal && tables && (
         <div style={modalStyles}>
           <div style={modalContentStyles}>
-            
+            <p>{qrData}</p>
             <QRCodeCanvas value={qrData} size={256} />  {/*qr code ürettiğimiz kısım */}
             <button onClick={handleCloseModal}>Kapat</button>
           </div>
