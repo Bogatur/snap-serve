@@ -88,6 +88,7 @@ function GenerateQr (){
 
 
     return (
+      companyData != null ? (
       <div className="profile-page">
         <div className="profile-menu">
             <div className="user-info-container">
@@ -142,7 +143,7 @@ function GenerateQr (){
         </div>
       )}
       </div>
-    )
+    ) : (<h2>Yükleniyor..</h2>));
 }
 
 // Basit modal stilleri
