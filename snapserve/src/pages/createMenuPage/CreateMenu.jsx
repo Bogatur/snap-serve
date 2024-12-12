@@ -84,7 +84,7 @@ function CreateMenu() {
 
   const handleAddItem = (e) => {
     e.preventDefault();
-    addMenuPageProduct(pages[0].pageKey, companyKey, newItem.title, newItem.description, newItem.price, newItem.image);
+    addMenuPageProduct(pages[activeTabIndex].pageKey, companyKey, newItem.title, newItem.description, newItem.price, newItem.image);
     setItems([...items, newItem]);
     setNewItem({ title: "", description: "", price: "", image: null }); // Formu sıfırlıyoruz
     handleCloseItemModal();
@@ -139,6 +139,15 @@ function CreateMenu() {
     }
 
   }, [companyKey]);
+
+
+  const [activeTabIndex, setActiveTabIndex] = useState(0); // Aktif tab'ı tutacak state
+
+  const handleTabClick = (index) => {
+    setActiveTabIndex(index); // Tıklanan tab'a geçiş yap
+  };
+
+  
   /*----------------*/
 
   return (
@@ -179,51 +188,53 @@ function CreateMenu() {
           </div>
 
           <div className="menu-pages">
-            {pages.map((page) => (
-              <button key={page.pageKey} >{page.name}</button>
-            ))}
+      
             <button onClick={handleOpenPageModal}>Add Page</button>
           </div>
 
+              {/* Tab Başlıkları */}
+      <div className="tabs">
+        {pages && pages.length > 0 ? (
+          pages.map((page, index) => (
+            <button
+              key={page.pageKey}
+              onClick={() => handleTabClick(index)}
+              className={activeTabIndex === index ? 'active' : ''} // Aktif tab'a stil ver
+            >
+              {page.name}
+            </button>
+          ))
+        ) : (
+          <p>No pages available.</p>
+        )}
+      </div>
+      {/* Tab İçeriği */}
+      <div className="tab-content">
+        {pages && pages.length > 0 && pages[activeTabIndex] && (
           <div>
-            <h2>-ilk sayfa seçili!! ürünler: </h2>
-
-            { 
-  // pages ve products'ın boş olup olmadığını kontrol et
-  pages && pages.length > 0 ? (
-    pages.map((page, index) => (
-      // Eğer page.products boş değilse
-      page.products && Object.keys(page.products).length > 0 ? (
-        // Ürünler mevcutsa, her birini göster
-        Object.entries(page.products).map(([key, val]) => (
-          // Eğer val boş değilse
-          val && Object.keys(val).length > 0 ? (
-            <div key={key}> 
-              <p>-----</p> 
-              {Object.entries(val).toString()} 
-              <button onClick={() => handleEditItem(key)}>edit</button> 
-            </div>
-          ) : (
-            // Eğer val boşsa, başka bir mesaj gösterebiliriz
-            <div key={key}> 
-              <p>No data available for this product.</p>
-            </div>
-          )
-        ))
-      ) : (
-        // Eğer products boşsa, bu sayfa için başka bir mesaj gösterebiliriz
-        <div key={index}> 
-          <p>No products available for {page.name}.</p>
-        </div>
-      )
-    ))
-  ) : (
-    // Eğer pages boşsa, burada başka bir şey gösterebiliriz
-    <p>No pages available.</p>
-  )
-}
-          
+            {pages[activeTabIndex].products && Object.keys(pages[activeTabIndex].products).length > 0 ? (
+              Object.entries(pages[activeTabIndex].products).map(([key, val]) => (
+                val && Object.keys(val).length > 0 ? (
+                  <div key={key}>
+                    <p>-----</p>
+                    <pre>{JSON.stringify(val, null, 2)}</pre>
+                    <button onClick={() => handleEditItem(key)}>edit</button>
+                  </div>
+                ) : (
+                  <div key={key}>
+                    <p>No data available for this product.</p>
+                  </div>
+                )
+              ))
+            ) : (
+              <div>
+                <p>No products available for {pages[activeTabIndex].name}.</p>
+              </div>
+            )}
           </div>
+        )}
+      </div>
+    </div>
 
           <div className="menu-item-container">
             <div className="menu-item add-item">
@@ -241,7 +252,7 @@ function CreateMenu() {
             ))}
           </div>
         </div>
-      </div>
+ 
 
       {/* Edit Menu Info Modal */}
       {isModalOpen && (
@@ -329,7 +340,7 @@ function CreateMenu() {
                 Photo:
                 <input
                   type="file"
-                  onChange={(e) => setNewItem({ ...newItem, image: URL.createObjectURL(e.target.files[0]) })}
+                  onChange={(e) => setNewItem({ ...newItem, image: e.target.files[0] })}
                 />
               </label>
               <label>

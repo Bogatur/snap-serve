@@ -21,6 +21,23 @@ export const addCompany = async (companyName, menuName, menuSlogan) => {
   }
 };
 
+export const uploadImageData = async (base64Data) => {
+  try {
+    const imageKey = new Date().toISOString();
+    const imageRef = ref(database, 'images/' + imageKey);
+    
+    set(imageRef, {
+      imageData: base64Data
+    })
+    .then(() => {
+      console.log('Image uploaded successfully!');
+    })
+ 
+  } catch (error) {
+    console.error('Error uploading image: ', error);
+    throw error;
+  }
+}
 
 export const getCompanyData = async (companyKey) => {
     try {
@@ -105,15 +122,27 @@ export const getCompanyData = async (companyKey) => {
     }
   }
 
-export const addMenuPageProduct = async (pageKey, companyKey, name, description, price, photoURL) => {
+
+  function convertToBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+  }
+
+export const addMenuPageProduct = async (pageKey, companyKey, name, description, price, image) => {
   try{
+    const imageBase64Data = await convertToBase64(image);
+    console.log("IMAGE TYPE: " + imageBase64Data);
     const companyMenuPageProductsRef = push(ref(database, 'companies/' + companyKey + '/menu/' + pageKey + '/products'));
 
     await set(companyMenuPageProductsRef, {
       productName: name,
       productDescription: description,
       productPrice: price,
-      productPhotoURL: photoURL
+      productPhotoURL: imageBase64Data
     });
 
     console.log("başarıyla ürün eklendi. pageKey: "+ pageKey);
