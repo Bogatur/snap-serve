@@ -126,7 +126,7 @@ function CreateMenu() {
     const fetchCompany = async () => {
       try {
         const companyData = await getCompanyData(companyKey);
-        setCompanyData(companyData);
+     
         
         const pages = Object.entries(companyData.menu).map(([key, value]) => ({
           pageKey : key,
@@ -136,6 +136,8 @@ function CreateMenu() {
 
 
         setPages(pages);
+        setCompanyData(companyData);
+        console.log("pages 0 : " + Object.entries(pages[0]).toString());
       } catch (error) {
         console.error('Şirket verisi alınırken hata oluştu:', error);
       }
@@ -197,8 +199,8 @@ function CreateMenu() {
           <div>
             <h2>-ilk sayfa seçili!! ürünler: </h2>
 
-            {Object.entries(pages[0].products).map(([key,val]) =><div> <p>-----</p> {Object.entries(val).toString()} <button onClick={() => handleEditItem(key)}>edit</button> </div> )}
-    
+            { Object.entries(pages[0].products).map(([key,val]) =><div> <p>-----</p> {Object.entries(val).toString()} <button onClick={() => handleEditItem(key)}>edit</button> </div> ) }
+          
           </div>
 
           <div className="menu-item-container">
