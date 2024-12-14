@@ -20,10 +20,10 @@ function CreateMenu() {
   const [isItemModalOpen, setIsItemModalOpen] = useState(false);
   const [isEditItemModalOpen, setIsEditItemModalOpen] = useState(false);
   const [isDeleteItemModalOpen, setIsDeleteItemModalOpen] = useState(false);
-  const [newMenuName, setNewMenuName] = useState("XYZ Company Menu");
-  const [newSlogan, setNewSlogan] = useState("Delicious Meals");
+  const [newMenuName, setNewMenuName] = useState("SAMPLE MENU NAME");
+  const [newSlogan, setNewSlogan] = useState("SAMPLE SLOGAN");
   const [newPageName, setNewPageName] = useState("");
-  const [newItem, setNewItem] = useState({ title: "", description: "", price: "", image: null });
+  const [newItem, setNewItem] = useState({ title: "", description: "", price: "", image: "" });
   const [editItem, setEditItem] = useState(null);
   const [pages, setPages] = useState([]);
   const [items, setItems] = useState([]);
@@ -157,14 +157,14 @@ function CreateMenu() {
         <div className="user-info-container">
           <h3>PROFILE INFORMATION</h3>
           <div className="userinfo">
-            <h4></h4>
             <h5 className="username">{username ? username: "empty"}</h5>
-            <img src="" alt="" />
+            <h5>{companyData.companyName}</h5>
+            <img src="https://png.pngtree.com/png-vector/20231019/ourmid/pngtree-user-profile-avatar-png-image_10211467.png" alt="pp" />
           </div>
         </div>
         <div className="profile-navigation">
           <h5>GENERAL</h5>
-          <button>Create Menu</button>
+          <button className="create-menu-button">Create Menu</button>
           <button><Link to="/generateqr">Generate QR</Link></button>
           <button>Order Tracking</button>
           <button>Statistics</button>
@@ -178,11 +178,10 @@ function CreateMenu() {
         <div className="menu-container">
           <div className="menu-info-container">
             <div className="menu-title">
-              <h2>{"company name :" + companyData.companyName}</h2>
-              <h2>{newMenuName + " -- " + companyData.menuName}</h2>
+              <h2>{companyData.menuName}</h2>
             </div>
             <div className="menu-subtitle">
-              <h3>{newSlogan + " -- " + companyData.menuSlogan}</h3>
+              <h3>{companyData.menuSlogan}</h3>
             </div>
             <button onClick={handleOpenModal}>Edit Info</button>
           </div>

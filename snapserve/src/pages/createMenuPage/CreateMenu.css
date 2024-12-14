@@ -1,63 +1,293 @@
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    text-decoration: none;
+/* Minimalist CSS for Profile Menu */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  text-decoration: none;
 }
 
-.profile-page{
-    display: flex;
-    background-color: rgb(177, 177, 177);
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f9f9f9;
+  color: #212B36;
 }
 
-.profile-menu{
-    display: flex;
-    flex-direction: column;
-    background-color:rgb(230, 230, 230);
-    margin: 2rem;
-    padding: 5rem 2rem;
+.profile-page {
+  display: flex;
+  background-color: #F9FAFB;
 }
 
-.profile-navigation{
-    display: flex;
-    flex-direction: column;
+.profile-menu {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  height: max-content;
+  background-color: #ffffff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  margin: 2rem;
+  padding: 5rem 2rem;
 }
 
-.current-profile-page{
-    background-color: rgb(220, 239, 255);
+.user-info-container {
+  text-align: center;
+  margin-bottom: 20px;
 }
 
-.user-name{
+.user-info-container h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: #212B36;
+}
+
+.userinfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.userinfo h4 {
+  font-size: 16px;
+  font-weight: 500;
+  color: #00AB55;
+  margin: 0;
+}
+
+.userinfo .username {
+  font-size: 14px;
+  color: #212B36;
+  margin: 8px 0;
+}
+
+.userinfo img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 2px solid #00AB55;
+  margin-top: 10px;
+}
+
+.profile-navigation {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-navigation h5 {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 15px;
+  color: #212B36;
+}
+
+.profile-navigation button {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #212B36;
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 10px;
+}
+
+.profile-navigation button:hover {
+  background-color: #f0f0f0;
+}
+
+.profile-navigation button a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button:focus {
+  outline: none;
+}
+
+.current-profile-page {
+  background-color: rgb(255, 255, 255);
+  margin-top: 2rem;
+  max-width: 1300px;
+}
+
+.user-name {
   font-size: 50px;
-  color:black;
+  color: black;
 }
 
 .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .modal-content {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    width: 300px;
-  }
-  
-  label {
-    display: block;
-    margin: 10px 0;
-  }
-  
-  input {
-    width: 100%;
-    padding: 8px;
-    margin-top: 5px;
-  }
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 300px;
+}
+
+label {
+  display: block;
+  margin: 10px 0;
+}
+
+input {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+}
+
+.current-profile-page h5 {
+  font-size: 24px;
+  color: #212B36;
+  margin-bottom: 1rem;
+}
+
+.menu-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.menu-info-container {
+  padding: 1rem;
+  background-color: #f4f4f4;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.menu-info-container h2, .menu-info-container h3 {
+  margin-bottom: 1rem;
+}
+
+.menu-info-container button {
+  padding: 10px 15px;
+  background-color: #00AB55;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.menu-info-container button:hover {
+  background-color: #008f47;
+}
+
+.menu-pages button {
+  padding: 10px 15px;
+  background-color: #00AB55;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.menu-pages button:hover {
+  background-color: #008f47;
+}
+
+.tabs {
+  display: flex;
+  gap: 1rem;
+}
+
+.tabs button {
+  padding: 10px 15px;
+  background-color: #ffffff;
+  color: #212B36;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.tabs button.active {
+  background-color: #00AB55;
+  color: white;
+  border: none;
+}
+
+.tabs button:hover {
+  background-color: #f0f0f0;
+}
+
+.tab-content {
+  padding: 1rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.menu-item-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.menu-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.menu-item img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+
+.menu-item h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #212B36;
+  margin-bottom: 0.5rem;
+}
+
+.menu-item p {
+  font-size: 14px;
+  color: #757575;
+  margin-bottom: 0.5rem;
+}
+
+.menu-item .price {
+  font-weight: bold;
+  color: #00AB55;
+}
+
+.menu-item button {
+  margin-top: auto;
+  padding: 8px 12px;
+  background-color: #00AB55;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.menu-item button:hover {
+  background-color: #008f47;
+}

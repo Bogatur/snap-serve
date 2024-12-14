@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import './login&signup.css';
+
 
 const LoginPage = () => {
   const { login } = useAuth();
@@ -19,7 +21,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div>
+    <div className='form-body'>
       <h2>Login</h2>
       <form onSubmit={handleLogin}>
         <input
@@ -34,7 +36,7 @@ const LoginPage = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button type="submit">Login</button>
+        <button className='form-button' type="submit">Login</button>
       </form>
     </div>
   );

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import './login&signup.css';
 
 const SignupPage = () => {
   const { signup } = useAuth();
@@ -11,7 +12,7 @@ const SignupPage = () => {
   const [password, setPassword] = useState();
   const [rePassword, setRePassword] = useState();
 
-  const [companyName, setCompanyName] = useState('company');
+  const [companyName, setCompanyName] = useState('');
 
   const handleSignup = async () => {
     try {
@@ -24,7 +25,7 @@ const SignupPage = () => {
 
 
   return (
-    <div>
+    <div className='form-body'>
       <h2>Signup</h2>
     
         <input
@@ -53,22 +54,18 @@ const SignupPage = () => {
         />
           <input
           type="password"
-          placeholder="RePassword"
+          placeholder="Re-Enter Password"
           value={rePassword}
           onChange={(e) => setRePassword(e.target.value)}
         />
-            <button onClick={handleSignup}>Signup</button>
 
-        <p>Company şu anlık işlevsiz!</p>
         <input
           type="text"
-          placeholder="Name"
+          placeholder="Company Name"
           value={companyName}
           onChange={(e) => setCompanyName(e.target.value)}
         />
-   
-    
-
+         <button className='form-button' onClick={handleSignup}>Signup</button>
     </div>
   );
 };

@@ -4,12 +4,13 @@ import { useNavigate, Link } from 'react-router-dom';
 import '../createMenuPage/CreateMenu.css';
 import { addTable, deleteTable, getCompanyData } from "../../services/companyService";
 import { QRCodeCanvas } from 'qrcode.react';
+import './generateQrPage.css';
 
 
 const baseURL = "http://localhost:3000/mobilemenu";
 
 function GenerateQr (){
-    const { user, companyKey, logout } = useAuth();
+  const { user, username, companyKey, logout } = useAuth();
     console.log(user ? user.displayName : "empty")
 
     const navigate = useNavigate();
@@ -87,10 +88,10 @@ function GenerateQr (){
             <div className="user-info-container">
             <h3>PROFILE INFORMATION</h3>
             <div className="userinfo">
-                <h4>XYZ Company</h4>
-                <h5 className="username">{user ? user.displayName: "empty"}</h5>
-                <img src="" alt="" />
-            </div>
+              <h5 className="username">{username ? username: "empty"}</h5>
+                <h5>{companyData.companyName}</h5>
+                <img src="https://png.pngtree.com/png-vector/20231019/ourmid/pngtree-user-profile-avatar-png-image_10211467.png" alt="pp" />
+                </div>
             </div>
             <div className="profile-navigation">
             <h5>GENERAL</h5>

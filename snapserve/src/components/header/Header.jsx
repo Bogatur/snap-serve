@@ -13,15 +13,16 @@ function Header (){
     //     navigate('/login'); // Login sayfasına yönlendir
     //   };
     
-
-
     return (
         <div className="nav-bar">
             <Link to="/"><h1>SNAPSERVE</h1></Link>
             {!user ? (
+            
             <div className="pages">
-                <Link to="/login">Login</Link>
-                <Link to="/signup">SignUp</Link>
+                <Link to="/">ABOUT US</Link>
+                <Link to="/">CONTACT</Link>
+                <Link to="/login">LOG IN</Link>
+                <Link to="/signup">SIGN UP</Link>
             </div>
             ) : (
             <div className="pages">

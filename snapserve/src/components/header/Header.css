@@ -16,7 +16,8 @@
 .nav-bar h1{
     margin-left: 1rem;
     color: #212B36;
-    font-size: 22px;
+    font-size: 20px;
+    font-weight: 700;
 
 }
 .pages{
@@ -25,6 +26,10 @@
 .pages a{
     padding: 0 1rem;
     color: #212B36;
-    font-size: 15px;
+    font-size: 13px;
     font-weight: 600;
+}
+
+.pages a:hover{
+    color: #00AB55;
 }
