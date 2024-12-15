@@ -82,6 +82,10 @@ function GenerateQr (){
     setShowModal(false); // Modal'ı kapatıyoruz
   };
 
+  useEffect(() => {
+    console.log(" a public path: " + process.env.PUBLIC_URL);
+  },[]);
+
 
     return (
       companyData != null ? (

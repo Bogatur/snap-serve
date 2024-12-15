@@ -54,7 +54,7 @@ function MobileMenu() {
   useEffect(() => {
     const fetchMenuData = async () => {
       // Firebase'deki belirli bir şirketin menüsüne erişim sağlıyoruz
-      const dbRef = ref(database, "companies/-ODviExedvgNmHi7FAGy/menu"); // Veritabanındaki menu yolunu kontrol ediyoruz
+      const dbRef = ref(database, "companies/"+companyKey+"/menu"); // Veritabanındaki menu yolunu kontrol ediyoruz
       try {
         const snapshot = await get(dbRef); // Veriyi alıyoruz
         if (snapshot.exists()) {
@@ -85,6 +85,7 @@ function MobileMenu() {
   return (
     <div className="nav-bar">
       <div>
+        <p>COmpany Key: {companyKey}</p>
         <p>Masa ID: {tableKey}</p>
         <h1>Menu List</h1>
         {loading ? (

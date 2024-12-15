@@ -105,6 +105,9 @@ function CreateMenu() {
   console.log(user ? user.displayName : "empty")
 
 
+  useEffect(() => {
+    console.log("public path: " + process.env.PUBLIC_URL);
+  },[]);
 
   /*---------------*/
   const[companyData, setCompanyData] = useState();
