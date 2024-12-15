@@ -15,94 +15,8 @@ body {
 
 .profile-page {
   display: flex;
-  background-color: #F9FAFB;
-}
-
-.profile-menu {
-  display: flex;
-  flex-direction: column;
-  width: 300px;
-  height: max-content;
-  background-color: #ffffff;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  margin: 2rem;
-  padding: 5rem 2rem;
-}
-
-.user-info-container {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.user-info-container h3 {
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 15px;
-  color: #212B36;
-}
-
-.userinfo {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.userinfo h4 {
-  font-size: 16px;
-  font-weight: 500;
-  color: #00AB55;
-  margin: 0;
-}
-
-.userinfo .username {
-  font-size: 14px;
-  color: #212B36;
-  margin: 8px 0;
-}
-
-.userinfo img {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  border: 2px solid #00AB55;
-  margin-top: 10px;
-}
-
-.profile-navigation {
-  display: flex;
-  flex-direction: column;
-}
-
-.profile-navigation h5 {
-  font-size: 16px;
-  font-weight: 500;
-  margin-bottom: 15px;
-  color: #212B36;
-}
-
-.profile-navigation button {
-  width: 100%;
-  padding: 10px;
-  font-size: 14px;
-  font-weight: 500;
-  color: #212B36;
-  background-color: #ffffff;
-  border: 1px solid #e0e0e0;
-  border-radius: 4px;
-  text-align: left;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  margin-bottom: 10px;
-}
-
-.profile-navigation button:hover {
-  background-color: #f0f0f0;
-}
-
-.profile-navigation button a {
-  text-decoration: none;
-  color: inherit;
+  width: max-content;
+  margin: 0 auto;
 }
 
 button:focus {
@@ -110,15 +24,40 @@ button:focus {
 }
 
 .current-profile-page {
-  background-color: rgb(255, 255, 255);
   margin-top: 2rem;
-  max-width: 1300px;
+  width: 1000px;
 }
 
-.user-name {
-  font-size: 50px;
-  color: black;
+.page-info-text{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
+
+.page-info-text button {
+  background-color: transparent;
+  color: #212B36;
+  border: 1px solid #212B36;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.page-info-text button:hover {
+  background-color: #00AB55;
+  color: white;
+  border: none;
+}
+
+.current-profile-page h5{
+  font-size: 20px;
+  font-weight: 500;
+  margin-top: 1rem;
+  color: #212B36;
+}
+
 
 .modal-overlay {
   position: fixed;
@@ -139,7 +78,7 @@ button:focus {
   width: 300px;
 }
 
-label {
+/* label {
   display: block;
   margin: 10px 0;
 }
@@ -148,57 +87,53 @@ input {
   width: 100%;
   padding: 8px;
   margin-top: 5px;
-}
+} */
 
-.current-profile-page h5 {
-  font-size: 24px;
-  color: #212B36;
-  margin-bottom: 1rem;
-}
 
 .menu-container {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1rem;
 }
 
 .menu-info-container {
-  padding: 1rem;
-  background-color: #f4f4f4;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  background-color: #F4F6F8;
+  text-align: center;
 }
 
-.menu-info-container h2, .menu-info-container h3 {
-  margin-bottom: 1rem;
+.menu-info-container h2{
+  font-size: 30px;
+  margin-bottom: 0.5rem;
+}
+.menu-info-container h3{
+  font-weight: 400;
 }
 
-.menu-info-container button {
+.page-buttons{
+  display: flex;
+  justify-content: space-between;
+  margin: 0.5rem 0;
+}
+
+.page-buttons p{
+align-self: center;
+}
+
+.add-page-button{
   padding: 10px 15px;
-  background-color: #00AB55;
-  color: white;
-  border: none;
+  background-color: transparent;
+  color: #212B36;
+  border: 1px solid #212B36;
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
-.menu-info-container button:hover {
-  background-color: #008f47;
-}
-
-.menu-pages button {
-  padding: 10px 15px;
+.add-page-button:hover {
   background-color: #00AB55;
-  color: white;
+  color: #ffffff;
   border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.menu-pages button:hover {
-  background-color: #008f47;
 }
 
 .tabs {
@@ -216,78 +151,88 @@ input {
   transition: all 0.3s ease;
 }
 
+.tabs button:hover {
+  padding: 10px 15px;
+  background-color: #dcdcdc;
+
+}
 .tabs button.active {
   background-color: #00AB55;
   color: white;
   border: none;
 }
 
-.tabs button:hover {
-  background-color: #f0f0f0;
-}
-
-.tab-content {
-  padding: 1rem;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-}
-
-.menu-item-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 1.5rem;
-  margin-top: 2rem;
-}
-
-.menu-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: #ffffff;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  padding: 1rem;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-}
-
-.menu-item img {
+.add-new-item-button{
   width: 100%;
-  height: 150px;
-  object-fit: cover;
-  border-radius: 4px;
-  margin-bottom: 1rem;
-}
-
-.menu-item h3 {
-  font-size: 18px;
-  font-weight: 600;
+  padding: 12px;
+  background-color: transparent;
   color: #212B36;
-  margin-bottom: 0.5rem;
-}
-
-.menu-item p {
-  font-size: 14px;
-  color: #757575;
-  margin-bottom: 0.5rem;
-}
-
-.menu-item .price {
-  font-weight: bold;
-  color: #00AB55;
-}
-
-.menu-item button {
-  margin-top: auto;
-  padding: 8px 12px;
-  background-color: #00AB55;
-  color: white;
-  border: none;
+  border: 1px solid #212B36;
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
-.menu-item button:hover {
-  background-color: #008f47;
+.add-new-item-button:hover{
+  background-color: #00AB55;
+  color: #ffffff;
+  border: 1px solid #ffffff;
+}
+
+/* .product-area{
+  width: 1000px;
+} */
+
+.product-list{
+  display: flex;
+  flex-wrap: wrap; /* Kutuların aşağı kaymasını sağlar */
+  gap: 16px; /* Kutular arası boşluk */
+  justify-content: flex-start; /* Kutuları sola hizalar */
+}
+.product-container{
+  background-color: #ffffff;
+  flex: 0 0 238px; /* Kutuların sabit genişlikte olmasını sağlar */
+  box-shadow: rgba(99, 99, 99, 0.1) 0px 2px 8px 0px;
+}
+.product-elements{
+  width: max-content;
+  margin: 0 auto;
+  margin: 0.5rem;
+}
+.product-photo{
+  width: 222px;
+  height: 222px;
+}
+.edit-product-contanier{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+}
+
+.product-title{
+  font-size: 15px;
+  font-weight: 600;
+  margin-top: 0.3rem;
+}
+
+.product-description{
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.product-price{
+  font-size: 13px;
+  font-weight: 600;
+  color: #212B36;
+}
+.edit-icon-button{
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.edit-icon-button img{
+  height: 14px;
+  width: 14px;
 }

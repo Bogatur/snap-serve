@@ -5,6 +5,8 @@ import '../createMenuPage/CreateMenu.css';
 import { addTable, deleteTable, getCompanyData } from "../../services/companyService";
 import { QRCodeCanvas } from 'qrcode.react';
 import './generateQrPage.css';
+import SideMenu from "../../components/sidemenu/SideMenu";
+
 
 
 const baseURL = "http://localhost:3000/mobilemenu";
@@ -84,44 +86,28 @@ function GenerateQr (){
     return (
       companyData != null ? (
       <div className="profile-page">
-        <div className="profile-menu">
-            <div className="user-info-container">
-            <h3>PROFILE INFORMATION</h3>
-            <div className="userinfo">
-              <h5 className="username">{username ? username: "empty"}</h5>
-                <h5>{companyData.companyName}</h5>
-                <img src="https://png.pngtree.com/png-vector/20231019/ourmid/pngtree-user-profile-avatar-png-image_10211467.png" alt="pp" />
-                </div>
-            </div>
-            <div className="profile-navigation">
-            <h5>GENERAL</h5>
-            <button><Link to="/createmenü">Create Menü</Link></button>
-            <button>Generate QR</button>
-            <button>Order Tracking</button>
-            <button>Statistics</button>
-            <button onClick={handleLogoutRedirect}>Logout</button>
-            </div>
-        </div>
+        <SideMenu />
         <div className="current-profile-page">
-            <h5>Create Tables & QR Codes</h5>
-            <hr />
-            <div className="menu-container">
-                <div className="menu-item-container">
-                    <div className="menu-item add-item">
-                    <button onClick={addNewTable}>Add Table</button>
-                    <div>
-                        {tables.map(table => (
-                        <div key={table.tableID} style={{ border: '1px solid black', padding: '10px', margin: '10px', width: '200px' }}>
-                            <p>Masa No: {table.tableID}</p>
-                            <button onClick={() => handleOpenModal(table.tableKey, companyKey)}>Get QR Code</button>
-                            <button onClick={() => deleteATable(table.tableKey)}>Delete</button>
-                        </div>
-                        ))}
-                    </div>
-                </div>
-                
+            <div className="page-info-text">
+              <h5>Create Tables & QR Codes</h5>
+              <button onClick={addNewTable}>Add Table</button>
             </div>
-
+            <div>
+                <div className="table-container">
+                    {tables.map(table => (
+                      <div className="tables" key={table.tableID}>
+                        <div className="table-top-part">
+                          <img src={`${process.env.PUBLIC_URL}/table-photo.png`} alt="table-photo" />
+                          <button className="delete-icon"onClick={() => deleteATable(table.tableKey)}><img src={`${process.env.PUBLIC_URL}/Delete.png`} alt="delete-icon" /></button>
+                        </div>
+                        <div className="table-bottom-part">
+                          <h5>{companyData.menuName}</h5>
+                          <p>Table No: {table.tableID}</p>
+                          <button onClick={() => handleOpenModal(table.tableKey, companyKey)}>Get QR Code</button>
+                        </div>
+                      </div>
+                     ))}
+                </div>
             </div>
         </div>
              {/* Modal Gösterimi */}

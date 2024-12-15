@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from '../../context/AuthContext'
 import { useNavigate, Link } from 'react-router-dom';
+import SideMenu from "../../components/sidemenu/SideMenu"
 import './CreateMenu.css';
-import { addMenuPage, addMenuPageProduct, deleteMenuPage, getCompanyData, updateCompanyMenuNameMenuSlogan, updateMenuPageProduct } from "../../services/companyService";
+import { addMenuPage, addMenuPageProduct, deleteMenuPage, getCompanyData, updateCompanyMenuNameMenuSlogan, updateMenuPageProduct} from "../../services/companyService";
 
 function CreateMenu() {
   const { user, username, companyKey, logout } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogoutRedirect = () => {
-    logout();
-    navigate('/login'); // Login sayfasına yönlendir
-  };
 
   
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -151,285 +148,278 @@ function CreateMenu() {
   /*----------------*/
 
   return (
+
      companyData != null ? (
     <div className="profile-page">
-      <div className="profile-menu">
-        <div className="user-info-container">
-          <h3>PROFILE INFORMATION</h3>
-          <div className="userinfo">
-            <h5 className="username">{username ? username: "empty"}</h5>
-            <h5>{companyData.companyName}</h5>
-            <img src="https://png.pngtree.com/png-vector/20231019/ourmid/pngtree-user-profile-avatar-png-image_10211467.png" alt="pp" />
-          </div>
-        </div>
-        <div className="profile-navigation">
-          <h5>GENERAL</h5>
-          <button className="create-menu-button">Create Menu</button>
-          <button><Link to="/generateqr">Generate QR</Link></button>
-          <button>Order Tracking</button>
-          <button>Statistics</button>
-          <button onClick={handleLogoutRedirect}>Logout</button>
-        </div>
-      </div>
-
+      <SideMenu />
       <div className="current-profile-page">
-        <h5>Create Your Digital Menu</h5>
-        <hr />
         <div className="menu-container">
-          <div className="menu-info-container">
-            <div className="menu-title">
-              <h2>{companyData.menuName}</h2>
+            <div className="page-info-text">
+              <h5>Create Your Digital Menu</h5>
+              <button onClick={handleOpenModal}>Edit Menu Name</button>
             </div>
-            <div className="menu-subtitle">
-              <h3>{companyData.menuSlogan}</h3>
+            <div className="menu-info-container">
+              <div className="menu-title">
+                <h2>{companyData.menuName}</h2>
+              </div>
+              <div className="menu-subtitle">
+                <h3>{companyData.menuSlogan}</h3>
+              </div>
             </div>
-            <button onClick={handleOpenModal}>Edit Info</button>
-          </div>
 
-          <div className="menu-pages">
-      
-            <button onClick={handleOpenPageModal}>Add Page</button>
-          </div>
-
+        <div className="page-buttons">
               {/* Tab Başlıkları */}
-      <div className="tabs">
-        {pages && pages.length > 0 ? (
-          pages.map((page, index) => (
-            <button
-              key={page.pageKey}
-              onClick={() => handleTabClick(index)}
-              className={activeTabIndex === index ? 'active' : ''} // Aktif tab'a stil ver
-            >
-              {page.name}
-            </button>
-          ))
-        ) : (
-          <p>No pages available.</p>
-        )}
-      </div>
-      {/* Tab İçeriği */}
-      <div className="tab-content">
-        {pages && pages.length > 0 && pages[activeTabIndex] && (
-          <div>
-            {pages[activeTabIndex].products && Object.keys(pages[activeTabIndex].products).length > 0 ? (
-              Object.entries(pages[activeTabIndex].products).map(([key, val]) => (
-                val && Object.keys(val).length > 0 ? (
-                  <div key={key}>
-                    <p>-----</p>
-                    <pre>{JSON.stringify(val, null, 2)}</pre>
-                    <button onClick={() => handleEditItem(key)}>edit</button>
-                  </div>
-                ) : (
-                  <div key={key}>
-                    <p>No data available for this product.</p>
-                  </div>
-                )
-              ))
-            ) : (
-              <div>
-                <p>No products available for {pages[activeTabIndex].name}.</p>
-              </div>
-            )}
-          </div>
-        )}
-      </div>
-    </div>
-
-          <div className="menu-item-container">
-            <div className="menu-item add-item">
-              <button onClick={handleOpenItemModal}>Add New Item</button>
+            <div className="tabs">
+              {pages && pages.length > 0 ? (
+                pages.map((page, index) => (
+                  <button
+                    key={page.pageKey}
+                    onClick={() => handleTabClick(index)}
+                    className={activeTabIndex === index ? 'active' : ''} // Aktif tab'a stil ver
+                  >
+                    {page.name}
+                  </button>
+                ))
+              ) : (
+                <p>First, create a menu page to start building your digital menu.</p>
+              )}
             </div>
-
-            {items.map((item, index) => (
-              <div key={index} className="menu-item">
-                <img src={item.image} alt="item" />
-                <h3>{item.title}</h3>
-                <p>{item.description}</p>
-                <p>${item.price}</p>
-                <button onClick={() => handleOpenEditItemModal(item)}>Edit</button>
-              </div>
-            ))}
-          </div>
+            <div >
+                  <button className="add-page-button"onClick={handleOpenPageModal}>Add Page</button>
+            </div>
         </div>
- 
 
-      {/* Edit Menu Info Modal */}
-      {isModalOpen && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <h2>Edit Profile</h2>
-            <form onSubmit={handleSaveMenuInfo}>
-              <label>
-                Menu Name:
-                <input
-                  type="text"
-                  value={newMenuName}
-                  onChange={(e) => setNewMenuName(e.target.value)}
-                />
-              </label>
-              <label>
-                Slogan:
-                <input
-                  type="text"
-                  value={newSlogan}
-                  onChange={(e) => setNewSlogan(e.target.value)}
-                />
-              </label>
-              <button type="submit">Save</button>
-              <button type="button" onClick={handleCloseModal}>
-                Cancel
-              </button>
-            </form>
-          </div>
+
+        <div className="add-new-item-section">
+            {pages[activeTabIndex] && ( // active page varsa bu kod bloğunu çalıştır
+              <>
+                <div className="menu-info-container">
+                  <div className="menu-subtitle">
+                    <h3>Create Products for {pages[activeTabIndex].name} page</h3>
+                  </div>
+                </div>
+                <button className="add-new-item-button" onClick={handleOpenItemModal}>Add New Item</button>
+              </>
+            )}
         </div>
-      )}
 
-      {/* Add Page Modal */}
-      {isPageModalOpen && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <h2>Add Page</h2>
-            <form onSubmit={handleAddPage}>
-              <label>
-                Page Name:
-                <input
-                  type="text"
-                  value={newPageName}
-                  onChange={(e) => setNewPageName(e.target.value)}
-                />
-              </label>
-              <button type="submit">Add Page</button>
-              <button type="button" onClick={handleClosePageModal}>
-                Cancel
-              </button>
-            </form>
-            <h3>Current Pages:</h3>
-            <ul>
-       
 
-            {pages.map((page) => (
-                <li key={page.pageKey}>
-                  {page.name}{" "}
-                  <button onClick={() => handleOpenDeleteModal(page.pageKey)}>Delete</button>
-                </li>
-              ))} 
-            </ul>
-          </div>
+        <div className="product-area">
+          {pages && pages.length > 0 && pages[activeTabIndex] && (
+            <div className="product-list">
+              {pages[activeTabIndex].products && Object.keys(pages[activeTabIndex].products).length > 0 ? (
+                Object.entries(pages[activeTabIndex].products).map(([key, val]) => (
+                  val && Object.keys(val).length > 0 ? (
+                    <div className="product-container" key={key}>
+                      <div className="product-elements">
+                        <img className="product-photo" src={val.productPhotoURL} />
+                        <p className="product-title">{val.productName}</p>
+                        <p className="product-description">{val.productDescription}</p>
+                        <div className="edit-product-contanier">
+                          <p className="product-price">${val.productPrice}</p>
+                          <button className="edit-icon-button" onClick={() => handleEditItem(key)}><img src={`${process.env.PUBLIC_URL}/pen.png`} alt="Edit-Icon" ></img></button>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div key={key}>
+                      <p>No data available for this product.</p>
+                    </div>
+                  )
+                ))
+              ) : (
+                <div>
+                  <p>No products available for {pages[activeTabIndex].name}.</p>
+                </div>
+              )}
+            </div>
+          )}
         </div>
-      )}
+      </div>
 
-      {/* Delete Page Modal */}
-      {isDeleteModalOpen && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <h2>Are you sure you want to delete this page?</h2>
-            <button onClick={handleDeletePage}>Yes</button>
-            <button onClick={handleCloseDeleteModal}>No</button>
-          </div>
-        </div>
-      )}
+</div>
+  
 
-      {/* Add Item Modal */}
-      {isItemModalOpen && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <h2>Add New Item</h2>
-            <form onSubmit={handleAddItem}>
-              <label>
-                Photo:
-                <input
-                  type="file"
-                  onChange={(e) => setNewItem({ ...newItem, image: e.target.files[0] })}
-                />
-              </label>
-              <label>
-                Title:
-                <input
-                  type="text"
-                  value={newItem.title}
-                  onChange={(e) => setNewItem({ ...newItem, title: e.target.value })}
-                />
-              </label>
-              <label>
-                Description:
-                <textarea
-                  value={newItem.description}
-                  onChange={(e) => setNewItem({ ...newItem, description: e.target.value })}
-                />
-              </label>
-              <label>
-                Price:
-                <input
-                  type="number"
-                  value={newItem.price}
-                  onChange={(e) => setNewItem({ ...newItem, price: e.target.value })}
-                />
-              </label>
-              <button type="submit">Add Item</button>
-              <button type="button" onClick={handleCloseItemModal}>Cancel</button>
-            </form>
+        {/* Edit Menu Info Modal */}
+        {isModalOpen && (
+          <div className="modal-overlay">
+            <div className="modal-content">
+              <h2>Edit Profile</h2>
+              <form onSubmit={handleSaveMenuInfo}>
+                <label>
+                  Menu Name:
+                  <input
+                    type="text"
+                    value={newMenuName}
+                    onChange={(e) => setNewMenuName(e.target.value)}
+                  />
+                </label>
+                <label>
+                  Slogan:
+                  <input
+                    type="text"
+                    value={newSlogan}
+                    onChange={(e) => setNewSlogan(e.target.value)}
+                  />
+                </label>
+                <button type="submit">Save</button>
+                <button type="button" onClick={handleCloseModal}>
+                  Cancel
+                </button>
+              </form>
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Edit Item Modal */}
-      {isEditItemModalOpen && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <h2>Edit Item</h2>
-            <button onClick={() => handleOpenDeleteItemModal(editItem)}>Delete</button>
-            <form>
-              <label>
-                Photo:
-                <input
-                  type="file"
-                  onChange={(e) => setNewItem({ ...newItem, image: URL.createObjectURL(e.target.files[0]) })}
-                />
-              </label>
-              <label>
-                Title:
-                <input
-                  type="text"
-                  value={newItem.title}
-                  onChange={(e) => setNewItem({ ...newItem, title: e.target.value })}
-                />
-              </label>
-              <label>
-                Description:
-                <textarea
-                  value={newItem.description}
-                  onChange={(e) => setNewItem({ ...newItem, description: e.target.value })}
-                />
-              </label>
-              <label>
-                Price:
-                <input
-                  type="number"
-                  value={newItem.price}
-                  onChange={(e) => setNewItem({ ...newItem, price: e.target.value })}
-                />
-              </label>
-              <button type="submit">Save Changes</button>
-              <button type="button" onClick={handleCloseEditItemModal}>Cancel</button>
-            </form>
-          </div>
-        </div>
-      )}
+        {/* Add Page Modal */}
+        {isPageModalOpen && (
+          <div className="modal-overlay">
+            <div className="modal-content">
+              <h2>Add Page</h2>
+              <form onSubmit={handleAddPage}>
+                <label>
+                  Page Name:
+                  <input
+                    type="text"
+                    value={newPageName}
+                    onChange={(e) => setNewPageName(e.target.value)}
+                  />
+                </label>
+                <button type="submit">Add Page</button>
+                <button type="button" onClick={handleClosePageModal}>
+                  Cancel
+                </button>
+              </form>
+              <h3>Current Pages:</h3>
+              <ul>
+        
 
-      {/* Delete Item Modal */}
-      {isDeleteItemModalOpen && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <h2>Are you sure you want to delete this item?</h2>
-            <button onClick={handleDeleteItem}>Yes</button>
-            <button onClick={handleCloseDeleteItemModal}>No</button>
+              {pages.map((page) => (
+                  <li key={page.pageKey}>
+                    {page.name}{" "}
+                    <button onClick={() => handleOpenDeleteModal(page.pageKey)}>Delete</button>
+                  </li>
+                ))} 
+              </ul>
+            </div>
           </div>
-        </div>
-      )}
+        )}
+
+        {/* Delete Page Modal */}
+        {isDeleteModalOpen && (
+          <div className="modal-overlay">
+            <div className="modal-content">
+              <h2>Are you sure you want to delete this page?</h2>
+              <button onClick={handleDeletePage}>Yes</button>
+              <button onClick={handleCloseDeleteModal}>No</button>
+            </div>
+          </div>
+        )}
+
+        {/* Add Item Modal */}
+        {isItemModalOpen && (
+          <div className="modal-overlay">
+            <div className="modal-content">
+              <h2>Add New Item</h2>
+              <form onSubmit={handleAddItem}>
+                <label>
+                  Photo:
+                  <input
+                    required
+                    type="file"
+                    onChange={(e) => setNewItem({ ...newItem, image: e.target.files[0] })}
+                  />
+                </label>
+                <label>
+                  Title:
+                  <input
+                    required
+                    type="text"
+                    value={newItem.title}
+                    onChange={(e) => setNewItem({ ...newItem, title: e.target.value })}
+                  />
+                </label>
+                <label>
+                  Description:
+                  <textarea
+                    required
+                    value={newItem.description}
+                    onChange={(e) => setNewItem({ ...newItem, description: e.target.value })}
+                  />
+                </label>
+                <label>
+                  Price:
+                  <input
+                    required
+                    type="number"
+                    value={newItem.price}
+                    onChange={(e) => setNewItem({ ...newItem, price: e.target.value })}
+                  />
+                </label>
+                <button type="submit">Add Item</button>
+                <button type="button" onClick={handleCloseItemModal}>Cancel</button>
+              </form>
+            </div>
+          </div>
+        )}
+
+        {/* Edit Item Modal */}
+        {isEditItemModalOpen && (
+          <div className="modal-overlay">
+            <div className="modal-content">
+              <h2>Edit Item</h2>
+              <button onClick={() => handleOpenDeleteItemModal(editItem)}>Delete</button>
+              <form>
+                <label>
+                  Photo:
+                  <input
+                    type="file"
+                    onChange={(e) => setNewItem({ ...newItem, image: URL.createObjectURL(e.target.files[0]) })}
+                  />
+                </label>
+                <label>
+                  Title:
+                  <input
+                    type="text"
+                    value={newItem.title}
+                    onChange={(e) => setNewItem({ ...newItem, title: e.target.value })}
+                  />
+                </label>
+                <label>
+                  Description:
+                  <textarea
+                    value={newItem.description}
+                    onChange={(e) => setNewItem({ ...newItem, description: e.target.value })}
+                  />
+                </label>
+                <label>
+                  Price:
+                  <input
+                    type="number"
+                    value={newItem.price}
+                    onChange={(e) => setNewItem({ ...newItem, price: e.target.value })}
+                  />
+                </label>
+                <button type="submit">Save Changes</button>
+                <button type="button" onClick={handleCloseEditItemModal}>Cancel</button>
+              </form>
+            </div>
+          </div>
+        )}
+
+        {/* Delete Item Modal */}
+        {isDeleteItemModalOpen && (
+          <div className="modal-overlay">
+            <div className="modal-content">
+              <h2>Are you sure you want to delete this item?</h2>
+              <button onClick={handleDeleteItem}>Yes</button>
+              <button onClick={handleCloseDeleteItemModal}>No</button>
+            </div>
+          </div>
+        )}
     </div>
   ) : (<h2>Yükleniyor..</h2>));
 }
 
 export default CreateMenu;
-
 

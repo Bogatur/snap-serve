@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import './login&signup.css';
 
@@ -14,7 +14,7 @@ const LoginPage = () => {
     e.preventDefault();
     try {
       await login(email, password);
-      navigate('/createmenü'); // Giriş başarılıysa ana sayfaya yönlendir
+      navigate('/createmenu'); // Giriş başarılıysa ana sayfaya yönlendir
     } catch (error) {
       alert("Hata: " + error.message);
     }

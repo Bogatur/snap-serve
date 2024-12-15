@@ -1,0 +1,65 @@
+.table-container{
+    display: flex;
+    flex-wrap: wrap; /* Kutuların aşağı kaymasını sağlar */
+    gap: 16px; /* Kutular arası boşluk */
+    justify-content: flex-start; /* Kutuları sola hizalar */
+    height: 10rem;
+    margin-top: 1rem;
+}
+
+.tables{
+    flex: 0 0 238px; /* Kutuların sabit genişlikte olmasını sağlar */
+    background-color: #ffffff;
+    box-shadow: rgba(99, 99, 99, 0.1) 0px 2px 8px 0px;
+}
+.tables img{
+    width: 100px;
+    height: 50px;
+}
+.table-top-part{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin: 1rem;
+}
+.delete-icon{
+    cursor: pointer;
+    border: none;
+    background-color: transparent;
+}
+.delete-icon img{
+    height: 15px;
+    width: 15px;
+}
+
+.table-bottom-part{
+    margin: 2rem 1rem 1rem 1rem;
+}
+
+.table-bottom-part h5{
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.table-bottom-part p{
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.table-bottom-part button{
+    width: 100%;
+    padding: 4px;
+    background-color: transparent;
+    color: #212B36;
+    border: 1px solid #212B36;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 0.5rem;
+  }
+  
+  .table-bottom-part button:hover{
+    background-color: #00AB55;
+    color: #ffffff;
+    border: 1px solid #ffffff;
+  }
