@@ -8,6 +8,7 @@ import Home from './pages/homePage/Home'
 import CreateMenu from './pages/createMenuPage/CreateMenu';
 import GenerateQr from './pages/generateQrPage/GenerateQr';
 import MobileMenu from './pages/mobileMenuPage/MobileMenu';
+import OrderTracking from './pages/orderTrackingPage/OrderTracking';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="/createmenu" element={<CreateMenu />} />
           <Route path="/generateqr" element={<GenerateQr />} />
           <Route path="/mobilemenu" element={<MobileMenu />} />
+          <Route path="/ordertracking" element={<OrderTracking />} />
         </Routes>
     </AuthProvider>
   );

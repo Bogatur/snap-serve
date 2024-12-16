@@ -1,53 +1,59 @@
-.table-container{
+
+.order-area{
     display: flex;
     flex-wrap: wrap; /* Kutuların aşağı kaymasını sağlar */
     gap: 16px; /* Kutular arası boşluk */
     justify-content: flex-start; /* Kutuları sola hizalar */
     height: 10rem;
-    margin-top: 1rem;
+    margin-top: 1rem;    
 }
 
-.tables{
-    flex: 0 0 238px; /* Kutuların sabit genişlikte olmasını sağlar */
+.order-container{
+    flex: 0 0 322.6px; /* Kutuların sabit genişlikte olmasını sağlar */
     background-color: #ffffff;
     box-shadow: rgba(99, 99, 99, 0.1) 0px 2px 8px 0px;
 }
-.tables img{
-    width: 100px;
-    height: 50px;
-}
-.table-top-part{
+
+.container-top-part{
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
     margin: 1rem;
 }
-.delete-icon{
-    cursor: pointer;
-    border: none;
-    background-color: transparent;
-}
-.delete-icon img{
-    height: 15px;
-    width: 15px;
+
+.order-container img{
+    height: 90px;
+    width: 115px;
 }
 
-.table-bottom-part{
-    margin: 2rem 1rem 1rem 1rem;
+.container-bottom-part{
+    display: flex;
+    flex-direction: column;
+}
+.container-edit-area{
+    display: flex;
+    justify-content: space-between;
+    margin: 1rem;
 }
 
-.table-bottom-part h5{
-    font-size: 15px;
-    font-weight: 600;
+.container-edit-area img{
+    height: 13px;
+    width: 13px;
 }
 
-.table-bottom-part p{
-    font-size: 14px;
-    font-weight: 400;
+.order-detail{
+    display: flex;
+    justify-content: space-between;
+    margin: 1rem;
 }
 
-.table-bottom-part button{
-    width: 100%;
+.order-total-info{
+    display: flex;
+    justify-content: space-between;
+    margin: 1rem;
+}
+
+.settle-up-button{
     padding: 4px;
     background-color: transparent;
     color: #212B36;
@@ -55,15 +61,11 @@
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    margin-top: 0.5rem;
+    margin: 1rem;
   }
   
-  .table-bottom-part button:hover{
+  .settle-up-button:hover{
     background-color: #00AB55;
     color: #ffffff;
     border: 1px solid #ffffff;
-  }
-
-  .container-bottom-part{
-    font-size: 12px;
   }
