@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from "react-router-dom"; // useNavigate'yi import et
 import { database, get, ref } from "../../firebase";
 
 function MobileMenu() {
+  const navigate = useNavigate(); // useNavigate hook'unu kullanıyoruz
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const companyKey = queryParams.get('cid');
@@ -10,21 +11,18 @@ function MobileMenu() {
 
   const [menuData, setMenuData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [cart, setCart] = useState([]); // Sepeti tutan state
+  const [cart, setCart] = useState(location.state?.cart || []); // Sepeti tutan state
 
   const addToCart = (product) => {
-    // Sepetteki ürünlerden varsa miktarını artır, yoksa yeni ürün ekle
     setCart((prevCart) => {
       const existingProductIndex = prevCart.findIndex(
         (item) => item.productKey === product.productKey
       );
       if (existingProductIndex !== -1) {
-        // Ürün zaten sepette var, miktarını artır
         const updatedCart = [...prevCart];
         updatedCart[existingProductIndex].quantity += 1;
         return updatedCart;
       } else {
-        // Ürün sepette yok, yeni ekle
         return [...prevCart, { ...product, quantity: 1 }];
       }
     });
@@ -39,10 +37,8 @@ function MobileMenu() {
         const updatedCart = [...prevCart];
         const product = updatedCart[existingProductIndex];
         if (product.quantity > 1) {
-          // Miktar 1'den büyükse, sadece miktarı azalt
           product.quantity -= 1;
         } else {
-          // Miktar 1 ise, ürünü sepetten tamamen çıkar
           updatedCart.splice(existingProductIndex, 1);
         }
         return updatedCart;
@@ -51,15 +47,23 @@ function MobileMenu() {
     });
   };
 
+  const getProductQuantity = (product) => {
+    const cartItem = cart.find(item => item.productKey === product.productKey);
+    return cartItem ? cartItem.quantity : 0;
+  };
+
+  const handleOrder = () => {
+    // Sipariş Ver butonuna tıklandığında, Sepet verisini Cart sayfasına yönlendiriyoruz
+    navigate("/cart", { state: { cart, companyKey, tableKey } });
+  };
+
   useEffect(() => {
     const fetchMenuData = async () => {
-      // Firebase'deki belirli bir şirketin menüsüne erişim sağlıyoruz
-      const dbRef = ref(database, "companies/"+companyKey+"/menu"); // Veritabanındaki menu yolunu kontrol ediyoruz
+      const dbRef = ref(database, "companies/" + companyKey + "/menu");
       try {
-        const snapshot = await get(dbRef); // Veriyi alıyoruz
+        const snapshot = await get(dbRef);
         if (snapshot.exists()) {
           const data = snapshot.val();
-          console.log('Menu data:', data); // Veriyi konsola yazdırarak kontrol edin
           const menuList = Object.entries(data).map(([menuKey, menuValue]) => ({
             menuKey,
             menuPageName: menuValue.menuPageName,
@@ -68,19 +72,19 @@ function MobileMenu() {
               ...productValue
             }))
           }));
-          setMenuData(menuList); // Menü verilerini state'e kaydediyoruz
+          setMenuData(menuList);
         } else {
-          console.log("No menu data available"); // Verinin mevcut olmadığını konsola yazdırıyoruz
+          console.log("No menu data available");
         }
       } catch (error) {
-        console.error("Error fetching menu data:", error); // Hata varsa konsola yazdırıyoruz
+        console.error("Error fetching menu data:", error);
       } finally {
-        setLoading(false); // Yükleniyor durumunu kaldırıyoruz
+        setLoading(false);
       }
     };
 
     fetchMenuData();
-  }, []);
+  }, [companyKey]);
 
   return (
     <div className="nav-bar">
@@ -102,7 +106,16 @@ function MobileMenu() {
                       <p>Product Description: {product.productDescription}</p>
                       <p>Product Price: {product.productPrice}</p>
                       <img src={product.productPhotoURL} width={100} height={100} alt={product.productName} />
-                      <button onClick={() => addToCart(product)}>Ekle</button>
+
+                      {cart.some(item => item.productKey === product.productKey) ? (
+                        <div>
+                          <button onClick={() => removeFromCart(product.productKey)}>-</button>
+                          <span>{getProductQuantity(product)} miktar</span>
+                          <button onClick={() => addToCart(product)}>+</button>
+                        </div>
+                      ) : (
+                        <button onClick={() => addToCart(product)}>Ekle</button>
+                      )}
                     </li>
                   ))}
                 </ul>
@@ -113,16 +126,10 @@ function MobileMenu() {
             {cart.length === 0 ? (
               <p>Sepetiniz boş.</p>
             ) : (
-         <div>     <ul>
-                {cart.map((item) => (
-                  <li key={item.productKey} style={{ border: '2px solid #ccc', padding: '10px', marginBottom: '10px', borderRadius: '5px' }}>
-                    <p>{item.productName} - {item.productPrice}</p>
-                    <p>Miktar: {item.quantity}</p>
-                    <button onClick={() => removeFromCart(item.productKey)}>Çıkar</button> {/* Çıkar butonu */}
-                  </li>
-                ))}
-              </ul>
-              <button>Sipariş Ver</button> </div>
+              <div>
+                <p>Toplam Tutar: {cart.reduce((total, item) => total + item.productPrice * item.quantity, 0).toFixed(2)} TL</p>
+                <button onClick={handleOrder}>Sepete Git</button>
+              </div>
             )}
           </ul>
         )}

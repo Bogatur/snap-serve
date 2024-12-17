@@ -221,3 +221,86 @@ export const deleteTable = async (tableKey, companyKey) => {
     throw error;
   }
 }
+
+export const addOrder = async (companyKey, tableKey, products) => {
+  try {
+    const tableRef = push(ref(database, 'companies/' + companyKey + '/tables/' + tableKey + '/orders'));
+
+    // Sipariş verisini Firebase'e kaydediyoruz
+    await set(tableRef, {
+      orderId: Date.now(), // Benzersiz bir sipariş ID'si (örneğin, şu anki zaman damgası)
+      products: products.map(product => ({
+        productKey: product.productKey,
+        productName: product.productName,
+        productPrice: product.productPrice,
+        quantity: product.quantity
+      })),
+      status: "pending", // Sipariş durumu (başlangıçta "pending")
+      createdAt: new Date().toISOString() // Sipariş oluşturulma zamanı
+    });
+
+    console.log("Başarıyla siparişler eklendi.");
+
+  } catch (error) {
+    console.log("Hata oluştu: ", error);
+    throw error;
+  }
+};
+
+
+const calculateOrderTotal = (order) => {
+  // Bir siparişin toplam tutarını hesaplar
+  return order.products.reduce((total, product) => {
+    const productTotal = parseFloat(product.productPrice) * product.quantity;
+    return total + productTotal;
+  }, 0);
+};
+
+export const fetchTablesAndOrders = async (companyKey) => {
+  try {
+    const tablesRef = ref(database, `companies/${companyKey}/tables`);
+    const snapshot = await get(tablesRef);
+
+    if (snapshot.exists()) {
+      const tablesData = snapshot.val();
+
+      // Tables'deki her tablonun orders verilerini al
+      const tablesList = Object.entries(tablesData).map(([tableKey, table]) => {
+        const ordersList = table.orders
+          ? Object.entries(table.orders).map(([orderId, order]) => {
+              const productsList = order.products.map((product) => ({
+                productName: product.productName,
+                productPrice: parseFloat(product.productPrice).toFixed(2),
+                quantity: product.quantity,
+                totalPrice: (parseFloat(product.productPrice) * product.quantity).toFixed(2),
+              }));
+
+              const totalAmount = calculateOrderTotal(order).toFixed(2);
+
+              return {
+                orderId,
+                createdAt: order.createdAt,
+                status: order.status,
+                products: productsList,
+                totalAmount,
+              };
+            })
+          : [];
+
+        return {
+          tableKey,
+          tableName: table.tableName,
+          tableId: table.tableID,
+          orders: ordersList,
+        };
+      });
+
+      return tablesList; // Tables verisi ile birlikte döndürüyoruz
+    } else {
+      console.log("No tables found");
+      return [];
+    }
+  } catch (error) {
+    console.error("Error fetching tables and orders: ", error);
+  }
+};
