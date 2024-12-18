@@ -304,3 +304,18 @@ export const fetchTablesAndOrders = async (companyKey) => {
     console.error("Error fetching tables and orders: ", error);
   }
 };
+
+export const settleUp = async (companyKey, tableKey) => {
+  try {
+    const tableOrdersRef = ref(database, `companies/${companyKey}/tables/${tableKey}/orders`);
+
+    remove(tableOrdersRef);
+
+    console.log("orders silindi!!");
+
+  } catch (error) {
+  console.log(error);
+  throw error;  
+  }
+
+};
