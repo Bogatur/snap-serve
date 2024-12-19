@@ -14,6 +14,7 @@ function MobileMenu() {
   const [cart, setCart] = useState(location.state?.cart || []); // Sepeti tutan state
 
   const addToCart = (product) => {
+    
     setCart((prevCart) => {
       const existingProductIndex = prevCart.findIndex(
         (item) => item.productKey === product.productKey

@@ -22,6 +22,7 @@ export const addCompany = async (companyName, menuName, menuSlogan) => {
 };
 
 export const uploadImageData = async (base64Data) => {
+  
   try {
     const imageKey = new Date().toISOString();
     const imageRef = ref(database, 'images/' + imageKey);

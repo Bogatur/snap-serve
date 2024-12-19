@@ -13,6 +13,7 @@ function Cart() {
   //***** */ NAVIGATE POP veri gönderme işlemini kontrol et !!!!!!!!!!!!!!1
 
   const addToCart = (product) => {
+    
     setCart((prevCart) => {
       const existingProductIndex = prevCart.findIndex(
         (item) => item.productKey === product.productKey
