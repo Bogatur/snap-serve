@@ -8,12 +8,13 @@ import { useAuth } from "../../context/AuthContext";
 
 function OrderTracking (){
     
-  
+
     const { user, username, companyKey, logout } = useAuth();
     const [tables, setTables] = useState([]);
     
 
     useEffect(() => {
+      
       const loadTablesAndOrders = async () => {
         const tablesData = await fetchTablesAndOrders(companyKey);
        // setTables(tablesData);
