@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import './login&signup.css';
+import Header from '../../components/header/Header';
 
 const SignupPage = () => {
   const { signup } = useAuth();
@@ -25,6 +26,8 @@ const SignupPage = () => {
 
 
   return (
+    <>
+    <Header />
     <div className='form-body'>
       <h2>Signup</h2>
     
@@ -67,6 +70,7 @@ const SignupPage = () => {
         />
          <button className='form-button' onClick={handleSignup}>Signup</button>
     </div>
+    </>
   );
 };
 

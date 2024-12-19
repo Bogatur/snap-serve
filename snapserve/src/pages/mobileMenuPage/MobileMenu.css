@@ -1,0 +1,150 @@
+.mobile-bg{
+    max-width: 390px;
+    margin: 0 auto;
+    background-color: #f9f9f9;
+    padding: 1rem;
+}
+.menu-title-area{
+    background-color: #F4F6F8;
+    margin: 1rem auto;
+}
+.menu-title-area h1{
+    font-size: 1rem;
+    text-align: center;
+}
+.menu-title-area h2{
+    font-size: 0.65rem;
+    text-align: center;
+    font-weight: 400;
+}
+
+
+li{
+list-style: none;
+
+}
+.mobile-bg .tabs {
+    margin-bottom: 1rem;
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x:scroll;
+    scrollbar-width: none; /* Firefox için kaydırma çubuğunu gizle */
+    -ms-overflow-style: none; /* Internet Explorer ve Edge için kaydırma çubuğunu gizle */
+}
+  
+.mobile-bg .tabs button {
+    padding: 5px 10px;
+    font-size: 10px;
+    margin-right: 10px;
+    cursor: pointer;
+    background-color: #f1f1f1;
+    border: none;
+    border-radius: 2px;
+    white-space: nowrap; /* Sekme isimlerinin taşmasını engeller */
+  }
+  
+  .mobile-bg .tabs button.active {
+    background-color: #4CAF50; /* Aktif sekme yeşil renkte */
+    color: white;
+  }
+  
+  .mobile-bg .tabs::-webkit-scrollbar {
+    height: 0.5rem; /* Kaydırma çubuğunun yüksekliği */
+  }
+  
+  .mobile-bg .tabs::-webkit-scrollbar-thumb {
+    background-color: #888; /* Kaydırma çubuğunun rengi */
+    border-radius: 10px;
+  }
+  
+  .mobile-bg .tabs::-webkit-scrollbar-thumb:hover {
+    background-color: #555; /* Hover durumunda kaydırma çubuğu */
+  }
+  
+ .mobile-product-area{
+    display: flex;
+    flex-wrap: wrap; /* Kutuların aşağı kaymasını sağlar */
+    gap: 10px; /* Kutular arası boşluk */
+    justify-content: flex-start; /* Kutuları sola hizalar */
+  }
+  .mobile-product-container{
+    background-color: #ffffff;
+    flex: 1 1 calc(50% - 1rem); /* 50% genişlik, boşluklardan bağımsız */
+    box-shadow: rgba(99, 99, 99, 0.1) 0px 2px 8px 0px;
+    max-width: 50%;
+  }
+.mobile-product-items{
+    width: max-content;
+    margin: 0.5rem auto;
+}
+.mobile-product-photo{
+    width: 10rem;
+    height: 10rem;
+}
+.mobile-product-name{
+    /* max-width: 140px; */
+    font-size: 0.8rem;
+    font-weight: 600;
+    max-width: 10rem;
+    color: #212B36;
+
+
+}
+
+.mobile-product-description{
+    font-size: 0.6rem;
+    max-width: 10rem;
+    color: #212B36;
+
+}
+.mobile-product-price{
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #212B36;
+}
+
+.mobile-product-bottom-part{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.5rem;
+    max-width: 10rem;
+}
+
+.quantity-arrange-buttons{
+    height: max-content;
+    justify-items: center;
+}
+
+.mobile-product-add-button{
+background-color: transparent;
+line-height: 0.8rem;
+text-align: center;
+width: 1rem;
+height: 1rem;
+font-size: 0.8rem;
+border: 2px solid #4CAF50;
+color: #4CAF50;
+border-radius: 100%;
+
+}
+
+.mobile-product-remove-button{
+    background-color: transparent;
+    line-height: 0.8rem;
+    text-align: center;
+    width: 1rem;
+    height: 1rem;
+    font-size: 0.8rem;
+    border: 2px solid #4CAF50;
+    color: #4CAF50;
+    border-radius: 100%;
+}
+
+.mobile-product-quantity{
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #212B36;
+    margin: 0 0.5rem;
+}
+

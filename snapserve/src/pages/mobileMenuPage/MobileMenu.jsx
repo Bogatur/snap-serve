@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom"; // useNavigate'yi import et
+import { useNavigate, useLocation } from "react-router-dom"; 
 import { database, get, ref } from "../../firebase";
+import './MobileMenu.css';
 
 function MobileMenu() {
-  const navigate = useNavigate(); // useNavigate hook'unu kullanıyoruz
+  const navigate = useNavigate(); 
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const companyKey = queryParams.get('cid');
@@ -11,7 +12,9 @@ function MobileMenu() {
 
   const [menuData, setMenuData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [cart, setCart] = useState(location.state?.cart || []); // Sepeti tutan state
+  const [cart, setCart] = useState(location.state?.cart || []);
+  const [activeTab, setActiveTab] = useState(""); // Aktif sekme state'i
+
 
   const addToCart = (product) => {
     
@@ -54,7 +57,6 @@ function MobileMenu() {
   };
 
   const handleOrder = () => {
-    // Sipariş Ver butonuna tıklandığında, Sepet verisini Cart sayfasına yönlendiriyoruz
     navigate("/cart", { state: { cart, companyKey, tableKey } });
   };
 
@@ -74,6 +76,7 @@ function MobileMenu() {
             }))
           }));
           setMenuData(menuList);
+          setActiveTab(menuList[0]?.menuPageName || ""); // İlk sekmeyi aktif yap
         } else {
           console.log("No menu data available");
         }
@@ -87,42 +90,64 @@ function MobileMenu() {
     fetchMenuData();
   }, [companyKey]);
 
+  const handleTabClick = (menuPageName) => {
+    setActiveTab(menuPageName); // Aktif sekmeyi değiştir
+  };
+
+  const activeMenu = menuData.find(menu => menu.menuPageName === activeTab); // Aktif sekmeye ait menüyü bul
+
   return (
-    <div className="nav-bar">
+    <div className="mobile-bg">
       <div>
-        <p>COmpany Key: {companyKey}</p>
-        <p>Masa ID: {tableKey}</p>
-        <h1>Menu List</h1>
+        <div className="menu-title-area">
+          <h1>Menu Name</h1>
+          <h2>Menu Slogan</h2>
+        </div>
+        {/* Sekme Başlıkları */}
+        <div className="tabs">
+          {menuData.map((menu) => (
+            <button
+              key={menu.menuKey}
+              className={activeTab === menu.menuPageName ? 'active' : ''}
+              onClick={() => handleTabClick(menu.menuPageName)}
+            >
+              {menu.menuPageName}
+            </button>
+          ))}
+        </div>
+
         {loading ? (
           <p>Loading...</p>
         ) : (
-          <ul>
-            {menuData.map((menu) => (
-              <li key={menu.menuKey}>
-                <h2>{menu.menuPageName}</h2>
-                <ul>
-                  {menu.products.map((product) => (
-                    <li key={product.productKey} style={{ border: '2px solid #ccc', padding: '10px', marginBottom: '10px', borderRadius: '5px' }}>
-                      <p>Product Name: {product.productName}</p>
-                      <p>Product Description: {product.productDescription}</p>
-                      <p>Product Price: {product.productPrice}</p>
-                      <img src={product.productPhotoURL} width={100} height={100} alt={product.productName} />
+          <div>
+            {/* Aktif Menüyü Listele */}
+            <ul className="mobile-product-area">
+              {activeMenu?.products.map((product) => (
+                <li className="mobile-product-container" key={product.productKey}>
+                  <div className="mobile-product-items">
+                  <img className="mobile-product-photo" src={product.productPhotoURL} alt={product.productName} />
+                  <p className="mobile-product-name">{product.productName}</p>
+                  <p className="mobile-product-description">{product.productDescription}</p>
+                    <div className="mobile-product-bottom-part">
+                      <p className="mobile-product-price">${product.productPrice}</p>
+                      <div className="quantity-arrange-buttons">
+                        {cart.some(item => item.productKey === product.productKey) ? (
+                          <div>
+                            <button className="mobile-product-remove-button" onClick={() => removeFromCart(product.productKey)}>-</button>
+                            <span className="mobile-product-quantity">{getProductQuantity(product)}</span>
+                            <button className="mobile-product-add-button" onClick={() => addToCart(product)}>+</button>
+                          </div>
+                        ) : (
+                          <button className="mobile-product-add-button" onClick={() => addToCart(product)}>+</button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
 
-                      {cart.some(item => item.productKey === product.productKey) ? (
-                        <div>
-                          <button onClick={() => removeFromCart(product.productKey)}>-</button>
-                          <span>{getProductQuantity(product)} miktar</span>
-                          <button onClick={() => addToCart(product)}>+</button>
-                        </div>
-                      ) : (
-                        <button onClick={() => addToCart(product)}>Ekle</button>
-                      )}
-                    </li>
-                  ))}
-                </ul>
-              </li>
-            ))}
-
+            {/* Sepet */}
             <h2>Sepetiniz</h2>
             {cart.length === 0 ? (
               <p>Sepetiniz boş.</p>
@@ -132,7 +157,7 @@ function MobileMenu() {
                 <button onClick={handleOrder}>Sepete Git</button>
               </div>
             )}
-          </ul>
+          </div>
         )}
       </div>
     </div>

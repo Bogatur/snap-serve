@@ -136,12 +136,12 @@ align-self: center;
   border: none;
 }
 
-.tabs {
+.page-buttons .tabs {
   display: flex;
   gap: 1rem;
 }
 
-.tabs button {
+.page-buttons .tabs button {
   padding: 10px 15px;
   background-color: #ffffff;
   color: #212B36;
@@ -151,12 +151,12 @@ align-self: center;
   transition: all 0.3s ease;
 }
 
-.tabs button:hover {
+.page-buttons .tabs button:hover {
   padding: 10px 15px;
   background-color: #dcdcdc;
 
 }
-.tabs button.active {
+.page-buttons .tabs button.active {
   background-color: #00AB55;
   color: white;
   border: none;

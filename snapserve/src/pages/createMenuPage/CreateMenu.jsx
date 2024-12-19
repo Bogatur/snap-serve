@@ -4,6 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import SideMenu from "../../components/sidemenu/SideMenu"
 import './CreateMenu.css';
 import { addMenuPage, addMenuPageProduct, deleteMenuPage, getCompanyData, updateCompanyMenuNameMenuSlogan, updateMenuPageProduct} from "../../services/companyService";
+import Header from "../../components/header/Header";
 
 function CreateMenu() {
   const { user, username, companyKey, logout } = useAuth();
@@ -151,8 +152,9 @@ function CreateMenu() {
   /*----------------*/
 
   return (
-
-     companyData != null ? (
+    <>
+    <Header />
+     {companyData != null ? (
     <div className="profile-page">
       <SideMenu />
       <div className="current-profile-page">
@@ -421,8 +423,9 @@ function CreateMenu() {
           </div>
         )}
     </div>
-  ) : (<h2>Yükleniyor..</h2>));
+  ) : (<h2>Yükleniyor..</h2>)}
+  </>
+);
 }
-
 export default CreateMenu;
 

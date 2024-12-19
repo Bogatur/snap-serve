@@ -5,6 +5,7 @@ import '../createMenuPage/CreateMenu.css';
 import { addTable, deleteTable, getCompanyData } from "../../services/companyService";
 import { QRCodeCanvas } from 'qrcode.react';
 import './generateQrPage.css';
+import Header from "../../components/header/Header";
 import SideMenu from "../../components/sidemenu/SideMenu";
 
 
@@ -88,7 +89,9 @@ function GenerateQr (){
 
 
     return (
-      companyData != null ? (
+      <>
+      <Header />
+      {companyData != null ? (
       <div className="profile-page">
         <SideMenu />
         <div className="current-profile-page">
@@ -126,9 +129,10 @@ function GenerateQr (){
       )}
 
       </div>
-    ) : (<h2>Yükleniyor..</h2>));
+    ) : (<h2>Yükleniyor..</h2>)}
+    </>
+  );
 }
-
 // Basit modal stilleri
 const modalStyles = {
     position: 'fixed',

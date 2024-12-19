@@ -1,7 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
-import Header from './components/header/Header'
 import LoginPage from './pages/login&signupPage/LoginPage';
 import SignupPage from './pages/login&signupPage/SignupPage';
 import Home from './pages/homePage/Home'
@@ -14,7 +13,6 @@ import Cart from './pages/mobileMenuPage/Cart';
 function App() {
   return (
     <AuthProvider>
-      <Header/> 
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<LoginPage />} />

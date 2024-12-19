@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import './login&signup.css';
+import Header from '../../components/header/Header';
 
 
 const LoginPage = () => {
@@ -21,6 +22,8 @@ const LoginPage = () => {
   };
 
   return (
+    <>
+    <Header />
     <div className='form-body'>
       <h2>Login</h2>
       <form onSubmit={handleLogin}>
@@ -39,6 +42,7 @@ const LoginPage = () => {
         <button className='form-button' type="submit">Login</button>
       </form>
     </div>
+    </>
   );
 };
 

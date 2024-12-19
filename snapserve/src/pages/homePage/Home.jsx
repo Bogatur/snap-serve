@@ -2,6 +2,7 @@ import React from "react";
 import { useAuth } from '../../context/AuthContext';
 import './Home.css';
 import { useNavigate, Link } from 'react-router-dom';
+import Header from "../../components/header/Header";
 
 
 function Home (){
@@ -10,10 +11,13 @@ function Home (){
     const navigate = useNavigate();
     
     return (
+        <>
+        <Header />
         <div className="hero">
             <h1>Empowering Small <span className="green-text">Cafes&Restuarants</span> with Smart, Simple, and Seamless Service.</h1>
             <Link className="button-37" to="/login">GET STARTED</Link>
-        </div> 
+        </div>
+        </>
     )
 }
 
