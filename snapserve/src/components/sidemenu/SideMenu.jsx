@@ -29,7 +29,7 @@ function SideMenu (){
                 <Link to="/createmenu"><button className="create-menu-button">Create Menu</button></Link>
                 <Link to="/generateqr"><button>Generate QR</button></Link>
                 <Link to="/ordertracking"><button>Order Tracking</button></Link>
-                <button>Statistics</button>
+                <Link to="/statistics"><button>Statistics</button></Link>
                 <button onClick={handleLogoutRedirect}>Logout</button>
                 </div>
         </div>

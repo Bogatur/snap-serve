@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import './OrderTracking.css';
 import { useNavigate, Link } from 'react-router-dom';
 import SideMenu from "../../components/sidemenu/SideMenu";
-import { fetchTablesAndOrders, settleUp } from "../../services/companyService";
+import { fetchTablesAndOrders, increaseProductQuantity, removeProduct, settleUp } from "../../services/companyService";
 import { useAuth } from "../../context/AuthContext";
+import Header from "../../components/header/Header";
 
 
 function OrderTracking (){
@@ -13,22 +14,41 @@ function OrderTracking (){
     const [tables, setTables] = useState([]);
     
 
-    useEffect(() => {
-      
-      const loadTablesAndOrders = async () => {
-        const tablesData = await fetchTablesAndOrders(companyKey);
-       // setTables(tablesData);
-        const tablesWithOrders = tablesData.filter(table => table.orders.length > 0);
-        setTables(tablesWithOrders);
-      };
+      // Modal'ın görünürlüğünü kontrol eden state
+  const [isEditOrderModalOpen, setIsEditOrderModalOpen] = useState(false);
+  // Modal'ı açmak için kullanılan fonksiyon
+  const openEditOrderModal = () => setIsEditOrderModalOpen(true);
+  // Modal'ı kapatmak için kullanılan fonksiyon
+  const closeEditOrderModal = () => setIsEditOrderModalOpen(false);
+
+    // Inline CSS stilleri
+    const modalStyle = {
+      position: "fixed",
+      top: "0",
+      left: "0",
+      right: "0",
+      bottom: "0",
+      backgroundColor: "rgba(0, 0, 0, 0.5)",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+    };
   
-      loadTablesAndOrders();
-    }, [companyKey]);
+    const modalContentStyle = {
+      backgroundColor: "white",
+      padding: "20px",
+      borderRadius: "8px",
+      textAlign: "center",
+      width: "300px",
+      position: "relative",
+    };
+  
 
-    useEffect(() => {
-    
-
-    },[])
+  // useEffect içinde Firebase'den verileri anlık olarak dinliyoruz
+  useEffect(() => {
+    // Firebase'den anlık verileri dinlemek için fetch fonksiyonunu çağırıyoruz
+    fetchTablesAndOrders(companyKey, setTables);
+  }, [companyKey]); // companyKey değiştiğinde yeniden çağrılır
 
 
     function mergeProductsFromOrders(orders) {
@@ -68,8 +88,9 @@ function OrderTracking (){
   };
 
 
-    return (
+    return ( <>  <Header/>
             <div className="profile-page">
+           
                 <SideMenu />
                 <div className="current-profile-page">
                     <div className="page-info-text">
@@ -115,6 +136,8 @@ function OrderTracking (){
             quantity: product.quantity,
             productPrice: product.productPrice,
             totalPrice: product.totalPrice,
+            orderKey: order.orderId,
+            tableKey: table.tableKey
           };
         }
       });
@@ -133,7 +156,54 @@ function OrderTracking (){
       <div className="container-bottom-part">
       <div className="container-edit-area">
           <p>Orders</p>
-          <button className="edit-icon-button"><img src={`${process.env.PUBLIC_URL}/pen.png`} alt="Edit-Icon" /></button>
+          <button className="edit-icon-button" onClick={openEditOrderModal}><img src={`${process.env.PUBLIC_URL}/pen.png`} alt="Edit-Icon" /></button>
+       {/* Modal penceresi */}
+       {isEditOrderModalOpen && (
+  <div style={modalStyle}>
+    <div style={modalContentStyle}>
+      <span onClick={closeEditOrderModal}>
+        &times;
+      </span>
+      <h2>Modal Başlığı</h2>
+      <p>Modal içerik buraya gelecek.</p>
+      {mergedProducts.map((product, index) => (
+        <div className="order-detail" key={product.productKey}>
+          <p>{product.quantity} x {product.productName}</p>
+          <p>{product.productPrice} TL</p>
+          
+          {/* Eksi butonu */}
+          <button
+            onClick={() => removeProduct(companyKey, product.tableKey, product.orderKey, product.productName)}
+            style={{ marginRight: "10px" }}
+          >
+            -
+          </button>
+
+          {/* Artı butonu */}
+          <button
+            onClick={() => increaseProductQuantity(companyKey, product.tableKey, product.orderKey, product.productName)}
+            style={{ marginLeft: "10px" }}
+          >
+            +
+          </button>
+        </div>
+      ))}
+      <button
+        onClick={closeEditOrderModal}
+        style={{
+          padding: "10px 20px",
+          fontSize: "16px",
+          cursor: "pointer",
+          marginTop: "20px",
+        }}
+      >
+        Kapat
+      </button>
+    </div>
+  </div>
+)}
+
+
       </div>
       <hr/>
   
@@ -173,7 +243,7 @@ function OrderTracking (){
                     </div>            
             
             </div>
-
+            </>
     )
 }
 export default OrderTracking

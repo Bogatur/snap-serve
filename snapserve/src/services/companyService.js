@@ -1,4 +1,4 @@
-import { database, ref, push, set, get, update, remove } from '../firebase';
+import { database, ref, push, set, get, update, remove, onValue } from '../firebase';
 
 // Yeni şirket kaydını "companies" altına ekleme fonksiyonu
 export const addCompany = async (companyName, menuName, menuSlogan) => {
@@ -257,11 +257,11 @@ const calculateOrderTotal = (order) => {
   }, 0);
 };
 
-export const fetchTablesAndOrders = async (companyKey) => {
-  try {
-    const tablesRef = ref(database, `companies/${companyKey}/tables`);
-    const snapshot = await get(tablesRef);
+export const fetchTablesAndOrders = (companyKey, setTables) => {
+  const tablesRef = ref(database, `companies/${companyKey}/tables`);
 
+  // Firebase'den veriyi dinlemek için onValue kullanıyoruz
+  onValue(tablesRef, (snapshot) => {
     if (snapshot.exists()) {
       const tablesData = snapshot.val();
 
@@ -296,19 +296,68 @@ export const fetchTablesAndOrders = async (companyKey) => {
         };
       });
 
-      return tablesList; // Tables verisi ile birlikte döndürüyoruz
+      // Filter only tables with orders
+      const tablesWithOrders = tablesList.filter(table => table.orders.length > 0);
+
+      setTables(tablesWithOrders); // State'e yeni veriyi set ediyoruz
     } else {
       console.log("No tables found");
-      return [];
+      setTables([]); // Hiç tablosu olmayan durumda state'i temizle
     }
-  } catch (error) {
-    console.error("Error fetching tables and orders: ", error);
-  }
+  });
 };
 
 export const settleUp = async (companyKey, tableKey) => {
   try {
     const tableOrdersRef = ref(database, `companies/${companyKey}/tables/${tableKey}/orders`);
+
+        // Siparişlerin tümünü al
+        const snapshot = await get(tableOrdersRef);
+        if (snapshot.exists()) {
+          const ordersData = snapshot.val();
+          
+          // Satış verilerini kaydetmek için tarih oluştur
+          const date = new Date().toISOString().split("T")[0]; // YYYY-MM-DD formatında tarih
+    
+          // Yeni satış verisi oluşturulacak
+          const salesRef = push(ref(database, `companies/${companyKey}/salesStatistics/${date}`));
+    
+          // Satış verilerini işle
+          let salesData = [];
+          let totalRevenue = 0;
+    
+          // Orders'ı işle
+          Object.values(ordersData).forEach((order) => {
+            order.products.forEach((product) => {
+              console.log("PRODUCT: "+product.productName+"-"+product.quantity+"-"+product.productPrice);
+        
+              salesData.push({
+                productName: product.productName,
+                quantity: product.quantity,
+                productPrice: product.productPrice,
+                date: Date.now(),
+          
+              });
+            });
+          });
+    
+          salesData.forEach(element => {
+            console.log("eE: "+ JSON.stringify(element).toString());
+       
+          });
+
+          await set(salesRef, salesData);
+    
+          // Tablo siparişlerini sıfırla (Ödeme tamamlandı)
+       //   await set(tableOrdersRef, {});
+    
+          console.log("Orders settled and statistics updated!");
+          console.log("Total revenue: ", totalRevenue);
+        } else {
+          console.log("No orders found for this table");
+        }
+
+
 
     remove(tableOrdersRef);
 
@@ -319,4 +368,91 @@ export const settleUp = async (companyKey, tableKey) => {
   throw error;  
   }
 
+};
+
+
+
+export const removeProduct = async (companyKey, tableKey, orderKey, productName) => {
+  try {
+    // Sipariş referansını alıyoruz
+    const productRef = ref(database, "companies/" + companyKey + "/tables/" + tableKey + "/orders/" + orderKey);
+    console.log(productName);
+
+    // Veriyi alıyoruz
+    const snapshot = await get(productRef);
+
+    if (snapshot.exists()) {
+      const order = snapshot.val();
+      let updatedProducts = [...order.products];
+
+      // Ürünü bulup, miktarını kontrol ediyoruz
+      let productFound = false;
+      updatedProducts = updatedProducts.map((product) => {
+        if (product.productName === productName && product.quantity > 0) {
+          productFound = true;
+          // Eğer ürünün miktarı 1'den büyükse sadece miktarı azaltıyoruz
+          if (product.quantity > 1) {
+            product.quantity -= 1;
+          } else {
+            // Eğer miktar 1 ise, ürünü tamamen siliyoruz
+            return null;
+          }
+        }
+        return product;
+      }).filter(product => product !== null); // null olan ürünleri filtreliyoruz
+
+      // Eğer ürün bulunduysa, siparişi güncelliyoruz
+      if (productFound) {
+        const updatedOrder = {
+          ...order,
+          products: updatedProducts
+        };
+
+        // Eğer updatedProducts boşsa, yani tüm ürünler silindiyse, son ürün silindi mesajı veriyoruz
+        if (updatedProducts.length === 0) {
+          // Siparişteki tüm ürünler silindiğinde, orderKey'i tamamen kaldırıyoruz
+          await remove(productRef);
+          console.log('Son ürün silindi ve sipariş tamamen kaldırıldı!');
+        } else {
+          // Ürünler silinmediyse, sadece güncellenmiş siparişi kaydediyoruz
+          await update(productRef, updatedOrder);
+          console.log('Ürün başarıyla silindi!');
+        }
+      }
+    } else {
+      console.log("Sipariş bulunamadı.");
+    }
+  } catch (error) {
+    console.log("Hata: Ürün silinemedi.");
+    throw error;
+  }
+};
+
+export const increaseProductQuantity = async (companyKey, tableKey, orderKey, productName) => {
+  try {
+    // Firebase'deki ürünlerin bulunduğu referansa erişiyoruz
+    const productRef = ref(database, `companies/${companyKey}/tables/${tableKey}/orders/${orderKey}/products`);
+    const orderRef = ref(database, `companies/${companyKey}/tables/${tableKey}/orders/${orderKey}`);
+    // Veriyi alıyoruz
+    const snapshot = await get(productRef);
+
+    if (snapshot.exists()) {
+      let updatedProducts = snapshot.val().map((product) => {
+        if (product.productName === productName) {
+          // Miktarı artırıyoruz
+          product.quantity += 1;
+        }
+        return product;
+      });
+
+      // Firebase'e güncellenmiş veriyi kaydediyoruz
+      // Burada sadece `products` listesini güncellememiz gerektiği için
+      // 'products' anahtarını kullanarak güncelleme yapıyoruz
+      await update(orderRef, { products: updatedProducts });
+
+      console.log('Ürün miktarı artırıldı!');
+    }
+  } catch (error) {
+    console.error("Ürün miktarı artırılamadı:", error);
+  }
 };

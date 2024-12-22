@@ -9,6 +9,7 @@ import GenerateQr from './pages/generateQrPage/GenerateQr';
 import MobileMenu from './pages/mobileMenuPage/MobileMenu';
 import OrderTracking from './pages/orderTrackingPage/OrderTracking';
 import Cart from './pages/mobileMenuPage/Cart';
+import Statistics from './pages/statistics/Statistics';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path="/mobilemenu" element={<MobileMenu />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/ordertracking" element={<OrderTracking />} />
+          <Route path="/statistics" element={<Statistics />} />
         </Routes>
     </AuthProvider>
   );
