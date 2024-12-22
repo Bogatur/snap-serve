@@ -1,19 +1,29 @@
 .mobile-bg{
-    max-width: 390px;
+    max-width: 400px;
     margin: 0 auto;
-    background-color: #f9f9f9;
-    padding: 1rem;
+    background-color: #F9FAFB;
+    padding: 0.7rem;
 }
+
+.mobile-top-part{
+    position: sticky;
+    top: 0;
+    z-index: 10; /* Üstte kalmasını sağlar */
+
+}
+
+
 .menu-title-area{
     background-color: #F4F6F8;
-    margin: 1rem auto;
+    margin: 0 auto;
+    padding: 1.5rem;
 }
 .menu-title-area h1{
-    font-size: 1rem;
+    font-size: 1.35rem;
     text-align: center;
 }
 .menu-title-area h2{
-    font-size: 0.65rem;
+    font-size: 0.85rem;
     text-align: center;
     font-weight: 400;
 }
@@ -24,18 +34,24 @@ list-style: none;
 
 }
 .mobile-bg .tabs {
-    margin-bottom: 1rem;
+    background-color: #F9FAFB;
+    padding: 0.6rem 0;
     display: flex;
     flex-wrap: nowrap;
     overflow-x:scroll;
     scrollbar-width: none; /* Firefox için kaydırma çubuğunu gizle */
     -ms-overflow-style: none; /* Internet Explorer ve Edge için kaydırma çubuğunu gizle */
 }
+
+.mobile-bg .tabs::-webkit-scrollbar {
+    display: none; /* WebKit (Chrome, Safari, Opera) */
+    scrollbar-width: none; /* Firefox için kaydırma çubuğunu gizle */
+  }
   
 .mobile-bg .tabs button {
-    padding: 5px 10px;
-    font-size: 10px;
-    margin-right: 10px;
+    padding: 0.6rem 0.9rem;
+    font-size: 0.7rem;
+    margin-right: 0.7rem;
     cursor: pointer;
     background-color: #f1f1f1;
     border: none;
@@ -44,8 +60,8 @@ list-style: none;
   }
   
   .mobile-bg .tabs button.active {
-    background-color: #4CAF50; /* Aktif sekme yeşil renkte */
-    color: white;
+    background-color: #00AB55; /* Aktif sekme yeşil renkte */
+    color: rgb(255, 255, 255);
   }
   
   .mobile-bg .tabs::-webkit-scrollbar {
@@ -64,7 +80,7 @@ list-style: none;
  .mobile-product-area{
     display: flex;
     flex-wrap: wrap; /* Kutuların aşağı kaymasını sağlar */
-    gap: 10px; /* Kutular arası boşluk */
+    gap: 0.7rem; /* Kutular arası boşluk */
     justify-content: flex-start; /* Kutuları sola hizalar */
   }
   .mobile-product-container{
@@ -73,78 +89,179 @@ list-style: none;
     box-shadow: rgba(99, 99, 99, 0.1) 0px 2px 8px 0px;
     max-width: 50%;
   }
+
 .mobile-product-items{
-    width: max-content;
-    margin: 0.5rem auto;
+    margin: 0.4rem;
 }
+
+.photo-area{
+    /* width: 100%; */
+    position: relative;
+    width: 100%;
+    min-width: 100%;
+    padding-top: 100%;
+    min-width: 75px;
+    min-height: 75px;
+}
+
 .mobile-product-photo{
-    width: 10rem;
-    height: 10rem;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+    min-width: 100%;
+    object-fit: cover;
+    border-radius: 3px;
+
 }
+
+/* .mobile-product-info{
+    background-color: #555;
+    display: block;
+    position: sticky;
+    bottom: 0;
+    left: 0;
+} */
 .mobile-product-name{
-    /* max-width: 140px; */
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     font-weight: 600;
-    max-width: 10rem;
     color: #212B36;
-
-
+    margin-top: 0.5rem;
+    max-width: 8rem;
+    white-space: nowrap;
+    overflow: hidden; /* Taşan kısmı gizle */
+    text-overflow: ellipsis; /* Üç nokta ekle */
 }
 
 .mobile-product-description{
-    font-size: 0.6rem;
-    max-width: 10rem;
+    font-size: 0.65rem;
+    max-width: 8rem;
     color: #212B36;
+    max-height: 1rem;
+    white-space: nowrap;
 
-}
-.mobile-product-price{
-    font-size: 0.7rem;
-    font-weight: 600;
-    color: #212B36;
+    overflow: hidden; /* Taşan kısmı gizle */
+    text-overflow: ellipsis; /* Üç nokta ekle */
+    
 }
 
 .mobile-product-bottom-part{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 0.5rem;
-    max-width: 10rem;
+    margin-top: 0.4rem;
+    width: 100%;
+
 }
+.mobile-product-price{
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #212B36;
+}
+
 
 .quantity-arrange-buttons{
     height: max-content;
     justify-items: center;
 }
 
-.mobile-product-add-button{
-background-color: transparent;
-line-height: 0.8rem;
-text-align: center;
-width: 1rem;
-height: 1rem;
-font-size: 0.8rem;
-border: 2px solid #4CAF50;
-color: #4CAF50;
-border-radius: 100%;
-
-}
-
-.mobile-product-remove-button{
+.mobile-product-add-button, .mobile-product-remove-button{
     background-color: transparent;
     line-height: 0.8rem;
     text-align: center;
-    width: 1rem;
-    height: 1rem;
+    width: 1.2rem;
+    height: 1.2rem;
     font-size: 0.8rem;
-    border: 2px solid #4CAF50;
-    color: #4CAF50;
+    border: 2px solid #00AB55;
+    color: #00AB55;
     border-radius: 100%;
 }
+.mobile-product-add-button:active, .mobile-product-remove-button:active{
+    color: #007B55;
+    border: 3px solid #007B55;
+    font-weight: 700;
 
-.mobile-product-quantity{
-    font-size: 0.7rem;
-    font-weight: 600;
-    color: #212B36;
-    margin: 0 0.5rem;
 }
 
+
+.mobile-product-quantity{
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #212B36;
+    margin: 0 0.7rem;
+}
+
+.empty-space{
+    width: 100%;
+    height: 100px;
+    background-color: transparent;
+}
+
+
+.go-to-cart-button{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: none;
+    border: none;
+    width: 100%;
+    background-color: #00AB55;
+    padding: 1rem;
+
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%; 
+    box-shadow: 0 -1px 2.5px rgba(0, 0, 0, 0.1);
+}
+.go-to-cart-button:active{
+    background-color: #007B55;
+
+}
+.cart-info{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.product-count{
+    color: #F9FAFB;
+    font-size: 0.8rem;
+    border: 2px solid #F9FAFB;
+    border-radius: 50%;
+    height: 2rem;
+    width: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 0.5rem;
+    font-weight: 500;
+}
+
+
+.go-to-cart-button h3{
+    color: #F9FAFB;
+    font-size: 1rem;
+    font-weight: 500;
+    margin-left: 0.7rem;
+}
+
+.total-cost{
+    color: rgb(60, 60, 60);
+    background-color: #f9f9f9;
+    color: #212B36;
+    font-weight: 500;
+    font-size: 0.8rem;
+    border-radius: 2px;
+    max-width: 6rem;
+
+    width: 7.5rem;
+    height: 2.3rem;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}

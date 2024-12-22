@@ -13,7 +13,8 @@ function MobileMenu() {
   const [menuData, setMenuData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [cart, setCart] = useState(location.state?.cart || []);
-  const [activeTab, setActiveTab] = useState(""); // Aktif sekme state'i
+  const [activeTab, setActiveTab] = useState("");
+   // Aktif sekme state'i
 
 
   const addToCart = (product) => {
@@ -99,33 +100,40 @@ function MobileMenu() {
   return (
     <div className="mobile-bg">
       <div>
-        <div className="menu-title-area">
-          <h1>Menu Name</h1>
-          <h2>Menu Slogan</h2>
-        </div>
-        {/* Sekme Başlıkları */}
-        <div className="tabs">
-          {menuData.map((menu) => (
-            <button
-              key={menu.menuKey}
-              className={activeTab === menu.menuPageName ? 'active' : ''}
-              onClick={() => handleTabClick(menu.menuPageName)}
-            >
-              {menu.menuPageName}
-            </button>
-          ))}
-        </div>
-
-        {loading ? (
-          <p>Loading...</p>
-        ) : (
+        <div className="mobile-top-part">
+          <div className="menu-title-area">
+            <h1>Menu Name</h1>
+            <h2>Menu Slogan</h2>
+          </div>
+          {/* Sekme Başlıkları */}
+          <div className="tabs">
+            {menuData.map((menu) => (
+              <button
+                key={menu.menuKey}
+                className={activeTab === menu.menuPageName ? 'active' : ''}
+                onClick={() => handleTabClick(menu.menuPageName)}
+              >
+                {menu.menuPageName}
+              </button>
+            ))}
+          </div>
+      </div>
+          {loading ? (
+            <p>Loading...</p>
+          ) : (
           <div>
+            
+      
             {/* Aktif Menüyü Listele */}
+            
             <ul className="mobile-product-area">
               {activeMenu?.products.map((product) => (
                 <li className="mobile-product-container" key={product.productKey}>
                   <div className="mobile-product-items">
-                  <img className="mobile-product-photo" src={product.productPhotoURL} alt={product.productName} />
+                  <div className="photo-area">
+                    <img className="mobile-product-photo" src={product.productPhotoURL} alt={product.productName} />
+                  </div>
+                  <div className="mobile-product-info">
                   <p className="mobile-product-name">{product.productName}</p>
                   <p className="mobile-product-description">{product.productDescription}</p>
                     <div className="mobile-product-bottom-part">
@@ -141,23 +149,30 @@ function MobileMenu() {
                           <button className="mobile-product-add-button" onClick={() => addToCart(product)}>+</button>
                         )}
                       </div>
+                      </div>
                     </div>
                   </div>
                 </li>
               ))}
             </ul>
 
+            <div className="empty-space"></div>
+
             {/* Sepet */}
-            <h2>Sepetiniz</h2>
-            {cart.length === 0 ? (
-              <p>Sepetiniz boş.</p>
-            ) : (
-              <div>
-                <p>Toplam Tutar: {cart.reduce((total, item) => total + item.productPrice * item.quantity, 0).toFixed(2)} TL</p>
-                <button onClick={handleOrder}>Sepete Git</button>
+            {cart.length !== 0 && (
+              <button className="go-to-cart-button" onClick={handleOrder}>
+                <div className="cart-info">
+                    <p className="product-count"> {cart.reduce((total, item) => total + item.quantity, 0)}</p>
+                    <h3>Go to Cart</h3>
               </div>
-            )}
+                <div className="total-cost">
+                    <p>${cart.reduce((total, item) => total + item.productPrice * item.quantity, 0).toFixed(2)}</p>
+                </div>
+                </button>
+               )}
           </div>
+
+          
         )}
       </div>
     </div>

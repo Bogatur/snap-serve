@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom"; // useLocation ve useNavigate import ediliyor
 import { addOrder } from "../../services/companyService";
+import './Cart.css';
 
 function Cart() {
   const location = useLocation();
@@ -8,6 +9,20 @@ function Cart() {
   //const cart = location.state?.cart || []; // Sepet verisi burada alınıyor
 
   const [cart, setCart] = useState(location.state?.cart || []);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenModal = () => setIsModalOpen(true);
+  const handleCloseModal = () => setIsModalOpen(false);
+
+  const handleCompleteOrder = () => {
+    // Sipariş tamamlama işlemleri burada yapılabilir.
+    handleOrder();
+    setIsModalOpen(false)
+    navigate("/mobileMenu?cid="+location.state?.companyKey+"&&tid="+location.state?.tableKey,  { state: { cart } })
+    // navigate("/order-complete", { replace: true }); // Sepeti boşaltıp sipariş tamamlandığına dair bir sayfaya yönlendiriyoruz
+    ;
+  };
 
 
   //***** */ NAVIGATE POP veri gönderme işlemini kontrol et !!!!!!!!!!!!!!1
@@ -27,6 +42,7 @@ function Cart() {
       }
     });
   };
+  
 
   const removeFromCart = (productKey) => {
     setCart((prevCart) => {
@@ -59,38 +75,67 @@ function Cart() {
 
 
   return (
-    <div>
-      <h1>Sepetiniz</h1>
+    <div className="mobile-bg">
+      <div className="mobile-top-part">
+          <div className="menu-title-area">
+            <h1>Menu Name</h1>
+            <h2>Menu Slogan</h2>
+          </div>
+      </div>
       {cart.length === 0 ? (
-        <p>Sepetiniz boş.</p>
-      ) : (
-        <ul>
+        navigate("/mobileMenu?cid="+location.state?.companyKey+"&&tid="+location.state?.tableKey,  { state: { cart } })
+        ) : (
+        <ul className="cart-product-area">
+          <h3 className="chart-title">Your Cart</h3>
           {cart.map((item) => (
-            <li key={item.productKey}>
-                   <img src={item.productPhotoURL} width={100} height={100} alt={item.productName} />
-
-              <p>{item.productName} - {item.productPrice}</p>
-              <p>Miktar: 
-              <button onClick={() => removeFromCart(item.productKey)}>-</button>
-                {item.quantity}
-                <button onClick={() => addToCart(item)}>+</button>
-              </p>
-          
+            <li className="cart-product-container" key={item.productKey}>
+              <img className="cart-photo" src={item.productPhotoURL} alt={item.productName} />
+              <div className="cart-product-details">
+                <div className="order-product-info">
+                  <p className="mobile-product-name">{item.productName}</p>
+                  <p className="mobile-product-price">${item.quantity * item.productPrice}</p>
+                </div>
+                <div className="order-arrange area">
+                  <button className="mobile-product-remove-button" onClick={() => removeFromCart(item.productKey)}>-</button>
+                  <span className="mobile-product-quantity">{item.quantity}</span>
+                  <button className="mobile-product-add-button"  onClick={() => addToCart(item)}>+</button>
+                </div>
+              </div>
+      
             </li>
           ))}
-
-{cart.length === 0 ? (
-              <p>Sepetiniz boş.</p>
-            ) : (
-              <div>
-                <p>Toplam Tutar: {cart.reduce((total, item) => total + item.productPrice * item.quantity, 0).toFixed(2)} TL</p>
-                <button onClick={handleOrder}>Sipariş Ver</button>
-              </div>
-            )}
         </ul>
       )}
-      <button onClick={() => navigate("/mobileMenu?cid="+location.state?.companyKey+"&&tid="+location.state?.tableKey,  { state: { cart } })}>Menüye Dön</button>
+                  
+      <div className="empty-space"></div>
+      <div className="handle-order-div">
+          <div className="total-fee-area">
+            <p className="total-fee-text">Total Fee:</p>
+            <p className="total-fee">${cart.reduce((total, item) => total + item.productPrice * item.quantity, 0).toFixed(2)}</p>
+          </div>
+          <button className="give-order-button" onClick={handleOpenModal}>Complete Order</button>
+      </div>
+      {/* <button onClick={() => navigate("/mobileMenu?cid="+location.state?.companyKey+"&&tid="+location.state?.tableKey,  { state: { cart } })}>Menüye Dön</button> */}
+      {isModalOpen && (
+        <div className="cart-overlay">
+          <div className="cart-modal">
+            <p className="cart-modal-text">Are you sure you want to complete your order for ${cart.reduce((total, item) => total + item.productPrice * item.quantity, 0).toFixed(2)} ?</p>
+            <div className="cart-modal-buttons">
+              <button className="cart-modal-button complete" onClick={handleCompleteOrder}>
+                Complete
+              </button>
+              <button className="cart-modal-button cancel" onClick={handleCloseModal}>
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    
     </div>
+    
+
+    
   );
 }
 

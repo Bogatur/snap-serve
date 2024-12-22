@@ -225,7 +225,6 @@ function OrderTracking (){
       <hr/>
       <button className="settle-up-button" onClick={() => handleSettleUp(table.tableKey)}>Settle Up</button>
   </div>
-
   
     );
   })()
