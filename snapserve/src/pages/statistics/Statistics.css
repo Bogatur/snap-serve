@@ -1,0 +1,134 @@
+.statistics-sub-menu {
+    display: flex;
+    gap: 2rem;    /* margin: 0.5rem; */
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 0.4rem;
+  }
+  
+  .statistics-sub-menu a {
+    color: #919EAB; /* Soluk gri */
+    font-size: 1rem;
+    text-decoration: none;
+    padding: 0.5rem 0;
+    position: relative;
+    transition: color 0.3s ease;
+  }
+  
+  .statistics-sub-menu a:hover {
+    color: #212B36; /* Parlak siyah */
+  }
+  
+  .statistics-sub-menu a.statistics-active-tab {
+    color: #212B36; /* Parlak siyah */
+    font-weight: 500;
+  }
+  
+  .statistics-sub-menu a.statistics-active-tab::after {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 3px;
+    background-color: #00AB55;; /* Yeşil */
+    position: absolute;
+    bottom: -0.5rem;
+    left: 0;
+    border-radius: 5px;
+  }
+  /* .income-tracking-bg{
+    background-color: #337B57;
+  } */
+
+  .income-tracking-filter-area{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 2rem 0 2rem 0;
+  }
+
+  .income-details-container{
+    display: flex;
+    margin-bottom: 2rem;
+  }
+
+  .total-revenue-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem 2rem;
+    margin: 0rem 0 0rem 2rem;
+    background-color: #ffffff;
+    border-radius: 5px;
+    box-shadow: rgba(99, 99, 99, 0.1) 0px 2px 8px 0px;
+    width:max-content;
+    height: max-content;
+  
+  }
+
+  .revenue-bar{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #337B57;
+    height: 8rem;
+    width: 8rem;
+    border-radius: 50%;
+    color: #337B57;
+    font-weight: 500;
+    margin: 2rem 0;
+  }
+
+  .total-revenue-container p{
+    color:#212B36;
+    font-weight: 500;
+    width: max-content;
+  }
+
+  .statistics-filter{
+    width: 7rem;
+    height: 2.5rem;
+    border: 2px solid #337B57;
+    background-color: transparent;
+    border-radius: 3px;
+  }
+
+  .list-of-product-sold{
+    width: 100%;
+  }
+
+  /* .table-head{
+    position: fixed;
+  } */
+
+  .table-container{
+    padding: 0;
+    margin: 0;
+  }
+
+  .table-container::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .table-container::-webkit-scrollbar-track {
+    background: #f0f0f0;
+  }
+  
+  .table-container::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+  }
+  
+  .table-container::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+
+  .graph-filter-button{
+    width: 100%;
+    padding: 0.7rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    border: 2px solid #337B57;
+    background-color: transparent;
+    border-radius: 3px;
+    color: #212B36;
+  }
