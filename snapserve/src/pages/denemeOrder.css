@@ -1,0 +1,15 @@
+/* Arkaplanın soluklaşarak kaybolma animasyonu */
+@keyframes fadeOutBackground {
+    0% {
+      background-color: rgba(0, 255, 0, 0.8); /* Başlangıçta yeşil ve belirgin */
+    }
+    100% {
+      background-color: rgba(0, 255, 0, 0); /* Animasyon sonunda transparan */
+    }
+  }
+  
+  /* Arkaplanın animasyonu */
+  .fade-background {
+    animation: fadeOutBackground 1m forwards; /* 1 dakika süren animasyon */
+  }
+  

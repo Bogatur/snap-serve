@@ -10,10 +10,14 @@ import MobileMenu from './pages/mobileMenuPage/MobileMenu';
 import OrderTracking from './pages/orderTrackingPage/OrderTracking';
 import Cart from './pages/mobileMenuPage/Cart';
 import Statistics from './pages/statistics/Statistics';
+import { OrderProvider } from './context/OrderContext';
+import AdminPage from './pages/denemeOrderPage';
+import Ord from './pages/orderTrackingPage/ord';
 
 function App() {
   return (
     <AuthProvider>
+      <OrderProvider>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<LoginPage />} />
@@ -24,7 +28,10 @@ function App() {
           <Route path="/cart" element={<Cart />} />
           <Route path="/ordertracking" element={<OrderTracking />} />
           <Route path="/statistics" element={<Statistics />} />
+          <Route path="/orderDeneme" element={<AdminPage />} />
+          <Route path="/ord" element={<Ord />} />
         </Routes>
+      </OrderProvider>
     </AuthProvider>
   );
 }
