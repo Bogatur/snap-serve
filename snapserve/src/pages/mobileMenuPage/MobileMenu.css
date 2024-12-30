@@ -94,6 +94,7 @@ list-style: none;
     margin: 0.4rem;
 }
 
+
 .photo-area{
     /* width: 100%; */
     position: relative;
@@ -102,6 +103,36 @@ list-style: none;
     padding-top: 100%;
     min-width: 75px;
     min-height: 75px;
+    display: inline-block; /* Fotoğrafın kendi boyutunu kapsamasını sağlar */
+
+}
+
+.like-button{
+    background-color: #007B55;
+    height: 1.4rem;
+    width: 1.4rem;
+    position: absolute;
+    top: 0.4rem; /* Fotoğrafın üstünden 10px boşluk */
+    right: 0.4rem; /* Fotoğrafın sağından 10px boşluk */
+    z-index: 9;
+    border: none;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+}
+
+.like-button img{
+    height: 0.6rem;
+    width: 0.6rem;
+}
+.like-button.liked {
+    background-color: #F4F6F8;
+}
+.like-button.liked img{
+    height: 0.8rem;
+    width: 0.8rem;
 }
 
 .mobile-product-photo{
@@ -153,24 +184,28 @@ list-style: none;
     justify-content: space-between;
     align-items: center;
     margin-top: 0.4rem;
+    margin-bottom: 0.1rem;
     width: 100%;
-
 }
 .mobile-product-price{
     font-size: 0.8rem;
     font-weight: 500;
     color: #212B36;
+    height: 100%;
+    align-self: flex-end;
 }
 
 
 .quantity-arrange-buttons{
-    height: max-content;
-    justify-items: center;
+    margin-right: 0.2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
 }
 
 .mobile-product-add-button, .mobile-product-remove-button{
-    background-color: transparent;
-    line-height: 0.8rem;
+    background-color:transparent;
     text-align: center;
     width: 1.2rem;
     height: 1.2rem;
@@ -179,13 +214,17 @@ list-style: none;
     color: #00AB55;
     border-radius: 100%;
 }
+
+.mobile-product-add-button p, .mobile-product-remove-button p{
+    line-height: 100%;
+}
+
+
 .mobile-product-add-button:active, .mobile-product-remove-button:active{
     color: #007B55;
     border: 3px solid #007B55;
     font-weight: 700;
-
 }
-
 
 .mobile-product-quantity{
     font-size: 0.8rem;

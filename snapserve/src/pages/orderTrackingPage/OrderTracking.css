@@ -1,26 +1,38 @@
 
 .order-area{
-    display: flex;
-    flex-wrap: wrap; /* Kutuların aşağı kaymasını sağlar */
-    gap: 16px; /* Kutular arası boşluk */
-    justify-content: flex-start; /* Kutuları sola hizalar */
-    height: 10rem;
+    max-width: 1000px;
+    display: block;
+    column-count: 3;
     margin-top: 1rem;    
+
 }
 
 .order-container{
-    flex: 0 0 322.6px; /* Kutuların sabit genişlikte olmasını sağlar */
+    break-inside: avoid;
+    margin-bottom: 1rem;
+    width: 325px;
+    max-width: 325px;
+    max-width: none;
     background-color: #ffffff;
     box-shadow: rgba(99, 99, 99, 0.1) 0px 2px 8px 0px;
+    padding-top: 1rem;
 }
 
 .container-top-part{
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin: 1rem;
+    margin: 0 1rem;
+    /* background-color: aqua; */
 }
 
+.container-top-part p{
+    background-color: #00AB55;
+    font-weight: 500;
+    color: white;
+    padding: 0.4rem 0.6rem;
+    border-radius: 2px;
+}
 .order-container img{
     height: 90px;
     width: 115px;
@@ -33,8 +45,16 @@
 .container-edit-area{
     display: flex;
     justify-content: space-between;
-    margin: 1rem;
+    margin: 1rem 1rem 0.5rem 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #C1CAD3;
 }
+.container-edit-area p{
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #212B36;
+}
+
 
 .container-edit-area img{
     height: 13px;
@@ -44,15 +64,31 @@
 .order-detail{
     display: flex;
     justify-content: space-between;
-    margin: 1rem;
+    margin: 0.5rem 1rem;
+
 }
 
 .order-total-info{
     display: flex;
     justify-content: space-between;
-    margin: 1rem;
+    margin: 0.5rem 1rem 0rem 1rem;
+    border-bottom: 1px dashed #212B36;
+    border-top: 1px dashed #212B36;
+    padding: 0.6rem 0;
 }
 
+.product-name-count{
+    max-width: 12rem;
+    white-space: nowrap;
+    overflow: hidden; /* Taşan kısmı gizle */
+    text-overflow: ellipsis; /* Üç nokta ekle */
+}
+
+
+.order-total-info p{
+    font-weight: 500;
+    color: #212B36;
+}
 .settle-up-button{
     padding: 4px;
     background-color: transparent;

@@ -248,7 +248,7 @@ function CreateMenu() {
         {/* Edit Menu Info Modal */}
         {isModalOpen && (
           <div className="modal-overlay">
-            <div className="modal-content">
+            <div className="edit-menu-Info-Modal">
               <h2>Edit Profile</h2>
               <form onSubmit={handleSaveMenuInfo}>
                 <label>
@@ -278,8 +278,8 @@ function CreateMenu() {
 
         {/* Add Page Modal */}
         {isPageModalOpen && (
-          <div className="modal-overlay">
-            <div className="modal-content">
+          <div  className="modal-overlay">
+            <div className="edit-page-modal-content">
               <h2>Add Page</h2>
               <form onSubmit={handleAddPage}>
                 <label>
@@ -313,7 +313,7 @@ function CreateMenu() {
         {/* Delete Page Modal */}
         {isDeleteModalOpen && (
           <div className="modal-overlay">
-            <div className="modal-content">
+            <div className="delete-modal-content">
               <h2>Are you sure you want to delete this page?</h2>
               <button onClick={handleDeletePage}>Yes</button>
               <button onClick={handleCloseDeleteModal}>No</button>
@@ -324,7 +324,7 @@ function CreateMenu() {
         {/* Add Item Modal */}
         {isItemModalOpen && (
           <div className="modal-overlay">
-            <div className="modal-content">
+            <div className="add-item-modal-content">
               <h2>Add New Item</h2>
               <form onSubmit={handleAddItem}>
                 <label>
@@ -371,7 +371,7 @@ function CreateMenu() {
         {/* Edit Item Modal */}
         {isEditItemModalOpen && (
           <div className="modal-overlay">
-            <div className="modal-content">
+            <div className="edit-item-modal-content">
               <h2>Edit Item</h2>
               <button onClick={() => handleOpenDeleteItemModal(editItem)}>Delete</button>
               <form>
@@ -415,7 +415,7 @@ function CreateMenu() {
         {/* Delete Item Modal */}
         {isDeleteItemModalOpen && (
           <div className="modal-overlay">
-            <div className="modal-content">
+            <div className="isdelete-modal-content">
               <h2>Are you sure you want to delete this item?</h2>
               <button onClick={handleDeleteItem}>Yes</button>
               <button onClick={handleCloseDeleteItemModal}>No</button>

@@ -19,6 +19,9 @@ function Cart() {
     // Sipariş tamamlama işlemleri burada yapılabilir.
     handleOrder();
     setIsModalOpen(false)
+    setTimeout(() => {
+      alert("Settled Up successfully");
+    }, 500); // 300ms delay (you can adjust the delay)
     navigate("/mobileMenu?cid="+location.state?.companyKey+"&&tid="+location.state?.tableKey,  { state: { cart } })
     // navigate("/order-complete", { replace: true }); // Sepeti boşaltıp sipariş tamamlandığına dair bir sayfaya yönlendiriyoruz
     ;
@@ -130,8 +133,7 @@ function Cart() {
             </div>
           </div>
         </div>
-      )}
-    
+      )}  
     </div>
     
 

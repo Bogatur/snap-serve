@@ -16,6 +16,12 @@ function MobileMenu() {
   const [activeTab, setActiveTab] = useState("");
    // Aktif sekme state'i
 
+   const [liked, setLiked] = useState(false);
+
+   const likeHandleClick = () => {
+     setLiked(!liked);
+   };
+
 
   const addToCart = (product) => {
     
@@ -131,6 +137,13 @@ function MobileMenu() {
                 <li className="mobile-product-container" key={product.productKey}>
                   <div className="mobile-product-items">
                   <div className="photo-area">
+                    <button className={`like-button ${liked ? "liked" : ""}`} onClick={likeHandleClick}>
+                    <img
+                        src={`${process.env.PUBLIC_URL}/${liked ? "filled-heart.png" : "white-hearth.png"}`}
+                        alt="Heart Icon"
+                        className="heart-icon"
+                      />                      
+                    </button>
                     <img className="mobile-product-photo" src={product.productPhotoURL} alt={product.productName} />
                   </div>
                   <div className="mobile-product-info">
@@ -141,12 +154,12 @@ function MobileMenu() {
                       <div className="quantity-arrange-buttons">
                         {cart.some(item => item.productKey === product.productKey) ? (
                           <div>
-                            <button className="mobile-product-remove-button" onClick={() => removeFromCart(product.productKey)}>-</button>
+                            <button className="mobile-product-remove-button" onClick={() => removeFromCart(product.productKey)}><p>-</p></button>
                             <span className="mobile-product-quantity">{getProductQuantity(product)}</span>
-                            <button className="mobile-product-add-button" onClick={() => addToCart(product)}>+</button>
+                            <button className="mobile-product-add-button" onClick={() => addToCart(product)}><p>+</p></button>
                           </div>
                         ) : (
-                          <button className="mobile-product-add-button" onClick={() => addToCart(product)}>+</button>
+                          <button className="mobile-product-add-button" onClick={() => addToCart(product)}><p>+</p></button>
                         )}
                       </div>
                       </div>

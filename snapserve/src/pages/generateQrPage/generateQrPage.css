@@ -1,10 +1,11 @@
+.table-area{
+    margin-top: 1.5rem;
+}
 .table-container{
     display: flex;
     flex-wrap: wrap; /* Kutuların aşağı kaymasını sağlar */
     gap: 16px; /* Kutular arası boşluk */
     justify-content: flex-start; /* Kutuları sola hizalar */
-    height: 10rem;
-    margin-top: 1rem;
 }
 
 .tables{
@@ -26,6 +27,17 @@
     cursor: pointer;
     border: none;
     background-color: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.3rem;
+}
+
+.delete-icon:hover{
+    background-color: #ffaeb4;
+    border-radius: 3px;
+
+
 }
 .delete-icon img{
     height: 15px;
