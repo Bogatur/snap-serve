@@ -99,9 +99,9 @@ function Cart() {
                   <p className="mobile-product-price">${item.quantity * item.productPrice}</p>
                 </div>
                 <div className="order-arrange area">
-                  <button className="mobile-product-remove-button" onClick={() => removeFromCart(item.productKey)}>-</button>
+                  <button className="mobile-product-remove-button" onClick={() => removeFromCart(item.productKey)}><p>-</p></button>
                   <span className="mobile-product-quantity">{item.quantity}</span>
-                  <button className="mobile-product-add-button"  onClick={() => addToCart(item)}>+</button>
+                  <button className="mobile-product-add-button"  onClick={() => addToCart(item)}><p>+</p></button>
                 </div>
               </div>
       

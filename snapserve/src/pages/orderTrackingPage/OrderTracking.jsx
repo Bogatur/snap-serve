@@ -13,6 +13,7 @@ function OrderTracking () {
   const [isOverlayOpen, setIsOverlayOpen] = useState(false); // Overlay'i kontrol eden state
   const [selectedTableKey, setSelectedTableKey] = useState(null);
   const [totalAmount, setTotalAmount] = useState(0);
+  const [activeCategory, setActiveCategory] = useState(null); // Active category state
 
   const openEditOrderModal = () => setIsEditOrderModalOpen(true);
   const closeEditOrderModal = () => setIsEditOrderModalOpen(false);
@@ -27,6 +28,9 @@ function OrderTracking () {
     setIsOverlayOpen(false);
   };
 
+  const toggleCategory = (category) => {
+    setActiveCategory(activeCategory === category ? null : category);
+  };
 
   useEffect(() => {
     fetchTablesAndOrders(companyKey, setTables);
@@ -74,7 +78,7 @@ function OrderTracking () {
         <div className="current-profile-page">
           <div className="page-info-text">
             <h5>Active Orders</h5>
-            <button>Add Order Manually</button>
+            <button onClick={() => setIsOverlayOpen(true)}>Add Order Manually</button>
           </div>
           <div className="order-area">
             {tables.length > 0 ? (
@@ -141,20 +145,83 @@ function OrderTracking () {
 
       {/* Overlay Modal */}
       {isOverlayOpen && (
-        <div className="modal-overlay">
-          <div className="settleUp-modal-content">
-            <h2>Are you sure you want to settle up the total amount of ${totalAmount} for this table?</h2>
-            <div>
-              <button
-                onClick={handleSettleUp}
-              >
-                Settle Up
-              </button>
-              <button
-                onClick={closeOverlay}
-              >
-                Cancel
-              </button>
+        <div className="add-order-comp">
+          <div className="add-order-overlay">
+            <div className="close-button-area">
+              <button onClick={closeOverlay} className="order-overlay-close-button">&times;</button>
+            </div>
+            <div className="overlay-sides">
+            <div className="add-order-left">
+              <h4>Choose Table No</h4>
+              <select>
+                <option value="">Select Table</option>
+                {tables.map((table) => (
+                  <option key={table.tableKey} value={table.tableKey}>{table.tableId}</option>
+                ))}
+              </select>
+              <p className="add-item-text">Add Item</p>
+              <div className="category">
+                <h4 onClick={() => toggleCategory("mainDishes")}>Main Dishes</h4>
+                {activeCategory === "mainDishes" && (
+                  <ul>
+                    <li>Pizza <button>+</button></li>
+                    <li>Doner <button>+</button></li>
+                    <li>Pasta <button>+</button></li>
+                  </ul>
+                )}
+              </div>
+              <div className="category">
+                <h4 onClick={() => toggleCategory("desserts")}>Desserts</h4>
+                {activeCategory === "desserts" && (
+                  <ul>
+                    <li>Ice Cream <button>+</button></li>
+                    <li>Cake <button>+</button></li>
+                    <li>Pudding <button>+</button></li>
+                  </ul>
+                )}
+              </div>
+              <div className="category">
+                <h4 onClick={() => toggleCategory("drinks")}>Drinks</h4>
+                {activeCategory === "drinks" && (
+                  <ul>
+                    <li>Cola <button>+</button></li>
+                    <li>Tea <button>+</button></li>
+                    <li>Water <button>+</button></li>
+                  </ul>
+                )}
+              </div>
+              <div className="category">
+                <h4 onClick={() => toggleCategory("snacks")}>Snacks</h4>
+                {activeCategory === "snacks" && (
+                  <ul>
+                    <li>Chips <button>+</button></li>
+                    <li>Popcorn <button>+</button></li>
+                    <li>Nuts <button>+</button></li>
+                  </ul>
+                )}
+              </div>
+            </div>
+            <div className="add-order-right">
+              <h4>Order Details</h4>
+              <div className="order-details">
+                  <div className="order-item-continer">
+                    <div className="order-item-details">
+                      <p>Pizza</p>
+                      <div className="arrange-order-item">
+                        <button>-</button> 5 <button>+</button>
+                      </div>
+                    </div>
+                    <div className="order-item-price">
+                      <p>$15</p>
+                    </div>
+                  </div>
+              </div>
+              <div className="order-total-fee">
+                <p>Total Fee</p>
+                <p>$50</p>
+              </div>
+              <button className="save-button">Save</button>
+            </div>
             </div>
           </div>
         </div>

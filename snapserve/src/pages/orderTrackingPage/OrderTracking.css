@@ -105,3 +105,176 @@
     color: #ffffff;
     border: 1px solid #ffffff;
   }
+
+  .add-order-comp {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6); /* Karanlık arka plan */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  .add-order-overlay {
+    background-color: #f9f9f9;
+    padding: 1.5rem;
+    gap: 2rem;
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    max-width: 1000px;
+  }
+
+  .overlay-sides{
+    display: flex;
+    gap: 2rem;
+  }
+  
+  .add-order-left,
+  .add-order-right {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .add-order-left h4,
+  .add-order-right h4{
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    color: #333;
+    border-bottom: 1px solid #c1cad3;
+    padding-bottom: 0.5rem;
+    font-weight: 600;
+
+  }
+  .add-item-text{
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    border: none;
+    color: #333;
+    font-weight: 600;
+
+  }
+  .add-order-left select {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    background-color: #fff;
+    outline: none;
+  }
+  
+  .category {
+    margin-bottom: 1rem;
+  }
+  
+  .category h4 {
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: #555;
+    margin-bottom: 0.5rem;
+    transition: color 0.2s ease;
+  }
+  
+  .category h4:hover {
+    color: #00AB55;
+  }
+  
+  .category ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .category ul li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #e0e0e0;
+    font-size: 0.95rem;
+    color: #444;
+  }
+  
+  .category ul li button {
+    background-color: #00AB55;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    padding: 0.2rem 0.5rem;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .category ul li button:hover {
+    background-color: #00AB55;
+  }
+  
+  .add-order-right .order-details {
+    background-color: rgb(255, 255, 255);
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 1rem;
+    min-height: 150px;
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+    color: #666;
+  }
+  
+  .save-button {
+    width: 100%;
+    padding: 0.5rem;
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    color: #fff;
+    background-color: #00AB55;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .save-button:hover {
+    background-color: #00AB55;
+  }
+  
+  .order-details{
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .order-item-continer{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .order-item-details{
+    display: flex;
+  }
+
+  .order-total-fee{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .close-button-area{
+    position: relative;
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .order-overlay-close-button{
+    width: 1.5rem;
+    height: 1.5rem;
+  }

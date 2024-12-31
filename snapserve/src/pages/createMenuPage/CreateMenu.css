@@ -172,6 +172,8 @@ align-self: center;
 .product-photo{
   width: 222px;
   height: 222px;
+  object-fit: cover;
+
 }
 .edit-product-contanier{
   display: flex;
