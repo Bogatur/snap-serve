@@ -79,3 +79,38 @@
   .container-bottom-part{
     font-size: 12px;
   }
+
+  .qr-buttons{
+    gap: 1rem;
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+  .qr-download-button{
+    background-color: #00AB55;
+    height: 2.5rem;
+    width: 8rem;
+    color: white;
+  }
+
+  .qr-cancel-button{
+    background-color: #dedede;
+
+    height: 2.5rem;
+    width: 8rem; 
+    color: #212B36;
+}
+
+.qr-download-button:hover{
+    background-color: #007B55;
+}
+
+.qr-cancel-button:hover{
+    background-color: #c7c7c7;
+}
+
+.delete-modal-text{
+    margin-bottom: 1rem;
+}
+

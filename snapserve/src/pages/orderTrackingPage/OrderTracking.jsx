@@ -11,17 +11,20 @@ function OrderTracking () {
   const [tables, setTables] = useState([]);
   const [isEditOrderModalOpen, setIsEditOrderModalOpen] = useState(false);
   const [isOverlayOpen, setIsOverlayOpen] = useState(false); // Overlay'i kontrol eden state
+  const [isSettleOverlayOpen, setSettleIsOverlayOpen] = useState(false); // Overlay'i kontrol eden state
+
   const [selectedTableKey, setSelectedTableKey] = useState(null);
   const [totalAmount, setTotalAmount] = useState(0);
   const [activeCategory, setActiveCategory] = useState(null); // Active category state
 
   const openEditOrderModal = () => setIsEditOrderModalOpen(true);
   const closeEditOrderModal = () => setIsEditOrderModalOpen(false);
+  
 
-  const openOverlay = (tableKey, totalAmount) => {
+  const openSettleOverlay = (tableKey, totalAmount) => {
     setSelectedTableKey(tableKey);
     setTotalAmount(totalAmount);
-    setIsOverlayOpen(true);
+    setSettleIsOverlayOpen(true);
   };
 
   const closeOverlay = () => {
@@ -61,7 +64,7 @@ function OrderTracking () {
   const handleSettleUp = async () => {
     try {
       await settleUp(companyKey, selectedTableKey);
-      closeOverlay();
+      setSettleIsOverlayOpen(false)
       setTimeout(() => {
         alert("Settled Up successfully");
       }, 300); // 300ms delay (you can adjust the delay)
@@ -125,7 +128,7 @@ function OrderTracking () {
                         </div>
                         <button
                           className="settle-up-button"
-                          onClick={() => openOverlay(table.tableKey, totalAmount)}
+                          onClick={() => openSettleOverlay(table.tableKey, totalAmount)}
                         >
                           Settle Up
                         </button>
@@ -164,7 +167,7 @@ function OrderTracking () {
                 <h4 onClick={() => toggleCategory("mainDishes")}>Main Dishes</h4>
                 {activeCategory === "mainDishes" && (
                   <ul>
-                    <li>Pizza <button>+</button></li>
+                    <li>Pizza <button >+</button></li>
                     <li>Doner <button>+</button></li>
                     <li>Pasta <button>+</button></li>
                   </ul>
@@ -206,9 +209,11 @@ function OrderTracking () {
               <div className="order-details">
                   <div className="order-item-continer">
                     <div className="order-item-details">
-                      <p>Pizza</p>
+                      <p className="choosen-order-items">Pizza</p>
                       <div className="arrange-order-item">
-                        <button>-</button> 5 <button>+</button>
+                        <button className="mobile-product-remove-button"><p>-</p></button>
+                         <p>5</p> 
+                         <button className="mobile-product-add-button"><p>+</p></button>
                       </div>
                     </div>
                     <div className="order-item-price">
@@ -226,6 +231,30 @@ function OrderTracking () {
           </div>
         </div>
       )}
+
+      {isSettleOverlayOpen && (
+        <div className="modal-overlay">
+          <div className="settleUp-modal-content">
+            <h2>Are you sure you want to settle up the total amount of ${totalAmount} for this table?</h2>
+            <div className="model-confirm-buttons">
+              <button
+                onClick={() => handleSettleUp()}
+                className="modal-save-confirm-button"
+              >
+                Settle Up
+              </button>
+              <button
+                onClick={() => setSettleIsOverlayOpen(false)}
+                className="modal-delete-confirm-button"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+
     </>
   );
 }

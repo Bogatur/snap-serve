@@ -190,7 +190,7 @@ function CreateMenu() {
               )}
             </div>
             <div >
-                  <button className="add-page-button"onClick={handleOpenPageModal}>Add Page</button>
+                  <button className="add-page-button"onClick={handleOpenPageModal}>Edit Category</button>
             </div>
         </div>
 
@@ -249,7 +249,7 @@ function CreateMenu() {
         {isModalOpen && (
           <div className="modal-overlay">
             <div className="edit-menu-Info-Modal">
-              <h2>Edit Profile</h2>
+              <h2>Edit Menu</h2>
               <form onSubmit={handleSaveMenuInfo}>
                 <label>
                   Menu Name:
@@ -257,6 +257,8 @@ function CreateMenu() {
                     type="text"
                     value={newMenuName}
                     onChange={(e) => setNewMenuName(e.target.value)}
+                    maxLength="25"
+                    placeholder="Enter your menu name(maks 25char)"
                   />
                 </label>
                 <label>
@@ -265,12 +267,17 @@ function CreateMenu() {
                     type="text"
                     value={newSlogan}
                     onChange={(e) => setNewSlogan(e.target.value)}
+                    maxLength="35"
+                    placeholder="Enter your menu slogan(maks 35char)"
                   />
                 </label>
-                <button type="submit">Save</button>
-                <button type="button" onClick={handleCloseModal}>
-                  Cancel
-                </button>
+                <div className="edit-menu-buttons"></div>
+                  <button className="edit-menu-save-button" type="submit">Save</button>
+                  <button className="edit-menu-cancel-button" type="button" onClick={handleCloseModal}>
+                    Cancel
+                  </button>
+                <div className="edit-menu-buttons"></div>
+
               </form>
             </div>
           </div>
@@ -280,7 +287,7 @@ function CreateMenu() {
         {isPageModalOpen && (
           <div  className="modal-overlay">
             <div className="edit-page-modal-content">
-              <h2>Add Page</h2>
+              <h2>Add Category</h2>
               <form onSubmit={handleAddPage}>
                 <label>
                   Page Name:
@@ -288,12 +295,11 @@ function CreateMenu() {
                     type="text"
                     value={newPageName}
                     onChange={(e) => setNewPageName(e.target.value)}
+                    maxLength="15"
+                    placeholder="Enter your category name(maks 15char)"
                   />
                 </label>
-                <button type="submit">Add Page</button>
-                <button type="button" onClick={handleClosePageModal}>
-                  Cancel
-                </button>
+                <button className="add-category-button" type="submit">Add Category</button>
               </form>
               <h3>Current Pages:</h3>
               <ul>
@@ -301,11 +307,16 @@ function CreateMenu() {
 
               {pages.map((page) => (
                   <li key={page.pageKey}>
-                    {page.name}{" "}
-                    <button onClick={() => handleOpenDeleteModal(page.pageKey)}>Delete</button>
+                    <div className="current-page-container">
+                      {page.name}{" "}
+                      <button className="delete-page-buttons" onClick={() => handleOpenDeleteModal(page.pageKey)}>Delete</button>
+                    </div>
                   </li>
                 ))} 
               </ul>
+              <button className="current-page-cancel-button" type="button" onClick={handleClosePageModal}>
+                  Cancel
+              </button>
             </div>
           </div>
         )}
@@ -315,8 +326,10 @@ function CreateMenu() {
           <div className="modal-overlay">
             <div className="delete-modal-content">
               <h2>Are you sure you want to delete this page?</h2>
-              <button onClick={handleDeletePage}>Yes</button>
-              <button onClick={handleCloseDeleteModal}>No</button>
+              <div className="model-confirm-buttons">
+                <button className="modal-save-confirm-button" onClick={handleDeletePage}>Yes</button>
+                <button className="modal-delete-confirm-button" onClick={handleCloseDeleteModal}>No</button>
+              </div>
             </div>
           </div>
         )}
@@ -333,6 +346,7 @@ function CreateMenu() {
                     required
                     type="file"
                     onChange={(e) => setNewItem({ ...newItem, image: e.target.files[0] })}
+                    className="add-product-image-input"
                   />
                 </label>
                 <label>
@@ -342,6 +356,8 @@ function CreateMenu() {
                     type="text"
                     value={newItem.title}
                     onChange={(e) => setNewItem({ ...newItem, title: e.target.value })}
+                    maxLength="15"
+                    placeholder="Enter your product title(maks 15char)"
                   />
                 </label>
                 <label>
@@ -350,6 +366,8 @@ function CreateMenu() {
                     required
                     value={newItem.description}
                     onChange={(e) => setNewItem({ ...newItem, description: e.target.value })}
+                    maxLength="15"
+                    placeholder="Enter your product description(maks 20char)"
                   />
                 </label>
                 <label>
@@ -359,10 +377,14 @@ function CreateMenu() {
                     type="number"
                     value={newItem.price}
                     onChange={(e) => setNewItem({ ...newItem, price: e.target.value })}
+                    maxLength="10"
+                    placeholder="Enter your product price"
                   />
                 </label>
-                <button type="submit">Add Item</button>
-                <button type="button" onClick={handleCloseItemModal}>Cancel</button>
+                <div className="add-product-buttons">
+                  <button className="add-product-save-button" type="submit">Add Item</button>
+                  <button className="add-product-cancel-button" type="button" onClick={handleCloseItemModal}>Cancel</button>
+                </div>
               </form>
             </div>
           </div>
@@ -417,8 +439,8 @@ function CreateMenu() {
           <div className="modal-overlay">
             <div className="isdelete-modal-content">
               <h2>Are you sure you want to delete this item?</h2>
-              <button onClick={handleDeleteItem}>Yes</button>
-              <button onClick={handleCloseDeleteItemModal}>No</button>
+                <button  onClick={handleDeleteItem}>Yes</button>
+                <button  onClick={handleCloseDeleteItemModal}>No</button>
             </div>
           </div>
         )}

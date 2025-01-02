@@ -213,6 +213,7 @@ list-style: none;
     border: 2px solid #00AB55;
     color: #00AB55;
     border-radius: 100%;
+    cursor: pointer;
 }
 
 .mobile-product-add-button p, .mobile-product-remove-button p{

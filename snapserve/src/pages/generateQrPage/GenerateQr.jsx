@@ -117,9 +117,11 @@ function GenerateQr (){
             <div className="modal-overlay">
               <div className="qr-modal-content">
                 <p>{qrData}</p>
-                <QRCodeCanvas value={qrData} size={256} />
-                <button className="print-button">Print</button>
-                <button onClick={handleCloseQrModal}>Close</button>
+                <QRCodeCanvas  value={qrData} size={240} />
+                <div className="qr-buttons">
+                  <button className="qr-download-button">Download</button>
+                  <button className="qr-cancel-button"onClick={handleCloseQrModal}>Close</button>
+                </div>
               </div>
             </div>
           )}
@@ -128,15 +130,15 @@ function GenerateQr (){
           {showDeleteModal && (
             <div className="modal-overlay">
               <div className="delete-modal-content">
-                <p>Are you sure you want to delete this Table?</p>
-                <div className="modal-buttons">
+                <p className="delete-modal-text">Are you sure you want to delete this Table?</p>
+                <div className="model-confirm-buttons">
                   <button
-                    className="delete-button"
+                    className="modal-save-confirm-button"
                     onClick={() => deleteATable(selectedTableKey)}
                   >
                     Delete
                   </button>
-                  <button className="cancel-button" onClick={handleCloseDeleteModal}>Cancel</button>
+                  <button className="modal-delete-confirm-button" onClick={handleCloseDeleteModal}>Cancel</button>
                 </div>
               </div>
             </div>
