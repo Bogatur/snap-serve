@@ -460,3 +460,35 @@ align-self: center;
 .modal-delete-confirm-button:hover{
   background-color: #c7c7c7;
 }
+
+
+.edit-item-top-part{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.edit-item-top-part p{
+  font-size: 1.2rem;
+  color: #212B36;
+  font-weight: 600;
+}
+
+.edit-item-delete-button{
+  cursor: pointer;
+  background-color: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem;
+}
+
+.edit-item-delete-button:hover{
+  background-color: #ff9ea5;
+  border-radius: 3px;
+}
+.edit-item-delete-img{
+  height: 20px;
+  width: 20px;
+}

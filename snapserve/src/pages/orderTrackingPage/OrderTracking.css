@@ -297,3 +297,49 @@
     font-weight: 500;
     font-size: 1rem;
   }
+
+  .edit-order-top-part{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  .edit-order-top-part p{
+    font-size: 1rem;
+    color: #212B36;
+    font-weight: 600;
+  }
+  
+  .edit-order-delete-button{
+    cursor: pointer;
+    background-color: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.5rem;
+    border: none;
+  }
+  
+  .edit-order-delete-button:hover{
+    background-color: #ff9ea5;
+    border-radius: 3px;
+  }
+  .edit-order-delete-button img{
+    height: 20px;
+    width: 20px;
+  }
+
+  .edit-order-comp {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.3); /* Karanlık arka plan */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    font-family: 'Arial', sans-serif;
+  }

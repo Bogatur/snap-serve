@@ -222,7 +222,14 @@ function CreateMenu() {
                         <p className="product-description">{val.productDescription}</p>
                         <div className="edit-product-contanier">
                           <p className="product-price">${val.productPrice}</p>
-                          <button className="edit-icon-button" onClick={() => handleEditItem(key)}><img src={`${process.env.PUBLIC_URL}/pen.png`} alt="Edit-Icon" ></img></button>
+                          {/* ???????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????? */}
+                          {/* önceki versiyon*/}
+                          {/* <button className="edit-icon-button" onClick={() => handleEditItem(key)}><img src={`${process.env.PUBLIC_URL}/pen.png`} alt="Edit-Icon" ></img></button> */}
+                        
+                          {/* yeni versiyon-sadece buton içi fonksiyon değişti */}
+                          <button className="edit-icon-button" onClick={() => handleOpenEditItemModal()}><img src={`${process.env.PUBLIC_URL}/pen.png`} alt="Edit-Icon" ></img></button>
+                          {/* ???????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????? */}
+
                         </div>
                       </div>
                     </div>
@@ -390,45 +397,63 @@ function CreateMenu() {
           </div>
         )}
 
+      {/* ?????????????????????????????????????? EDIT ITEM  MODEL DUZENLENDI ???????????????????????????????????????????????????????????????*/}
         {/* Edit Item Modal */}
         {isEditItemModalOpen && (
           <div className="modal-overlay">
-            <div className="edit-item-modal-content">
-              <h2>Edit Item</h2>
-              <button onClick={() => handleOpenDeleteItemModal(editItem)}>Delete</button>
+            <div className="add-item-modal-content">
+              <div className="edit-item-top-part">
+                <p>Edit Item</p>
+                <button onClick={() => handleOpenDeleteItemModal(editItem)} className="edit-item-delete-button">
+                  <img className="edit-item-delete-img" src={`${process.env.PUBLIC_URL}/Delete.png`} alt="delete-icon" />
+                </button>
+              </div>
               <form>
                 <label>
                   Photo:
                   <input
+                    required
                     type="file"
-                    onChange={(e) => setNewItem({ ...newItem, image: URL.createObjectURL(e.target.files[0]) })}
+                    onChange={(e) => setNewItem({ ...newItem, image: e.target.files[0] })}
+                    className="add-product-image-input"
                   />
                 </label>
                 <label>
                   Title:
                   <input
+                    required
                     type="text"
                     value={newItem.title}
                     onChange={(e) => setNewItem({ ...newItem, title: e.target.value })}
+                    maxLength="15"
+                    placeholder="Enter your new product title(maks 15char)"
                   />
                 </label>
                 <label>
                   Description:
                   <textarea
+                    required
                     value={newItem.description}
                     onChange={(e) => setNewItem({ ...newItem, description: e.target.value })}
+                    maxLength="15"
+                    placeholder="Enter your new product description(maks 20char)"
                   />
                 </label>
                 <label>
                   Price:
                   <input
+                    required
                     type="number"
                     value={newItem.price}
                     onChange={(e) => setNewItem({ ...newItem, price: e.target.value })}
+                    maxLength="10"
+                    placeholder="Enter your new product price"
                   />
                 </label>
-                <button type="submit">Save Changes</button>
-                <button type="button" onClick={handleCloseEditItemModal}>Cancel</button>
+                <div className="add-product-buttons">
+                  <button className="add-product-save-button" type="submit">Save Changes</button>
+                  <button className="add-product-cancel-button" type="button" onClick={handleCloseEditItemModal}>Cancel</button>
+                </div>
               </form>
             </div>
           </div>
@@ -439,8 +464,11 @@ function CreateMenu() {
           <div className="modal-overlay">
             <div className="isdelete-modal-content">
               <h2>Are you sure you want to delete this item?</h2>
-                <button  onClick={handleDeleteItem}>Yes</button>
-                <button  onClick={handleCloseDeleteItemModal}>No</button>
+              <div className="model-confirm-buttons">
+                <button className="modal-save-confirm-button" onClick={handleDeleteItem}>Yes</button>
+                <button className="modal-delete-confirm-button" onClick={handleCloseDeleteItemModal}>No</button>
+              </div>
+
             </div>
           </div>
         )}

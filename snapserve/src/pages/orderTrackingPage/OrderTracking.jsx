@@ -106,14 +106,96 @@ function OrderTracking () {
                           <button className="edit-icon-button" onClick={openEditOrderModal}>
                             <img src={`${process.env.PUBLIC_URL}/pen.png`} alt="Edit-Icon" />
                           </button>
+
+                          {/* edit order eklendi ?????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????? */}
                           {isEditOrderModalOpen && (
-                            <div className="modal-overlay">
-                              <div className="edit-order-modal-overlay">
-                                <span onClick={closeEditOrderModal}>&times;</span>
-                                <h2>Modal Başlığı</h2>
-                                <p>Modal içerik buraya gelecek.</p>
+                              <div className="edit-order-comp">
+                                <div className="add-order-overlay">
+                                  <div className="close-button-area">
+                                    <button onClick={closeEditOrderModal} className="order-overlay-close-button">&times;</button>
+                                  </div>
+                                  <div className="overlay-sides">
+                                  <div className="add-order-left">
+                                      <div className="edit-order-top-part">
+                                        <p>Edit Order</p>
+                                        <button className="edit-order-delete-button">
+                                          <img className="edit-order-delete-img" src={`${process.env.PUBLIC_URL}/Delete.png`} alt="delete-icon" />
+                                        </button>
+                                      </div>
+                                    <select>
+                                      <option value="">Select Table</option>
+                                      {tables.map((table) => (
+                                        <option key={table.tableKey} value={table.tableKey}>{table.tableId}</option>
+                                      ))}
+                                    </select>
+                                    <p className="add-item-text">Add Item</p>
+                                    <div className="category">
+                                      <h4 onClick={() => toggleCategory("mainDishes")}>Main Dishes</h4>
+                                      {activeCategory === "mainDishes" && (
+                                        <ul>
+                                          <li>Pizza <button >+</button></li>
+                                          <li>Doner <button>+</button></li>
+                                          <li>Pasta <button>+</button></li>
+                                        </ul>
+                                      )}
+                                    </div>
+                                    <div className="category">
+                                      <h4 onClick={() => toggleCategory("desserts")}>Desserts</h4>
+                                      {activeCategory === "desserts" && (
+                                        <ul>
+                                          <li>Ice Cream <button>+</button></li>
+                                          <li>Cake <button>+</button></li>
+                                          <li>Pudding <button>+</button></li>
+                                        </ul>
+                                      )}
+                                    </div>
+                                    <div className="category">
+                                      <h4 onClick={() => toggleCategory("drinks")}>Drinks</h4>
+                                      {activeCategory === "drinks" && (
+                                        <ul>
+                                          <li>Cola <button>+</button></li>
+                                          <li>Tea <button>+</button></li>
+                                          <li>Water <button>+</button></li>
+                                        </ul>
+                                      )}
+                                    </div>
+                                    <div className="category">
+                                      <h4 onClick={() => toggleCategory("snacks")}>Snacks</h4>
+                                      {activeCategory === "snacks" && (
+                                        <ul>
+                                          <li>Chips <button>+</button></li>
+                                          <li>Popcorn <button>+</button></li>
+                                          <li>Nuts <button>+</button></li>
+                                        </ul>
+                                      )}
+                                    </div>
+                                  </div>
+                                  <div className="add-order-right">
+                                    <h4>Order Details</h4>
+                                    <div className="order-details">
+                                        <div className="order-item-continer">
+                                          <div className="order-item-details">
+                                            <p className="choosen-order-items">Pizza</p>
+                                            <div className="arrange-order-item">
+                                              <button className="mobile-product-remove-button"><p>-</p></button>
+                                                <p>5</p> 
+                                                <button className="mobile-product-add-button"><p>+</p></button>
+                                            </div>
+                                          </div>
+                                          <div className="order-item-price">
+                                            <p>$15</p>
+                                          </div>
+                                        </div>
+                                    </div>
+                                    <div className="order-total-fee">
+                                      <p>Total Fee</p>
+                                      <p>$50</p>
+                                    </div>
+                                    <button className="save-button">Save</button>
+                                  </div>
+                                  </div>
+                                </div>
                               </div>
-                            </div>
                           )}
                         </div>
                         {mergedProducts.map((product) => (
