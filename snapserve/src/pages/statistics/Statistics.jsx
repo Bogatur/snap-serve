@@ -43,23 +43,37 @@ const getStartOfLast365Days = (date) => {
   return getStartOfDay(startDate); // İlk günü gece yarısı olarak alıyoruz
 };
 
-// Veriyi zaman dilimine göre filtreleme fonksiyonu
+
+
+const Statistics = () => {
+  const { user, username, companyKey, logout } = useAuth();
+  const [activeTab, setActiveTab] = useState("Income Tracking");
+  const [salesData, setSalesData] = useState([]);
+
+  const [filterTitle, setFilterTitle] = useState("Daily");
+
+  // Veriyi zaman dilimine göre filtreleme fonksiyonu
 const filterSalesData = (salesData, timePeriod) => {
   const currentTime = new Date();
   let startTime;
 
+
   switch (timePeriod) {
     case 'daily':
       startTime = getStartOfDay(new Date(currentTime)); // Son 1 gün
+      setFilterTitle("Daily");
       break;
     case 'weekly':
       startTime = getStartOfLast7Days(new Date(currentTime)); // Son 7 gün
+      setFilterTitle("Weekly");
       break;
     case 'monthly':
       startTime = getStartOfLast30Days(new Date(currentTime)); // Son 1 ay
+      setFilterTitle("Monthly");
       break;
     case 'yearly':
       startTime = getStartOfLast365Days(new Date(currentTime)); // Son 1 yıl
+      setFilterTitle("Yearly");
       break;
     default:
       startTime = 0; // Herhangi bir zaman dilimi girilmezse
@@ -76,11 +90,6 @@ const filterSalesData = (salesData, timePeriod) => {
   }
   return filteredData;
 };
-
-const Statistics = () => {
-  const { user, username, companyKey, logout } = useAuth();
-  const [activeTab, setActiveTab] = useState("Income Tracking");
-  const [salesData, setSalesData] = useState([]);
 
   const fetchSalesData = async () => {
     try {
@@ -255,9 +264,13 @@ useEffect(() => {
               </TableContainer>
                   </div>
                   <div className='total-revenue-container'>
-                    <p>28.12.2024</p>
+                    <p>{new Date().toLocaleDateString('tr-TR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  })}</p>
                     <div className='revenue-bar'>${totalPrice}</div>
-                    <p>Total Daily Income</p>
+                    <p>Total {filterTitle} Income</p>
                   </div>
                 </div>
               </div>

@@ -65,6 +65,8 @@ function GenerateQr (){
     listenToCompanyData(companyKey, (data) => {
       setCompanyData(data); // Veriyi state'e kaydediyoruz
 
+
+      if(data.tables){
       const tables = Object.entries(data.tables).map(([key, value]) => ({
         tableKey: key,
         tableID: value.tableID,
@@ -73,6 +75,7 @@ function GenerateQr (){
       }));
 
       setTables(tables);
+    }
     });
   }
 

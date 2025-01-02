@@ -7,6 +7,7 @@ import { useAuth } from "../../context/AuthContext";
 import Header from "../../components/header/Header";
 import { useOrders } from "../../context/OrderContext";
 import { fetchMenu } from "../../services/menuService";
+import { deleteTableOrder } from "../../services/orderService";
 
 
 function Ord (){
@@ -116,6 +117,11 @@ function Ord (){
   }
   },[selectedTableKey])
 
+
+  const deleteItem = async ()  => {
+    await deleteTableOrder(companyKey, selectedTableKey);
+    setIsOverlayOpen(false);
+  }
 
 // Order veri yapısındaki ürün miktarını artırma
 const handleIncreaseQuantity = (orderIndex, productIndex) => {
@@ -334,6 +340,15 @@ Object.entries(orders) // Masalar üzerinden iterasyon
             </div>
             <div className="overlay-sides">
             <div className="add-order-left">
+            {
+                !selectTableVisible && 
+            <div className="edit-order-top-part">
+                                        <p>Edit Order</p>
+                                        <button className="edit-order-delete-button" onClick={() => deleteItem()}>
+                                          <img className="edit-order-delete-img" src={`${process.env.PUBLIC_URL}/Delete.png`} alt="delete-icon" />
+                                        </button>
+                                      </div>
+}
               {
                 selectTableVisible && 
                 <div>
@@ -341,14 +356,15 @@ Object.entries(orders) // Masalar üzerinden iterasyon
                   <select value={selectedTableKey} onChange={handleChangeSelectedTable}>
                     <option value="">Select Table</option>
                     {
-  tables && tables.map((table) => (
+  tables && tables.map((table) => ( 
+    !table.orders &&
     <option value={table.tableKey}>{table.tableID}</option>
   ))}
                   </select>
                 </div>
               }
              
-              <p className="add-item-text">Add Item</p>
+             <p className="add-item-text">Add Item</p>
               {menuData && Object.entries(menuData).map(([pageKey, pageValue]) => (
   <div key={pageKey}>  {/* Ana div'e key ekledim */}
     <div className="category">
@@ -441,7 +457,7 @@ Object.entries(orders) // Masalar üzerinden iterasyon
                 <p>Total Fee</p>
                 <p>{totalAmount}</p>
               </div>
-              <button className="save-button" onClick={handleSaveChanges}>Save</button>
+              <button className="save-button" onClick={() => { if(selectedTableKey != null && selectedTableKey != ""){ handleSaveChanges();}else { alert("Masa Seçiniz!");} } }>Save</button>
             </div>
             </div>
           </div>

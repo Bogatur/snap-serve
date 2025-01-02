@@ -21,6 +21,23 @@ export const addCompany = async (companyName, menuName, menuSlogan) => {
   }
 };
 
+// Async fonksiyon
+export const getCompanyName = async (companyKey) => {
+  try {
+    const companyRef = ref(database, `companies/${companyKey}`);
+    const snapshot = await get(companyRef);
+
+    if (snapshot.exists()) {
+      const data = snapshot.val();
+      return data.companyName;
+    } else {
+      throw new Error('Veri bulunamadı');
+    }
+  } catch (error) {
+    console.error('Şirket adı alınırken hata oluştu: ', error);
+    throw error;
+  }
+};
 export const uploadImageData = async (base64Data) => {
   
   try {
@@ -144,6 +161,19 @@ export const getCompanyData = async (companyKey) => {
     }
   }
 
+  export const  deleteMenuItem = async (pageKey, companyKey, productKey) => {
+    try {
+      const companyMenuItemRef = ref(database, 'companies/' + companyKey + '/menu/' + pageKey + '/products/' + productKey);
+
+      await remove(companyMenuItemRef);
+
+      console.log("silme başarılı!" + pageKey);
+      
+    } catch (error) {
+      console.log("menu page remove error!");
+      throw error;
+    }
+  }
 
   function convertToBase64(file) {
     return new Promise((resolve, reject) => {
@@ -177,14 +207,15 @@ export const addMenuPageProduct = async (pageKey, companyKey, name, description,
 
 export const updateMenuPageProduct = async (productKey, pageKey, companyKey, name, desc, price, image) => {
   try {
-
+  
+    const imageBase64Data = await convertToBase64(image);
     const companyMenuPageProductRef = ref(database, 'companies/' + companyKey + '/menu/' + pageKey + '/products/' + productKey);
 
     const updatedData = {
       productName: name, 
       productDescription: desc, 
       productPrice: price, 
-      productPhotoURL: image, 
+      productPhotoURL: imageBase64Data, 
     };
 
     // 3. Yeni veriyi veritabanına güncelle

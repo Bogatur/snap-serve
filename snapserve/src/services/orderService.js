@@ -13,6 +13,13 @@ export const deleteOrderService = async (companyKey, tableKey, orderId) => {
   await remove(orderRef); // Firebase'den silme işlemi
 };
 
+// Madaki tüm siparişi silme
+export const deleteTableOrder = async (companyKey, tableKey) => {
+  const orderRef = ref(database, `companies/${companyKey}/tables/${tableKey}/orders`);
+  await remove(orderRef); // Firebase'den silme işlemi
+};
+
+
 // Sipariş güncelleme
 export const updateOrderService = async (companyKey, tableKey, orderId, updatedData) => {
   const orderRef = ref(database, `companies/${companyKey}/tables/${tableKey}/orders/${orderId}`);

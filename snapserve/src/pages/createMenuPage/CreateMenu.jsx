@@ -3,7 +3,7 @@ import { useAuth } from '../../context/AuthContext'
 import { useNavigate, Link } from 'react-router-dom';
 import SideMenu from "../../components/sidemenu/SideMenu"
 import './CreateMenu.css';
-import { addMenuPage, addMenuPageProduct, deleteMenuPage, getCompanyData, listenToCompanyData, updateCompanyMenuNameMenuSlogan, updateMenuPageProduct} from "../../services/companyService";
+import { addMenuPage, addMenuPageProduct, deleteMenuItem, deleteMenuPage, getCompanyData, listenToCompanyData, updateCompanyMenuNameMenuSlogan, updateMenuPageProduct} from "../../services/companyService";
 import Header from "../../components/header/Header";
 
 function CreateMenu() {
@@ -18,8 +18,8 @@ function CreateMenu() {
   const [isItemModalOpen, setIsItemModalOpen] = useState(false);
   const [isEditItemModalOpen, setIsEditItemModalOpen] = useState(false);
   const [isDeleteItemModalOpen, setIsDeleteItemModalOpen] = useState(false);
-  const [newMenuName, setNewMenuName] = useState("SAMPLE MENU NAME");
-  const [newSlogan, setNewSlogan] = useState("SAMPLE SLOGAN");
+  const [newMenuName, setNewMenuName] = useState("");
+  const [newSlogan, setNewSlogan] = useState("");
   const [newPageName, setNewPageName] = useState("");
   const [newItem, setNewItem] = useState({ title: "", description: "", price: "", image: "" });
   const [editItem, setEditItem] = useState(null);
@@ -48,8 +48,14 @@ function CreateMenu() {
     setNewItem({ ...item }); // Burada düzenlenen öğeyi newItem ile eşliyoruz
     setIsEditItemModalOpen(true);
   };
+
+  const [editItemKey, setEditItemKey] = useState(null);
   
-  const handleCloseEditItemModal = () => setIsEditItemModalOpen(false);
+  const handleCloseEditItemModal = () => {
+    setIsEditItemModalOpen(false);
+    setEditItemKey(null);
+
+  };
   const handleOpenDeleteItemModal = (item) => {
     setItemToDelete(item);
     setIsDeleteItemModalOpen(true);
@@ -89,7 +95,7 @@ function CreateMenu() {
   };
   
   const handleEditItem = (productKey) => {
-    updateMenuPageProduct(productKey, pages[activeTabIndex].pageKey, companyKey, newItem.title, newItem.description, newItem.price, newItem.image);
+    updateMenuPageProduct(editItemKey, pages[activeTabIndex].pageKey, companyKey, newItem.title, newItem.description, newItem.price, newItem.image);
    // setItems(items.map(item => item === editItem ? newItem : item)); // Düzenlenmiş öğeyi listeye kaydediyoruz
   //  setEditItem(null);
    // setNewItem({ title: "", description: "", price: "", image: null }); // Düzenleme sonrası sıfırlıyoruz
@@ -98,6 +104,8 @@ function CreateMenu() {
   
 
   const handleDeleteItem = () => {
+
+    deleteMenuItem(pages[activeTabIndex].pageKey, companyKey, editItemKey)
     setItems(items.filter(item => item !== itemToDelete));
     setItemToDelete(null);
     setIsDeleteItemModalOpen(false);
@@ -128,6 +136,8 @@ function CreateMenu() {
         
         setPages(pages);
         setCompanyData(companyData);
+        setNewMenuName(companyData.menuName);
+        setNewSlogan(companyData.menuSlogan);
         // console.log("pages 0 : " + Object.entries(pages[0]).toString());
       } catch (error) {
         console.error('Şirket verisi alınırken hata oluştu:', error);
@@ -141,10 +151,7 @@ function CreateMenu() {
 
   }, [companyKey]);
 
-  const saveEditItem = () => {
-    handleEditItem();
 
-  }
 
 
   useEffect(() => {
@@ -257,7 +264,7 @@ function CreateMenu() {
                           {/* <button className="edit-icon-button" onClick={() => handleEditItem(key)}><img src={`${process.env.PUBLIC_URL}/pen.png`} alt="Edit-Icon" ></img></button> */}
                         
                           {/* yeni versiyon-sadece buton içi fonksiyon değişti */}
-                          <button className="edit-icon-button" onClick={() => handleOpenEditItemModal()}><img src={`${process.env.PUBLIC_URL}/pen.png`} alt="Edit-Icon" ></img></button>
+                          <button className="edit-icon-button" onClick={() => { setEditItemKey(key);  handleOpenEditItemModal()}}><img src={`${process.env.PUBLIC_URL}/pen.png`} alt="Edit-Icon" ></img></button>
                           {/* ???????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????? */}
 
                         </div>

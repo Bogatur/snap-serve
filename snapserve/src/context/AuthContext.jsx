@@ -35,13 +35,14 @@ export const AuthProvider = ({ children }) => {
 
     } catch (error) {
       console.error("Login Error:", error.message);
+     // throw error;
     }
   };
 
   
  const signup = async (email, password, rePassword, firstName, lastName, companyName) => {
     // Alanların boş olup olmadığını kontrol et
-    if (!email || !password || !firstName || !lastName) {
+    if (!email || !password || !firstName || !lastName || !companyName) {
       throw new Error("Tüm alanlar doldurulmalıdır.");
     }
     // şifrelerin uyuşup uyuşmadığını kontrol et

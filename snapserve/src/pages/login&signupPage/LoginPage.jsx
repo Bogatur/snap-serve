@@ -13,6 +13,7 @@ const LoginPage = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    
     try {
       await login(email, password);
       navigate('/createmenu'); // Giriş başarılıysa ana sayfaya yönlendir
