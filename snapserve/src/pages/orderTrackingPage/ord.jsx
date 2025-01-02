@@ -19,6 +19,26 @@ function Ord (){
     const [updatedOrderData, setUpdatedOrderData] = useState(null);
     const [menuData, setMenuData] = useState();
 
+    const [activeCategory, setActiveCategory] = useState(null); // Active category state
+    const [isOverlayOpen, setIsOverlayOpen] = useState(false); // Overlay'i kontrol eden state
+  
+    const [selectTableVisible, setSelectTableVisible] = useState(false);
+    const toggleCategory = (category) => {
+      setActiveCategory(activeCategory === category ? null : category);
+    };
+
+    const closeOverlay = () => {
+      setIsOverlayOpen(false);
+    };
+
+
+    useEffect(() => {
+      if(selectedTableKey){
+        setSelectTableVisible(false);
+      }else{
+        setSelectTableVisible(true);
+      }
+    },[isOverlayOpen])
     const currentTime = Date.now();
 
 
@@ -60,14 +80,25 @@ function Ord (){
 
 
     const handleSettleUp = async () => {
+   
         try {
+    
           await settleUp(companyKey, selectedTableKey);
-      
+          setSettleIsOverlayOpen(false);
         } catch (err) {
             alert(err);
           }
       };
     
+      const [totalAmount, setTotalAmount] = useState(0);
+      const [isSettleOverlayOpen, setSettleIsOverlayOpen] = useState(false); // Overlay'i kontrol eden state
+
+
+      const openSettleOverlay = (tableKey, totalAmount) => {
+        setSelectedTableKey(tableKey);
+        setTotalAmount(totalAmount);
+        setSettleIsOverlayOpen(true);
+      };
 
   const handleChangeSelectedTable = (event) => {
     const tableOrders = orders[event.target.value] ? orders[event.target.value] : [];
@@ -77,6 +108,13 @@ function Ord (){
  
   };
 
+  useEffect(() => {
+    if(selectedTableKey){
+   
+      const tableOrders = orders[selectedTableKey] ? orders[selectedTableKey] : [];
+      setUpdatedOrderData(tableOrders);
+  }
+  },[selectedTableKey])
 
 
 // Order veri yapısındaki ürün miktarını artırma
@@ -152,6 +190,7 @@ const handleIncreaseQuantity = (orderIndex, productIndex) => {
       
       // İşlemler tamamlandıktan sonra modal'ı kapatıyoruz
       setIsEditModalOpen(false);
+      closeOverlay();
     }
   };
 
@@ -166,7 +205,7 @@ const handleIncreaseQuantity = (orderIndex, productIndex) => {
                 <div className="current-profile-page">
                     <div className="page-info-text">
                         <h5>Active Orders</h5>
-                        <button onClick={() => handleEditOrder(null)}>Add Order Manually</button>
+                        <button onClick={() => {setSelectedTableKey(null); setIsOverlayOpen(true);}}>Add Order Manually</button>
                     </div>
                     <div className="order-area">
 
@@ -195,6 +234,15 @@ Object.entries(orders) // Masalar üzerinden iterasyon
   const sortedOrders = Object.entries(tableOrders)
     .sort((a, b) => new Date(b[1].createdAt) - new Date(a[1].createdAt));
 
+  const totalPrice = sortedOrders.reduce((orderSum, [orderKey, order]) => {
+      // Her siparişteki ürünlerin fiyatlarını topluyoruz
+      const orderTotal = order.products.reduce((sum, product) => {
+        const price = Number(product.productPrice) * Number(product.quantity); // Sayıya dönüştürme
+        return sum + price; // Sayıları topluyoruz
+      }, 0); // Başlangıç değeri 0
+  
+      return orderSum + orderTotal; // Siparişlerin toplamını topluyoruz
+    }, 0); 
  
   return (
           
@@ -211,7 +259,7 @@ Object.entries(orders) // Masalar üzerinden iterasyon
 
                             <div className="container-edit-area">
 <p>Orders</p>
-          <button className="edit-icon-button" onClick={() => handleEditOrder(tableKey)}><img src={`${process.env.PUBLIC_URL}/pen.png`} alt="Edit-Icon" /></button>
+          <button className="edit-icon-button" onClick={() => {setSelectedTableKey(tableKey); setIsOverlayOpen(true);}}><img src={`${process.env.PUBLIC_URL}/pen.png`} alt="Edit-Icon" /></button>
     
 </div>
 <div className="container-bottom-part">
@@ -229,7 +277,7 @@ Object.entries(orders) // Masalar üzerinden iterasyon
         return (
             
            <div>
-    <hr style={{color: "lightgray"}}/>
+  
 
 
 
@@ -254,13 +302,17 @@ Object.entries(orders) // Masalar üzerinden iterasyon
 
         )
 })}
-    <hr/>
+ 
 <div className="order-total-info">
           <p>Total:</p>
-          <p>total</p>
+          <p>
+  {
+  totalPrice
+  }
+</p>
       </div>
-      <hr/>
-      <button className="settle-up-button" onClick={() => handleSettleUp() }>Settle Up</button>
+
+      <button className="settle-up-button"   onClick={() => openSettleOverlay(tableKey, totalAmount)}>Settle Up</button>
 </div>
     </div>
 ));
@@ -273,6 +325,128 @@ Object.entries(orders) // Masalar üzerinden iterasyon
                    
                     </div>     
 
+ {/* Overlay Modal */}
+ {isOverlayOpen && (
+        <div className="add-order-comp">
+          <div className="add-order-overlay">
+            <div className="close-button-area">
+              <button onClick={closeOverlay} className="order-overlay-close-button">&times;</button>
+            </div>
+            <div className="overlay-sides">
+            <div className="add-order-left">
+              {
+                selectTableVisible && 
+                <div>
+                  <h4>Choose Table No</h4>
+                  <select value={selectedTableKey} onChange={handleChangeSelectedTable}>
+                    <option value="">Select Table</option>
+                    {
+  tables && tables.map((table) => (
+    <option value={table.tableKey}>{table.tableID}</option>
+  ))}
+                  </select>
+                </div>
+              }
+             
+              <p className="add-item-text">Add Item</p>
+              {menuData && Object.entries(menuData).map(([pageKey, pageValue]) => (
+  <div key={pageKey}>  {/* Ana div'e key ekledim */}
+    <div className="category">
+      <h4 onClick={() => toggleCategory(pageValue.menuPageName)}>
+        {pageValue.menuPageName}
+      </h4>
+
+      {activeCategory === pageValue.menuPageName && pageValue.products ? (
+        <ul>
+          {Object.entries(pageValue.products).map(([productKey, product]) => (
+            <li key={productKey}>  {/* Her bir ürün için key ekledim */}
+              {product.productName}
+              <button onClick={() => addToCart(productKey, product)}>+</button>
+            </li>
+          ))}
+        </ul>
+      ) : 
+       activeCategory === pageValue.menuPageName && <ul>
+          <li>Ürün bulunamadı!</li>
+        </ul>
+      }
+    </div>
+  </div>
+))}
+
+            </div>
+            <div className="add-order-right">
+              <h4>Order Details</h4>
+              <div className="order-details">
+              {
+         cart &&  cart.map((item) => (
+
+
+<div className="order-item-continer">
+<div className="order-item-details">
+  
+  <p className="choosen-order-items">{item.productName}</p>
+  <div className="arrange-order-item">
+    <button className="mobile-product-remove-button" onClick={() => removeFromCart(item.productKey)}><p>-</p></button>
+     <p>{item.quantity}</p> 
+     <button className="mobile-product-add-button" onClick={() => addToCart(item.productKey, item)}><p>+</p></button>
+  </div>
+</div>
+<div className="order-item-price">
+  <p>${item.productPrice}</p>
+</div>
+</div>
+
+          
+          ))
+         }
+
+{ selectedTableKey && updatedOrderData && Object.entries(updatedOrderData).map(([key, order], orderIndex) => (
+
+   
+       
+         order && order.products.map((product, productIndex) => (
+
+               
+     <div className="order-item-continer">
+     <div className="order-item-details">
+       
+       <p className="choosen-order-items">{product.productName}</p>
+       <div className="arrange-order-item">
+
+ 
+
+
+         <button className="mobile-product-remove-button" onClick={() =>  handleDecreaseQuantity(orderIndex, productIndex)}><p>-</p></button>
+          <p>{product.quantity}</p> 
+          <button className="mobile-product-add-button" onClick={() => handleIncreaseQuantity(orderIndex, productIndex)}><p>+</p></button>
+       </div>
+     </div>
+     <div className="order-item-price">
+       <p>${product.productPrice}</p>
+     </div>
+     </div>
+
+
+
+           ))
+
+
+  
+
+      ))}
+               
+              </div>
+              <div className="order-total-fee">
+                <p>Total Fee</p>
+                <p>{totalAmount}</p>
+              </div>
+              <button className="save-button" onClick={handleSaveChanges}>Save</button>
+            </div>
+            </div>
+          </div>
+        </div>
+      )}
 
                       {/* Edit Modal */}
       {isEditModalOpen && (
@@ -364,6 +538,7 @@ Object.entries(orders) // Masalar üzerinden iterasyon
          }
          </div>
           ) }
+       
               { selectedTableKey && Object.entries(updatedOrderData).map(([key, order], orderIndex) => (
      
         
@@ -395,6 +570,28 @@ Object.entries(orders) // Masalar üzerinden iterasyon
       </div>)}       
             
             </div>
+
+            {isSettleOverlayOpen && (
+        <div className="modal-overlay">
+          <div className="settleUp-modal-content">
+            <h2>Are you sure you want to settle up the total amount of ${totalAmount} for this table?</h2>
+            <div className="model-confirm-buttons">
+              <button
+                onClick={() => handleSettleUp()}
+                className="modal-save-confirm-button"
+              >
+                Settle Up
+              </button>
+              <button
+                onClick={() => setSettleIsOverlayOpen(false)}
+                className="modal-delete-confirm-button"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
             </>
     )
 }

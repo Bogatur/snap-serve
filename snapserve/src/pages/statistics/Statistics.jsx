@@ -18,36 +18,161 @@ import { Chart as ChartJS, CategoryScale, RadialLinearScale
 import './Statistics.css';
 
 
-const Statistics = () => {
+// Tarihleri karşılaştırabilmek için yardımcı fonksiyonlar
+const getStartOfDay = (date) => new Date(date.setHours(0, 0, 0, 0)).getTime();
+const getStartOfMonth = (date) => new Date(date.setDate(1)).getTime();
+const getStartOfYear = (date) => new Date(date.setMonth(0, 1)).getTime();
 
+// Son 7 gün için başlangıç tarihini alıyoruz
+const getStartOfLast7Days = (date) => {
+  const startDate = new Date(date);
+  startDate.setDate(startDate.getDate() - 7);  // 7 gün öncesini hesaplıyoruz
+  return getStartOfDay(startDate); // 7 gün öncesini gece yarısı olarak alıyoruz
+};
+
+const getStartOfLast30Days = (date) => {
+  const startDate = new Date(date);
+  startDate.setDate(startDate.getDate() - 30);  // 30 gün öncesini hesaplıyoruz
+  return getStartOfDay(startDate); // 30 gün öncesini gece yarısı olarak alıyoruz
+};
+
+// Son 365 gün için başlangıç tarihini alıyoruz
+const getStartOfLast365Days = (date) => {
+  const startDate = new Date(date);
+  startDate.setDate(startDate.getDate() - 365); // 365 gün öncesini hesaplıyoruz
+  return getStartOfDay(startDate); // İlk günü gece yarısı olarak alıyoruz
+};
+
+// Veriyi zaman dilimine göre filtreleme fonksiyonu
+const filterSalesData = (salesData, timePeriod) => {
+  const currentTime = new Date();
+  let startTime;
+
+  switch (timePeriod) {
+    case 'daily':
+      startTime = getStartOfDay(new Date(currentTime)); // Son 1 gün
+      break;
+    case 'weekly':
+      startTime = getStartOfLast7Days(new Date(currentTime)); // Son 7 gün
+      break;
+    case 'monthly':
+      startTime = getStartOfLast30Days(new Date(currentTime)); // Son 1 ay
+      break;
+    case 'yearly':
+      startTime = getStartOfLast365Days(new Date(currentTime)); // Son 1 yıl
+      break;
+    default:
+      startTime = 0; // Herhangi bir zaman dilimi girilmezse
+  }
+
+  // Filtrelenmiş verileri döndürme
+  const filteredData = {};
+  
+  // Veriyi her gün için kontrol et
+  for (const [dateKey, orders] of Object.entries(salesData)) {
+    if (new Date(dateKey).getTime() >= startTime) {
+      filteredData[dateKey] = orders;
+    }
+  }
+  return filteredData;
+};
+
+const Statistics = () => {
+  const { user, username, companyKey, logout } = useAuth();
   const [activeTab, setActiveTab] = useState("Income Tracking");
+  const [salesData, setSalesData] = useState([]);
+
+  const fetchSalesData = async () => {
+    try {
+      const salesRef = ref(database, `companies/${companyKey}/salesStatistics`);
+      const snapshot = await get(salesRef);
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+        setSalesData(data);
+    
+      } else {
+        console.log('No sales data found.');
+      }
+    } catch (error) {
+      console.error('Error fetching sales data: ', error);
+    }
+  };
+
+  useEffect(() => {
+    if(companyKey) {
+      fetchSalesData();
+    }
+
+  }, [companyKey]);
+
+
+  const [filteredData, setFilteredData] = useState({});
+
+  useEffect(() => {
+    if (salesData) {
+      // İlk başta veriyi günlük olarak filtreliyoruz
+      const dailyData = filterSalesData(salesData, 'daily');
+      setFilteredData(dailyData);
+    }
+  }, [salesData]);
+
+    // Butonlar veya kullanıcı etkileşimi ile zaman dilimini değiştirme
+    const handleTimePeriodChange = (timePeriod) => {
+      const newFilteredData = filterSalesData(salesData, timePeriod);
+      setFilteredData(newFilteredData);
+    };
+
+  // Döngü ile veriyi işle
+let rowsA = []; // Sonuçları saklamak için bir dizi
+const resulta = [
+  createData('Frozen yoghurt', 'dessert', 159, 6.0)
+];
+
+const [result, setResult] = useState([]);
+const [totalPrice, setTotalPrice] = useState();
+
+
+useEffect(() => {
+  const newResult = [];
+  let total = 0;
+
+  for (const [dateKey, orders] of Object.entries(filteredData)) {
+    for (const [orderKey, products] of Object.entries(orders)) {
+      products.forEach(product => {
+        const { productName, productPage, productPrice, quantity } = product;
+
+        const price = parseFloat(productPrice);
+
+        if (isNaN(price)) {
+          console.error('Geçersiz fiyat veya miktar:', { price });
+          return;
+        }
+      
+        total += price * quantity;
+  
+        const existingProduct = newResult.find(item => item.name === productName && item.productCategory === productPage);
+
+        if (existingProduct) {
+          existingProduct.calories += quantity;
+          existingProduct.fat += price * quantity;
+        } else {
+          // Sonuç dizisine yeni ürün ekliyoruz
+          newResult.push(createData(productName, productPage, quantity, price * quantity));
+        }
+      });
+    }
+  }
+
+  // Veriyi state'e ekliyoruz
+  setTotalPrice(total);
+  setResult(newResult);
+  
+
+},[filteredData])
 
   function createData(name, productCategory, calories, fat) {
     return { name, productCategory, calories, fat};
   }
-
-  const rows = [
-    createData('Frozen yoghurt', 'dessert', 159, 6.0),
-    createData('Ice cream sandwich', 'dessert', 237, 9.0),
-    createData('Eclair','dessert', 262, 16.0),
-    createData('Cupcake', 'dessert', 305, 3.7),
-    createData('Gingerbread', 'dessert', 356, 16.0),
-    createData('Frozen yoghurt', 'dessert', 159, 6.0),
-    createData('Ice cream sandwich', 'dessert', 237, 9.0),
-    createData('Eclair','dessert', 262, 16.0),
-    createData('Cupcake', 'dessert', 305, 3.7),
-    createData('Gingerbread', 'dessert', 356, 16.0),
-    createData('Frozen yoghurt', 'dessert', 159, 6.0),
-    createData('Ice cream sandwich', 'dessert', 237, 9.0),
-    createData('Eclair','dessert', 262, 16.0),
-    createData('Cupcake', 'dessert', 305, 3.7),
-    createData('Gingerbread', 'dessert', 356, 16.0),
-    createData('Frozen yoghurt', 'dessert', 159, 6.0),
-    createData('Ice cream sandwich', 'dessert', 237, 9.0),
-    createData('Eclair','dessert', 262, 16.0),
-    createData('Cupcake', 'dessert', 305, 3.7),
-    createData('Gingerbread', 'dessert', 356, 16.0),
-  ];
 
   return (
     <div>
@@ -75,8 +200,14 @@ const Statistics = () => {
           <div className="statistics-tab-content">
             {activeTab === "Income Tracking" && 
             <div>
+         
               <div className='income-tracking-filter-area'>
                 <p>Showing Daily Income Results</p>
+                <button onClick={() => handleTimePeriodChange('daily')}>Daily</button>
+      <button onClick={() => handleTimePeriodChange('weekly')}>Weekly (Last 7 days)</button>
+      <button onClick={() => handleTimePeriodChange('monthly')}>Monthly</button>
+      <button onClick={() => handleTimePeriodChange('yearly')}>Yearly</button>
+
                 <button className='statistics-filter'>Filter</button>
               </div>
               <div className='income-tracking-bg'>
@@ -102,7 +233,7 @@ const Statistics = () => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {rows.map((row) => (
+                    {result.map((row) => (
                       <TableRow
                         key={row.name}
                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -125,7 +256,7 @@ const Statistics = () => {
                   </div>
                   <div className='total-revenue-container'>
                     <p>28.12.2024</p>
-                    <div className='revenue-bar'> $150000</div>
+                    <div className='revenue-bar'>${totalPrice}</div>
                     <p>Total Daily Income</p>
                   </div>
                 </div>

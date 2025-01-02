@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import '../createMenuPage/CreateMenu.css';
-import { addTable, deleteTable, getCompanyData } from "../../services/companyService";
+import { addTable, deleteTable, getCompanyData, listenToCompanyData } from "../../services/companyService";
 import { QRCodeCanvas } from 'qrcode.react';
 import './generateQrPage.css';
 import Header from "../../components/header/Header";
@@ -34,7 +34,7 @@ function GenerateQr (){
       alert("Table deleted successfully");
     }, 300); // 300ms delay (you can adjust the delay)
   };
-
+/*
   useEffect(() => {
     const fetchCompany = async () => {
       try {
@@ -58,6 +58,31 @@ function GenerateQr (){
       fetchCompany();
     }
   }, [companyKey]);
+*/
+  useEffect(() => {
+    // Veriyi dinlemeye başlıyoruz
+    if (companyKey) {
+    listenToCompanyData(companyKey, (data) => {
+      setCompanyData(data); // Veriyi state'e kaydediyoruz
+
+      const tables = Object.entries(data.tables).map(([key, value]) => ({
+        tableKey: key,
+        tableID: value.tableID,
+        tableName: value.tableName,
+        tableQRBase64Data: value.tableQRBase64Data
+      }));
+
+      setTables(tables);
+    });
+  }
+
+    // Component unmount olduğunda listener'ı temizlemek için cleanup fonksiyonu
+    return () => {
+      // Burada Firebase listener'ı temizlemek için gerekli işlemi yapabilirsiniz.
+      // Ancak, Firebase Realtime Database için onValue listener'ları kendiliğinden temizlenmez.
+      // Eğer listener'ı temizlemek istiyorsanız, bunu onValue ile ilgili kaynaklarda araştırabilirsiniz.
+    };
+  }, [companyKey]); 
 
   const handleOpenQrModal = (tableKey) => {
     setQrData(`${baseURL}?cid=${companyKey}&tid=${tableKey}`);
@@ -130,15 +155,15 @@ function GenerateQr (){
           {showDeleteModal && (
             <div className="modal-overlay">
               <div className="delete-modal-content">
-                <p className="delete-modal-text">Are you sure you want to delete this Table?</p>
-                <div className="model-confirm-buttons">
+                <p>Are you sure you want to delete this Table?</p>
+                <div className="modal-buttons">
                   <button
-                    className="modal-save-confirm-button"
+                    className="delete-button"
                     onClick={() => deleteATable(selectedTableKey)}
                   >
                     Delete
                   </button>
-                  <button className="modal-delete-confirm-button" onClick={handleCloseDeleteModal}>Cancel</button>
+                  <button className="cancel-button" onClick={handleCloseDeleteModal}>Cancel</button>
                 </div>
               </div>
             </div>

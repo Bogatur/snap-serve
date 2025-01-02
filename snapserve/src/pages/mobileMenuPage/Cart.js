@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom"; // useLocation ve useNavigate import ediliyor
 import { addOrder } from "../../services/companyService";
 import './Cart.css';
@@ -22,10 +22,35 @@ function Cart() {
     setTimeout(() => {
       alert("Settled Up successfully");
     }, 500); // 300ms delay (you can adjust the delay)
+    sessionStorage.removeItem('cart');
+    setCart([]);
     navigate("/mobileMenu?cid="+location.state?.companyKey+"&&tid="+location.state?.tableKey,  { state: { cart } })
     // navigate("/order-complete", { replace: true }); // Sepeti boşaltıp sipariş tamamlandığına dair bir sayfaya yönlendiriyoruz
     ;
   };
+
+
+  useEffect(() => {
+    const handleBackButton = (event) => {
+      alert("Geri butonuna basıldı!");
+      // Burada istediğiniz fonksiyonu çağırabilirsiniz
+      // Örneğin, yönlendirme yapabilirsiniz
+
+      // Geri butonuna basıldığında cart verisini sessionStorage'a kaydediyoruz
+    sessionStorage.setItem('cart', JSON.stringify(cart));
+
+     // navigate('/some-other-page'); // İleriye veya geriye yönlendirebilirsiniz
+     navigate("/mobileMenu?cid="+location.state?.companyKey+"&&tid="+location.state?.tableKey,  { state: { cart } })
+     // navigate("/order-complete", { replace: true }); // Sepeti boşaltıp sipariş tamamlandığına dair bir sayfaya yönlendiriyoruz
+     ;
+    };
+
+    window.onpopstate = handleBackButton;
+
+    return () => {
+      window.onpopstate = null;
+    };
+  }, [navigate, location.state?.companyKey, location.state?.tableKey, cart]);
 
 
   //***** */ NAVIGATE POP veri gönderme işlemini kontrol et !!!!!!!!!!!!!!1
@@ -70,6 +95,9 @@ function Cart() {
     try {
 
       await addOrder(location.state?.companyKey, location.state?.tableKey, cart);
+
+      sessionStorage.clear();
+
     console.log("Sİpariş kaydedildi!");
     } catch (error) {
       console.error("Sipariş gönderilemedi:", error);

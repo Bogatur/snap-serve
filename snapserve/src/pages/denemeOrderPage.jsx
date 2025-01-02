@@ -31,7 +31,7 @@ const AdminPage = () => {
   const [updatedOrderData, setUpdatedOrderData] = useState(null);
 
 
-  const [controlData, setControlData] = useState(null);
+
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [menuData, setMenuData] = useState();
@@ -132,7 +132,7 @@ const handleSaveChanges = async () => {
       console.log(key)
       console.log(order)
       console.log("---");
-      console.log(controlData[selectedTableKey]);
+  
       console.log("*************************************");
       console.log("updated order:", JSON.stringify(order)); // order data'yı console'a yazdırıyoruz
       await updateOrder(selectedTableKey, key, order); // Firebase'e güncelleme işlemi
@@ -146,9 +146,7 @@ const handleSaveChanges = async () => {
 const currentTime = Date.now();
   
 
-useEffect(() => {
-  setControlData(orders);
-},[])
+
 
 useEffect(() => {
   // Async fonksiyon tanımlanıyor

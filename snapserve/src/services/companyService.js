@@ -63,6 +63,27 @@ export const getCompanyData = async (companyKey) => {
     }
   };
 
+  export const listenToCompanyData = (companyKey, callback) => {
+    const companyRef = ref(database, 'companies/' + companyKey);
+  
+    // onValue metodu ile veriyi dinliyoruz
+    onValue(companyRef, (snapshot) => {
+      if (snapshot.exists()) {
+        // Veriyi JSON formatında döndürüyoruz
+        const companyData = snapshot.val();
+        console.log('Şirket Verisi (Dinleyici):', companyData);
+        
+        // Callback fonksiyonu çağırarak güncellenen veriyi React component'ine gönderiyoruz
+        callback(companyData);
+      } else {
+        console.log('Bu companyKey için veri bulunamadı.');
+        callback(null); // Eğer veri yoksa, null döndürüyoruz
+      }
+    }, (error) => {
+      console.error('Veri alınırken hata oluştu: ', error);
+    });
+  };
+
   export const updateCompanyMenuNameMenuSlogan = async (companyKey, menuName, menuSlogan) => {
     try {
 
@@ -154,16 +175,16 @@ export const addMenuPageProduct = async (pageKey, companyKey, name, description,
   }
 }
 
-export const updateMenuPageProduct = async (productKey, pageKey, companyKey) => {
+export const updateMenuPageProduct = async (productKey, pageKey, companyKey, name, desc, price, image) => {
   try {
 
     const companyMenuPageProductRef = ref(database, 'companies/' + companyKey + '/menu/' + pageKey + '/products/' + productKey);
 
     const updatedData = {
-      productName: "edit product name", 
-      productDescription: "edit desc", 
-      productPrice: "10", 
-      productPhotoURL: "edit photo url", 
+      productName: name, 
+      productDescription: desc, 
+      productPrice: price, 
+      productPhotoURL: image, 
     };
 
     // 3. Yeni veriyi veritabanına güncelle
@@ -311,11 +332,19 @@ export const settleUp = async (companyKey, tableKey) => {
   try {
     const tableOrdersRef = ref(database, `companies/${companyKey}/tables/${tableKey}/orders`);
 
+    const companyMenuRef = ref(database,  `companies/${companyKey}/menu`);
+
+   
+
+
         // Siparişlerin tümünü al
         const snapshot = await get(tableOrdersRef);
+        const menu = await get(companyMenuRef);
+
+    
         if (snapshot.exists()) {
           const ordersData = snapshot.val();
-          
+     
           // Satış verilerini kaydetmek için tarih oluştur
           const date = new Date().toISOString().split("T")[0]; // YYYY-MM-DD formatında tarih
     
@@ -330,14 +359,35 @@ export const settleUp = async (companyKey, tableKey) => {
           Object.values(ordersData).forEach((order) => {
             order.products.forEach((product) => {
               console.log("PRODUCT: "+product.productName+"-"+product.quantity+"-"+product.productPrice);
-        
-              salesData.push({
-                productName: product.productName,
-                quantity: product.quantity,
-                productPrice: product.productPrice,
-                date: Date.now(),
+              if (menu.exists()) {
+                const menuDataA = menu.val();
+                
+           
+           
+                for (const [menuKey, menuData] of Object.entries(menuDataA)) {
+                  // Eğer products tanımlı ve boş değilse, işlemi yapıyoruz
+              
+                  if (menuData.products) {
+                    const productA = Object.entries(menuData.products).find(
+                      ([productKey]) => productKey === product.productKey
+                    );
+                    if (productA) {
+                      // Burada istediğiniz işlemi yapabilirsiniz
+                 
+                      salesData.push({
+                        productName: product.productName,
+                        quantity: product.quantity,
+                        productPrice: product.productPrice,
+                        productPage: menuData.menuPageName,
+                        date: Date.now(),
+                  
+                      });
+                    }
+                  }
+                }
+              
+              }
           
-              });
             });
           });
     

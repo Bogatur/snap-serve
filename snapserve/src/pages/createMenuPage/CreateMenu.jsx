@@ -3,7 +3,7 @@ import { useAuth } from '../../context/AuthContext'
 import { useNavigate, Link } from 'react-router-dom';
 import SideMenu from "../../components/sidemenu/SideMenu"
 import './CreateMenu.css';
-import { addMenuPage, addMenuPageProduct, deleteMenuPage, getCompanyData, updateCompanyMenuNameMenuSlogan, updateMenuPageProduct} from "../../services/companyService";
+import { addMenuPage, addMenuPageProduct, deleteMenuPage, getCompanyData, listenToCompanyData, updateCompanyMenuNameMenuSlogan, updateMenuPageProduct} from "../../services/companyService";
 import Header from "../../components/header/Header";
 
 function CreateMenu() {
@@ -89,7 +89,7 @@ function CreateMenu() {
   };
   
   const handleEditItem = (productKey) => {
-    updateMenuPageProduct(productKey, pages[0].pageKey, companyKey, "düzenlenmiş name", "edit description", "10", " edit image");
+    updateMenuPageProduct(productKey, pages[activeTabIndex].pageKey, companyKey, newItem.title, newItem.description, newItem.price, newItem.image);
    // setItems(items.map(item => item === editItem ? newItem : item)); // Düzenlenmiş öğeyi listeye kaydediyoruz
   //  setEditItem(null);
    // setNewItem({ title: "", description: "", price: "", image: null }); // Düzenleme sonrası sıfırlıyoruz
@@ -141,6 +141,34 @@ function CreateMenu() {
 
   }, [companyKey]);
 
+  const saveEditItem = () => {
+    handleEditItem();
+
+  }
+
+
+  useEffect(() => {
+    if (companyKey) {
+      // companyKey varsa veriyi dinlemeye başlıyoruz
+      listenToCompanyData(companyKey, (companyData) => {
+        
+        
+        const pages = Object.entries(companyData.menu || {}).map(([key, value]) => ({
+          pageKey: key,
+          name: value?.menuPageName || 'Default Page Name',  // Eğer menuPageName yoksa bir varsayılan isim
+          products: value?.products || {},  // Eğer products yoksa boş bir nesne
+        }));
+        
+        setPages(pages);
+        setCompanyData(companyData);
+      });
+    }
+
+    // Component unmount olduğunda listener'ı temizlemek için cleanup fonksiyonu
+    return () => {
+      // Dinleyiciyi temizlemek için kod eklenebilir
+    };
+  }, [companyKey]);
 
   const [activeTabIndex, setActiveTabIndex] = useState(0); // Aktif tab'ı tutacak state
 
@@ -148,6 +176,8 @@ function CreateMenu() {
     setActiveTabIndex(index); // Tıklanan tab'a geçiş yap
   };
 
+
+  
   
   /*----------------*/
 
@@ -451,7 +481,7 @@ function CreateMenu() {
                   />
                 </label>
                 <div className="add-product-buttons">
-                  <button className="add-product-save-button" type="submit">Save Changes</button>
+                  <button className="add-product-save-button" type="submit" onClick={() =>    handleEditItem()}>Save Changes</button>
                   <button className="add-product-cancel-button" type="button" onClick={handleCloseEditItemModal}>Cancel</button>
                 </div>
               </form>

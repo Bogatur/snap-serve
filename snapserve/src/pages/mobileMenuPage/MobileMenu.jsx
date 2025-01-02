@@ -12,7 +12,7 @@ function MobileMenu() {
 
   const [menuData, setMenuData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [cart, setCart] = useState(location.state?.cart || []);
+  const [cart, setCart] = useState([]);
   const [activeTab, setActiveTab] = useState("");
    // Aktif sekme state'i
 
@@ -22,6 +22,17 @@ function MobileMenu() {
      setLiked(!liked);
    };
 
+
+   useEffect(() => {
+    // Sayfa yenilendiğinde, sessionStorage'dan cart verisini alıyoruz
+    const storedCart = sessionStorage.getItem('cart');
+    if (storedCart) {
+      setCart(JSON.parse(storedCart)); // Veriyi state'e aktarıyoruz
+    } else {
+      // Eğer sessionStorage'da veri yoksa, location.state'den alıyoruz
+      setCart(location.state?.cart || []);
+    }
+  }, [location.state]);
 
   const addToCart = (product) => {
     
