@@ -45,6 +45,11 @@
     margin: 2rem 0 2rem 0;
   }
 
+  .statistics-buttons-income{
+    display: flex;
+    gap: 1rem;
+  }
+
   .income-details-container{
     display: flex;
     margin-bottom: 2rem;
@@ -131,4 +136,33 @@
     background-color: transparent;
     border-radius: 3px;
     color: #212B36;
+  }
+
+  .statistics-income-filter-tabs {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .statistics-income-filter-tabs button {
+    padding: 10px 15px;
+    background-color: #ffffff;
+    color: #212B36;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .statistics-income-filter-tabs button:hover {
+    background-color: #dcdcdc;
+  }
+  
+  .statistics-income-filter-tabs button.active {
+    background-color: #00AB55;
+    color: white;
+    border: none;
+  }
+  
+  .table-row-class{
+    background-color: #8e2d2d;
   }

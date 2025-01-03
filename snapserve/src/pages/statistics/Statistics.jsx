@@ -43,37 +43,25 @@ const getStartOfLast365Days = (date) => {
   return getStartOfDay(startDate); // İlk günü gece yarısı olarak alıyoruz
 };
 
-
-
-const Statistics = () => {
-  const { user, username, companyKey, logout } = useAuth();
-  const [activeTab, setActiveTab] = useState("Income Tracking");
-  const [salesData, setSalesData] = useState([]);
-
-  const [filterTitle, setFilterTitle] = useState("Daily");
-
-  // Veriyi zaman dilimine göre filtreleme fonksiyonu
+// Veriyi zaman dilimine göre filtreleme fonksiyonu
 const filterSalesData = (salesData, timePeriod) => {
   const currentTime = new Date();
   let startTime;
 
+  
 
   switch (timePeriod) {
     case 'daily':
       startTime = getStartOfDay(new Date(currentTime)); // Son 1 gün
-      setFilterTitle("Daily");
       break;
     case 'weekly':
       startTime = getStartOfLast7Days(new Date(currentTime)); // Son 7 gün
-      setFilterTitle("Weekly");
       break;
     case 'monthly':
       startTime = getStartOfLast30Days(new Date(currentTime)); // Son 1 ay
-      setFilterTitle("Monthly");
       break;
     case 'yearly':
       startTime = getStartOfLast365Days(new Date(currentTime)); // Son 1 yıl
-      setFilterTitle("Yearly");
       break;
     default:
       startTime = 0; // Herhangi bir zaman dilimi girilmezse
@@ -90,6 +78,11 @@ const filterSalesData = (salesData, timePeriod) => {
   }
   return filteredData;
 };
+
+const Statistics = () => {
+  const { user, username, companyKey, logout } = useAuth();
+  const [activeTab, setActiveTab] = useState("Income Tracking");
+  const [salesData, setSalesData] = useState([]);
 
   const fetchSalesData = async () => {
     try {
@@ -183,6 +176,12 @@ useEffect(() => {
     return { name, productCategory, calories, fat};
   }
 
+  const [activeTabIndex, setActiveTabIndex] = useState(0); // Aktif tab'ı tutacak state
+
+  const handleTabClick = (index) => {
+    setActiveTabIndex(index); // Tıklanan tab'a geçiş yap
+  };
+
   return (
     <div>
       <Header />
@@ -212,12 +211,32 @@ useEffect(() => {
          
               <div className='income-tracking-filter-area'>
                 <p>Showing Daily Income Results</p>
-                <button onClick={() => handleTimePeriodChange('daily')}>Daily</button>
-      <button onClick={() => handleTimePeriodChange('weekly')}>Weekly (Last 7 days)</button>
-      <button onClick={() => handleTimePeriodChange('monthly')}>Monthly</button>
-      <button onClick={() => handleTimePeriodChange('yearly')}>Yearly</button>
-
-                <button className='statistics-filter'>Filter</button>
+                <div className="statistics-income-filter-tabs">
+                  <button
+                    className={activeTabIndex === 0 ? "active" : ""}
+                    onClick={() => handleTabClick(0)}
+                  >
+                    Daily
+                  </button>
+                  <button
+                    className={activeTabIndex === 1 ? "active" : ""}
+                    onClick={() => handleTabClick(1)}
+                  >
+                    Weekly (Last 7 days)
+                  </button>
+                  <button
+                    className={activeTabIndex === 2 ? "active" : ""}
+                    onClick={() => handleTabClick(2)}
+                  >
+                    Monthly
+                  </button>
+                  <button
+                    className={activeTabIndex === 3 ? "active" : ""}
+                    onClick={() => handleTabClick(3)}
+                  >
+                    Yearly
+                  </button>
+                </div>
               </div>
               <div className='income-tracking-bg'>
                 <div className='income-details-container'>
@@ -264,13 +283,9 @@ useEffect(() => {
               </TableContainer>
                   </div>
                   <div className='total-revenue-container'>
-                    <p>{new Date().toLocaleDateString('tr-TR', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-  })}</p>
+                    <p>28.12.2024</p>
                     <div className='revenue-bar'>${totalPrice}</div>
-                    <p>Total {filterTitle} Income</p>
+                    <p>Total Daily Income</p>
                   </div>
                 </div>
               </div>
