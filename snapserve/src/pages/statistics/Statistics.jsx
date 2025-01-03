@@ -16,6 +16,9 @@ import { Chart as ChartJS, CategoryScale, RadialLinearScale
     import Paper from '@mui/material/Paper';
 
 import './Statistics.css';
+import ProductPieChart from './ProductPieChart';
+import CategoryPieChart from './CategoryPieChart';
+import TimeLineChart from './TimeLineChart';
 
 
 // Tarihleri karşılaştırabilmek için yardımcı fonksiyonlar
@@ -43,7 +46,17 @@ const getStartOfLast365Days = (date) => {
   return getStartOfDay(startDate); // İlk günü gece yarısı olarak alıyoruz
 };
 
-// Veriyi zaman dilimine göre filtreleme fonksiyonu
+
+const Statistics = () => {
+  const { user, username, companyKey, logout } = useAuth();
+  const [activeTab, setActiveTab] = useState("Income Tracking");
+  const [salesData, setSalesData] = useState([]);
+
+
+  const [filterTitle, setFilterTitle] = useState("Daily");
+
+
+  // Veriyi zaman dilimine göre filtreleme fonksiyonu
 const filterSalesData = (salesData, timePeriod) => {
   const currentTime = new Date();
   let startTime;
@@ -53,15 +66,19 @@ const filterSalesData = (salesData, timePeriod) => {
   switch (timePeriod) {
     case 'daily':
       startTime = getStartOfDay(new Date(currentTime)); // Son 1 gün
+      setFilterTitle("Daily");
       break;
     case 'weekly':
       startTime = getStartOfLast7Days(new Date(currentTime)); // Son 7 gün
+      setFilterTitle("Weekly");
       break;
     case 'monthly':
       startTime = getStartOfLast30Days(new Date(currentTime)); // Son 1 ay
+      setFilterTitle("Monthly");
       break;
     case 'yearly':
       startTime = getStartOfLast365Days(new Date(currentTime)); // Son 1 yıl
+      setFilterTitle("Yearly");
       break;
     default:
       startTime = 0; // Herhangi bir zaman dilimi girilmezse
@@ -79,10 +96,6 @@ const filterSalesData = (salesData, timePeriod) => {
   return filteredData;
 };
 
-const Statistics = () => {
-  const { user, username, companyKey, logout } = useAuth();
-  const [activeTab, setActiveTab] = useState("Income Tracking");
-  const [salesData, setSalesData] = useState([]);
 
   const fetchSalesData = async () => {
     try {
@@ -180,6 +193,18 @@ useEffect(() => {
 
   const handleTabClick = (index) => {
     setActiveTabIndex(index); // Tıklanan tab'a geçiş yap
+
+    if(index == 0){
+      handleTimePeriodChange('daily');
+
+    }else if(index == 1){
+      handleTimePeriodChange('weekly');
+
+    }else if(index == 2){
+      handleTimePeriodChange('monthly');
+    }else{
+      handleTimePeriodChange('yearly')
+    }
   };
 
   return (
@@ -285,7 +310,7 @@ useEffect(() => {
                   <div className='total-revenue-container'>
                     <p>28.12.2024</p>
                     <div className='revenue-bar'>${totalPrice}</div>
-                    <p>Total Daily Income</p>
+                    <p>Total {filterTitle} Income</p>
                   </div>
                 </div>
               </div>
@@ -293,9 +318,52 @@ useEffect(() => {
             {activeTab === "Detailed Statistics" && 
             
             <div>
-                <button className='graph-filter-button'>
+               {/* <button className='graph-filter-button'>
                   Filter Button Area
-                </button>
+                </button> */}
+
+                {
+  filteredData &&
+
+                <div style={{paddingTop: "15px"}}>
+   <div className="statistics-income-filter-tabs">
+                  <button
+                    className={activeTabIndex === 0 ? "active" : ""}
+                    onClick={() => handleTabClick(0)}
+                  >
+                    Daily
+                  </button>
+                  <button
+                    className={activeTabIndex === 1 ? "active" : ""}
+                    onClick={() => handleTabClick(1)}
+                  >
+                    Weekly (Last 7 days)
+                  </button>
+                  <button
+                    className={activeTabIndex === 2 ? "active" : ""}
+                    onClick={() => handleTabClick(2)}
+                  >
+                    Monthly
+                  </button>
+                  <button
+                    className={activeTabIndex === 3 ? "active" : ""}
+                    onClick={() => handleTabClick(3)}
+                  >
+                    Yearly
+                  </button>
+                </div>
+      <h2>Ürün Başına Kazanç</h2>
+      <ProductPieChart data={filteredData} />
+      
+      <h2>Kategori Başına Kazanç</h2>
+      <CategoryPieChart data={filteredData} />
+
+      <h2>{filterTitle} Kazanç</h2>
+      <TimeLineChart data={filteredData} timeUnit={filterTitle == " Daily" ? "daily" : filterTitle == "Monthly" ? "month" : "year" } />
+
+
+    </div>
+    }
             </div>}
           </div>
         </div>
