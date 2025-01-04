@@ -235,7 +235,7 @@ useEffect(() => {
             <div>
          
               <div className='income-tracking-filter-area'>
-                <p>Showing Daily Income Results</p>
+                <p>Showing Income Results</p>
                 <div className="statistics-income-filter-tabs">
                   <button
                     className={activeTabIndex === 0 ? "active" : ""}
@@ -310,7 +310,7 @@ useEffect(() => {
                   <div className='total-revenue-container'>
                     <p>28.12.2024</p>
                     <div className='revenue-bar'>${totalPrice}</div>
-                    <p>Total {filterTitle} Income</p>
+                    <p>Total {filterTitle} Revenue</p>
                   </div>
                 </div>
               </div>
@@ -352,14 +352,19 @@ useEffect(() => {
                     Yearly
                   </button>
                 </div>
-      <h2>Ürün Başına Kazanç</h2>
+      <div className='chart-style-st' >
+      <h2 className='chart-titles'>Income per Product</h2>
       <ProductPieChart data={filteredData} />
-      
-      <h2>Kategori Başına Kazanç</h2>
+      </div>
+      <div className='chart-style-st' >
+      <h2 className='chart-titles'>Income per Category</h2>
       <CategoryPieChart data={filteredData} />
+      </div>
+      <div className='chart-style-st' >
+      <h2 className='chart-titles'>{filterTitle} Income</h2>
 
-      <h2>{filterTitle} Kazanç</h2>
       <TimeLineChart data={filteredData} timeUnit={filterTitle == " Daily" ? "daily" : filterTitle == "Monthly" ? "month" : "year" } />
+      </div>
 
 
     </div>

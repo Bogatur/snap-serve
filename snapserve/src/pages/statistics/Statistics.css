@@ -163,6 +163,12 @@
     border: none;
   }
   
-  .table-row-class{
-    background-color: #8e2d2d;
+ 
+  .chart-titles{
+    text-align: center;
+  }
+
+  .chart-style-st{
+    width: 600px;
+    margin: 5rem auto;
   }

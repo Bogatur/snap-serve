@@ -67,8 +67,8 @@ function CreateMenu() {
 
   const handleSaveMenuInfo = async (e) => {
     e.preventDefault();
-    await updateCompanyMenuNameMenuSlogan(companyKey, newMenuName, newSlogan);
     handleCloseModal();
+    await updateCompanyMenuNameMenuSlogan(companyKey, newMenuName, newSlogan);
   };
 
   const handleAddPage = (e) => {
@@ -470,7 +470,7 @@ function CreateMenu() {
                   Description:
                   <textarea
                     required
-                    value={newItem.description}
+                    value={newItem.description} 
                     onChange={(e) => setNewItem({ ...newItem, description: e.target.value })}
                     maxLength="15"
                     placeholder="Enter your new product description(maks 20char)"

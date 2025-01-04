@@ -212,7 +212,7 @@ function OrderTracking () {
                           className="settle-up-button"
                           onClick={() => openSettleOverlay(table.tableKey, totalAmount)}
                         >
-                          Settle Up
+                          Complete Order
                         </button>
                       </div>
                     ) : (
